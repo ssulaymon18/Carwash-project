@@ -2,9 +2,12 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Avtoyuvish - Daromad va Xarajatlar</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
     <style>
         /* ---------- RESET & BASE ---------- */
@@ -17,11 +20,11 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f4f8;
             color: #1a202c;
-            padding: 20px;
+            padding: 12px;
             min-height: 100vh;
         }
         .container {
-            max-width: 1200px;
+            max-width: 480px;
             margin: 0 auto;
         }
 
@@ -29,122 +32,79 @@
         .header {
             background: linear-gradient(135deg, #0b3b5c, #1a6b8a);
             color: #fff;
-            padding: 28px 32px;
-            border-radius: 18px;
-            margin-bottom: 28px;
+            padding: 20px 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 8px 24px rgba(11, 59, 92, 0.30);
         }
         .header h1 {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         .header h1 small {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 400;
             opacity: 0.85;
-            margin-left: 6px;
         }
         .header .currency-badge {
             background: rgba(255, 255, 255, 0.18);
-            padding: 8px 18px;
+            padding: 6px 14px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 18px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.20);
+            font-size: 16px;
         }
-
-        /* ---------- CARDS ---------- */
         .card {
-            background: #ffffff;
+            background: #fff;
             border-radius: 16px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            padding: 24px 28px;
-            margin-bottom: 24px;
-            transition: box-shadow 0.2s;
-        }
-        .card:hover {
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
         }
         .card-title {
             font-size: 18px;
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             color: #1a3a4a;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .card-title .icon {
-            font-size: 22px;
-        }
-
-        /* ---------- FORM ---------- */
         .form-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 16px 24px;
+            gap: 12px;
             align-items: flex-end;
         }
         .form-group {
-            flex: 1 1 160px;
-            min-width: 130px;
+            flex: 1 1 120px;
+            min-width: 100px;
         }
         .form-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: #2d4a5a;
             margin-bottom: 4px;
-            letter-spacing: 0.3px;
         }
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 10px 14px;
+            padding: 10px 12px;
             border: 1.5px solid #dce4ec;
             border-radius: 10px;
             font-size: 15px;
             background: #fafcfe;
-            transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
-            color: #1a202c;
         }
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #1a6b8a;
-            box-shadow: 0 0 0 3px rgba(26, 107, 138, 0.15);
-        }
-        .form-group input[type="number"] {
-            -moz-appearance: textfield;
-        }
-        .form-group input[type="number"]::-webkit-outer-spin-button,
-        .form-group input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-        }
-
         .expense-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px 18px;
-            margin: 12px 0 8px 0;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
         }
-        .expense-grid .form-group {
-            flex: unset;
-            min-width: unset;
-        }
-        .expense-grid .form-group label {
-            font-size: 12px;
-        }
-
         .expense-item-with-desc {
             grid-column: span 2;
             display: flex;
@@ -161,18 +121,10 @@
             min-width: 80px;
         }
         .expense-item-with-desc .form-group:first-child {
-            flex: 2 1 160px;
+            flex: 2 1 140px;
         }
-        .expense-item-with-desc .form-group label {
-            font-size: 12px;
-        }
-        .expense-item-with-desc .form-group input {
-            padding: 8px 12px;
-            font-size: 14px;
-        }
-
         .btn {
-            padding: 10px 28px;
+            padding: 10px 22px;
             border: none;
             border-radius: 10px;
             font-weight: 600;
@@ -181,58 +133,38 @@
             transition: all 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .btn-primary {
             background: #1a6b8a;
             color: #fff;
         }
-        .btn-primary:hover {
-            background: #0f5875;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(26, 107, 138, 0.30);
-        }
-        .btn-success {
-            background: #2b7a4b;
-            color: #fff;
-        }
-        .btn-success:hover {
-            background: #1e643a;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(43, 122, 75, 0.30);
-        }
         .btn-danger {
             background: #b13e4a;
             color: #fff;
-        }
-        .btn-danger:hover {
-            background: #962f3a;
         }
         .btn-outline {
             background: transparent;
             border: 1.5px solid #dce4ec;
             color: #2d4a5a;
         }
-        .btn-outline:hover {
-            background: #eef4f8;
-            border-color: #b0c4d0;
-        }
         .btn-sm {
-            padding: 6px 16px;
+            padding: 6px 14px;
             font-size: 13px;
         }
-
-        /* ---------- TABS ---------- */
+        .btn-success {
+            background: #2b7a4b;
+            color: #fff;
+        }
         .tabs {
             display: flex;
-            flex-wrap: wrap;
             gap: 6px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             border-bottom: 2px solid #e8edf2;
             padding-bottom: 2px;
         }
         .tab-btn {
-            padding: 10px 22px;
+            padding: 8px 18px;
             border: none;
             background: transparent;
             font-size: 15px;
@@ -240,70 +172,40 @@
             color: #5a7a8a;
             cursor: pointer;
             border-radius: 10px 10px 0 0;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .tab-btn:hover {
-            color: #1a3a4a;
-            background: #f0f6fa;
         }
         .tab-btn.active {
             color: #0b3b5c;
             background: #e4eef6;
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 10%;
-            width: 80%;
-            height: 3px;
-            background: #1a6b8a;
-            border-radius: 4px;
+            border-bottom: 3px solid #1a6b8a;
         }
         .tab-pane {
             display: none;
-            animation: fadeUp 0.3s ease;
         }
         .tab-pane.active {
             display: block;
         }
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ---------- STATS GRID ---------- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 16px;
-            margin-bottom: 18px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
         }
         .stat-item {
             background: #f7fafc;
             border-radius: 12px;
-            padding: 16px 18px;
+            padding: 12px;
             text-align: center;
             border: 1px solid #e8edf2;
         }
         .stat-item .stat-label {
-            font-size: 13px;
+            font-size: 12px;
             color: #5a7a8a;
             font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
         }
         .stat-item .stat-value {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
-            margin-top: 2px;
             color: #0b3b5c;
         }
         .stat-item .stat-value.positive {
@@ -313,141 +215,147 @@
             color: #b13e4a;
         }
         .stat-item .stat-sub {
-            font-size: 14px;
+            font-size: 13px;
             color: #4a6a7a;
-            margin-top: 2px;
         }
-
-        /* ---------- CHART ---------- */
         .chart-wrapper {
-            position: relative;
-            height: 240px;
-            margin-top: 6px;
+            height: 200px;
+            margin-top: 10px;
         }
-        .chart-wrapper canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        /* ---------- HISTORY ---------- */
         .history-scroll {
-            max-height: 320px;
+            max-height: 280px;
             overflow-y: auto;
-            border-radius: 10px;
             border: 1px solid #e8edf2;
-        }
-        .history-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-        .history-scroll::-webkit-scrollbar-thumb {
-            background: #b8cddc;
             border-radius: 10px;
         }
-        .history-scroll::-webkit-scrollbar-track {
-            background: #f0f4f8;
-        }
-
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
+            font-size: 13px;
         }
         .history-table th {
             background: #e8eff4;
-            padding: 10px 14px;
+            padding: 8px 10px;
             text-align: left;
-            font-weight: 600;
-            color: #1a3a4a;
             position: sticky;
             top: 0;
             z-index: 2;
         }
         .history-table td {
-            padding: 10px 14px;
+            padding: 8px 10px;
             border-bottom: 1px solid #eef2f6;
-            vertical-align: middle;
         }
-        .history-table tr:hover td {
-            background: #f7fafc;
+        .desc-chip {
+            display: inline-block;
+            background: #d4edda;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #155724;
+            margin-left: 4px;
         }
-        .history-table .expense-detail {
-            font-size: 12px;
-            color: #5a7a8a;
-        }
-        .history-table .text-right {
-            text-align: right;
-        }
-        .history-table .text-center {
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a3a4a;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.20);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 999;
+            max-width: 90%;
             text-align: center;
         }
-
-        .empty-state {
-            padding: 40px 20px;
-            text-align: center;
-            color: #8a9aa8;
-            font-size: 15px;
+        .toast.show {
+            opacity: 1;
         }
-        .empty-state .big-icon {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 10px;
+        .toast.success {
+            background: #1e6b3a;
         }
-
-        .action-btns {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
+        .toast.error {
+            background: #b13e4a;
         }
-        .action-btns .btn {
-            padding: 4px 12px;
+        .role-badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            padding: 2px 12px;
+            border-radius: 20px;
             font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
         }
-
-        /* ---------- PERIOD SELECTOR ---------- */
+        .role-badge.admin {
+            background: #cce5ff;
+            color: #004085;
+        }
         .period-selector {
             display: flex;
             flex-wrap: wrap;
+            gap: 10px;
             align-items: center;
-            gap: 12px 20px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
         .period-selector .form-group {
-            flex: 0 0 auto;
-            min-width: 140px;
+            flex: 1 1 120px;
+            min-width: 100px;
         }
         .period-selector .form-group label {
             font-size: 12px;
         }
-        .period-selector .form-group input {
-            padding: 8px 12px;
+        .period-selector .form-group input,
+        .period-selector .form-group select {
+            padding: 8px 10px;
             font-size: 14px;
         }
-
-        /* ---------- RESPONSIVE ---------- */
-        @media (max-width: 700px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-                padding: 20px;
-            }
+        .user-management {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        .user-management .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .user-management .user-item:last-child {
+            border-bottom: none;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .mt-12 {
+            margin-top: 12px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            color: #6c757d;
+            font-size: 13px;
+        }
+        @media (max-width: 480px) {
             .header h1 {
+                font-size: 18px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .stat-item .stat-value {
                 font-size: 20px;
-                flex-wrap: wrap;
-            }
-            .header h1 small {
-                font-size: 14px;
-            }
-            .card {
-                padding: 18px 16px;
-            }
-            .form-row {
-                flex-direction: column;
-                gap: 12px;
-            }
-            .form-group {
-                flex: 1 1 100%;
-                min-width: unset;
             }
             .expense-grid {
                 grid-template-columns: 1fr 1fr;
@@ -458,142 +366,31 @@
             }
             .expense-item-with-desc .form-group {
                 flex: 1 1 100%;
-                min-width: unset;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .stat-item .stat-value {
-                font-size: 20px;
             }
             .tabs .tab-btn {
-                padding: 8px 14px;
+                padding: 6px 12px;
                 font-size: 13px;
             }
-            .history-table {
-                font-size: 12px;
-            }
-            .history-table th,
-            .history-table td {
-                padding: 6px 8px;
-            }
-            .period-selector {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .period-selector .form-group {
-                min-width: unset;
-            }
-        }
-        @media (max-width: 450px) {
-            .expense-grid {
-                grid-template-columns: 1fr;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .stats-grid .stat-item {
-                padding: 12px 8px;
-            }
-            .stat-item .stat-value {
-                font-size: 18px;
-            }
-            .header h1 {
-                font-size: 17px;
-            }
-            .header .currency-badge {
-                font-size: 14px;
-                padding: 6px 14px;
-            }
             .btn {
-                padding: 8px 18px;
+                padding: 8px 16px;
                 font-size: 13px;
                 width: 100%;
                 justify-content: center;
             }
-            .action-btns .btn {
-                width: auto;
+            .form-group {
+                flex: 1 1 100%;
+                min-width: unset;
             }
-        }
-
-        /* ---------- MISC ---------- */
-        .text-muted {
-            color: #6a8a9a;
-            font-size: 13px;
-        }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mt-12 {
-            margin-top: 12px;
-        }
-        .flex-between {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .gap-8 {
-            gap: 8px;
-        }
-        .badge {
-            display: inline-block;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            background: #e8edf2;
-            color: #1a3a4a;
-        }
-        .badge-income {
-            background: #d4edda;
-            color: #1a6b3a;
-        }
-        .badge-expense {
-            background: #f8d7da;
-            color: #a13a44;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #1a3a4a;
-            color: #fff;
-            padding: 14px 26px;
-            border-radius: 12px;
-            font-weight: 500;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.20);
-            transform: translateY(120px);
-            opacity: 0;
-            transition: all 0.4s ease;
-            z-index: 999;
-            max-width: 360px;
-        }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .toast.success {
-            background: #1e6b3a;
-        }
-        .toast.error {
-            background: #b13e4a;
-        }
-
-        .desc-chip {
-            display: inline-block;
-            background: #e8edf2;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            color: #2d4a5a;
-            margin-left: 6px;
-            max-width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            vertical-align: middle;
+            .form-row {
+                flex-direction: column;
+            }
+            .period-selector {
+                flex-direction: column;
+            }
+            .period-selector .form-group {
+                flex: 1 1 100%;
+                min-width: unset;
+            }
         }
     </style>
 </head>
@@ -601,13 +398,19 @@
 
     <div class="container">
 
-        <!-- HEADER -->
+        <!-- HEADER with user info -->
         <header class="header">
-            <h1>
-                🚗 Avtoyuvish
-                <small>daromad &amp; xarajat</small>
-            </h1>
-            <div class="currency-badge">🇺🇿 so‘m (UZS)</div>
+            <div>
+                <h1>
+                    🚗 Avtoyuvish
+                    <small>daromad &amp; xarajat</small>
+                </h1>
+                <div style="font-size:14px; margin-top:4px; opacity:0.9;">
+                    👤 <span id="userName">Yuklanmoqda...</span>
+                    <span id="userRoleBadge" class="role-badge"></span>
+                </div>
+            </div>
+            <div class="currency-badge">🇺🇿 so‘m</div>
         </header>
 
         <!-- ADD ENTRY CARD -->
@@ -615,7 +418,6 @@
             <div class="card-title">
                 <span class="icon">📋</span> Kunlik ma'lumot qo‘shish
             </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label for="entryDate">📅 Sana</label>
@@ -625,15 +427,14 @@
                     <label for="incomeInput">💰 Daromad (so‘m)</label>
                     <input type="number" id="incomeInput" placeholder="0" min="0" step="1000" />
                 </div>
-                <div class="form-group" style="flex:0 0 auto; min-width:100px;">
+                <div class="form-group" style="flex:0 0 auto;">
                     <label>&nbsp;</label>
-                    <button class="btn btn-primary" id="addEntryBtn">➕ Qo‘shish</button>
+                    <button class="btn btn-primary" id="addEntryBtn" style="width:100%;">➕ Qo‘shish</button>
                 </div>
             </div>
-
             <div class="mt-12">
                 <label style="font-weight:600; font-size:14px; color:#2d4a5a;">💸 Xarajatlar (so‘m)</label>
-                <div class="expense-grid" id="expenseGrid">
+                <div class="expense-grid">
                     <div class="form-group">
                         <label>🧴 Pena</label>
                         <input type="number" class="expense-input" data-category="foam" placeholder="0" min="0" step="500" />
@@ -650,21 +451,8 @@
                         <label>⚡ Elektr toki</label>
                         <input type="number" class="expense-input" data-category="electricity" placeholder="0" min="0" step="500" />
                     </div>
-                    <div class="form-group">
-                        <label>🏢 Ijara</label>
-                        <input type="number" class="expense-input" data-category="rent" placeholder="0" min="0" step="500" />
-                    </div>
-                    <div class="form-group">
-                        <label>🧪 Kimyoviy</label>
-                        <input type="number" class="expense-input" data-category="chemicals" placeholder="0" min="0" step="500" />
-                    </div>
-                    <div class="form-group">
-                        <label>📦 Boshqa</label>
-                        <input type="number" class="expense-input" data-category="other" placeholder="0" min="0" step="500" />
-                    </div>
-
                     <div class="expense-item-with-desc">
-                        <div class="form-group" style="flex:2 1 160px;">
+                        <div class="form-group" style="flex:2 1 140px;">
                             <label>🔧 Zapchast (nima?)</label>
                             <input type="text" class="expense-desc-input" data-category="spare_parts" placeholder="Masalan: filtr, moy, shina..." />
                         </div>
@@ -679,11 +467,11 @@
 
         <!-- SUMMARY CARD -->
         <section class="card">
-            <div class="flex-between" style="margin-bottom:6px;">
+            <div class="flex-between">
                 <div class="card-title" style="margin-bottom:0;">
                     <span class="icon">📊</span> Umumiy hisobot
                 </div>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
                     <button class="btn btn-outline btn-sm" id="refreshBtn">🔄 Yangilash</button>
                     <button class="btn btn-danger btn-sm" id="clearAllBtn">🗑️ Tozalash</button>
                 </div>
@@ -717,14 +505,15 @@
                 </div>
             </div>
 
-            <div class="tabs" id="summaryTabs">
+            <div class="tabs">
                 <button class="tab-btn active" data-tab="overview">📈 Umumiy</button>
                 <button class="tab-btn" data-tab="expenses">📉 Xarajatlar</button>
                 <button class="tab-btn" data-tab="history">📜 Tarix</button>
+                <button class="tab-btn" data-tab="users" id="usersTabBtn" style="display:none;">👥 Foydalanuvchilar</button>
             </div>
 
             <div class="tab-pane active" id="tab-overview">
-                <div class="stats-grid" id="overviewStats">
+                <div class="stats-grid">
                     <div class="stat-item">
                         <div class="stat-label">💰 Daromad</div>
                         <div class="stat-value" id="statIncome">0</div>
@@ -753,58 +542,44 @@
 
             <div class="tab-pane" id="tab-expenses">
                 <div class="stats-grid" id="expenseStatsGrid">
+                    <div class="stat-item"><div class="stat-label">🧴 Pena</div><div class="stat-value" id="expFoam">0</div></div>
+                    <div class="stat-item"><div class="stat-label">💧 Suv</div><div class="stat-value" id="expWater">0</div></div>
+                    <div class="stat-item"><div class="stat-label">⚡ Elektr</div><div class="stat-value" id="expElectricity">0</div></div>
+                    <div class="stat-item"><div class="stat-label">🏢 Ijara</div><div class="stat-value" id="expRent">0</div></div>
+                    <div class="stat-item"><div class="stat-label">🧪 Kimyoviy</div><div class="stat-value" id="expChemicals">0</div></div>
+                    <div class="stat-item"><div class="stat-label">📦 Boshqa</div><div class="stat-value" id="expOther">0</div></div>
+                    <div class="stat-item"><div class="stat-label">🕯️ Vosk</div><div class="stat-value" id="expWax">0</div></div>
                     <div class="stat-item">
-                        <div class="stat-label">🧴 Pena</div>
-                        <div class="stat-value" id="expFoam">0</div>
+                        <div class="stat-label">🔧 Zapchast</div>
+                        <div class="stat-value" id="expSpareParts">0</div>
+                        <div class="stat-sub" id="expSparePartsDesc" style="font-size:12px; color:#5a7a8a; margin-top:4px;"></div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-label">💧 Suv</div>
-                        <div class="stat-value" id="expWater">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">⚡ Elektr</div>
-                        <div class="stat-value" id="expElectricity">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">🏢 Ijara</div>
-                        <div class="stat-value" id="expRent">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">🧪 Kimyoviy</div>
-                        <div class="stat-value" id="expChemicals">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">📦 Boshqa</div>
-                        <div class="stat-value" id="expOther">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">🕯️ Vosk</div>
-                        <div class="stat-value" id="expWax">0</div>
-                    </div>
-                   <div class="stat-item">
-    <div class="stat-label">🔧 Zapchast</div>
-    <div class="stat-value" id="expSpareParts">0</div>
-    <div class="stat-sub" id="expSparePartsDesc" style="font-size:12px; color:#5a7a8a; margin-top:4px;"></div>
-</div>
                 </div>
-                <div class="chart-wrapper" style="height:200px;">
+                <div class="chart-wrapper" style="height:180px;">
                     <canvas id="expenseChart"></canvas>
                 </div>
             </div>
 
             <div class="tab-pane" id="tab-history">
                 <div class="history-scroll" id="historyContainer">
-                    <div class="empty-state">
-                        <span class="big-icon">📭</span>
-                        Hozircha hech qanday ma'lumot yo‘q.<br />
-                        Yangi yozuv qo‘shish uchun yuqoridagi formadan foydalaning.
+                    <div class="empty-state">📭 Hozircha ma'lumot yo‘q.</div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="tab-users">
+                <div class="user-management" id="userManagement">
+                    <h4 style="margin-bottom:8px;">👥 Foydalanuvchilar</h4>
+                    <div id="userList"></div>
+                    <div style="margin-top:12px;">
+                        <button class="btn btn-success btn-sm" id="addUserBtn">➕ Yangi foydalanuvchi</button>
+                        <span class="text-muted" style="font-size:12px; margin-left:8px;">(Telegram ID ni kiriting)</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer style="text-align:center; padding:20px 0 8px; color:#7a9aaa; font-size:14px; border-top:1px solid #e0e8ef; margin-top:8px;">
-            🚗 Avtoyuvish hisoblagichi &bull; Ma'lumotlar brauzeringizda saqlanadi
+        <footer style="text-align:center; padding:12px 0; color:#7a9aaa; font-size:12px; border-top:1px solid #e0e8ef; margin-top:8px;">
+            🚗 Avtoyuvish hisoblagichi &bull; Ma'lumotlar bulutda saqlanadi
         </footer>
     </div>
 
@@ -812,9 +587,87 @@
 
     <script>
         // ============================================================
-        //  DATA LAYER
+        //  🔑 CONFIGURATION - PUT YOUR KEYS HERE!
         // ============================================================
-        const STORAGE_KEY = 'carwash_data';
+        const SUPABASE_URL = 'https://hauokcicipuxpdjkuumnf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhdW9rY2ljcHVweGRqa3V1bW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTMwMzksImV4cCI6MjA5OTI2OTAzOX0.ZAoK0t4A3PTe08bGKdY93yclG01SfaJ1ROWjDDRjoW0';
+
+        // ============================================================
+        //  SUPABASE CLIENT
+        // ============================================================
+        const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================================
+        //  TELEGRAM WEBAPP INIT
+        // ============================================================
+        const tg = window.Telegram?.WebApp;
+        let currentUser = null;
+
+        async function initTelegramUser() {
+            if (!tg) {
+                showToast('⚠️ Telegram muhiti topilmadi.', 'error');
+                return null;
+            }
+            const user = tg.initDataUnsafe?.user;
+            if (!user) {
+                showToast('❌ Foydalanuvchi maʼlumoti topilmadi.', 'error');
+                return null;
+            }
+            const name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            const userId = user.id;
+
+            let { data: existing, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', userId)
+                .maybeSingle();
+
+            if (error && error.code !== 'PGRST116') {
+                console.error('Error fetching user:', error);
+                showToast('❌ Foydalanuvchi maʼlumotini olishda xatolik.', 'error');
+                return null;
+            }
+
+            if (!existing) {
+                const { data: newUser, error: insertError } = await supabase
+                    .from('users')
+                    .insert([{ id: userId, name: name, role: 'worker' }])
+                    .select()
+                    .single();
+
+                if (insertError) {
+                    console.error('Insert error:', insertError);
+                    showToast('❌ Foydalanuvchi yaratishda xatolik.', 'error');
+                    return null;
+                }
+                currentUser = newUser;
+                showToast(`👋 Xush kelibsiz, ${name}! Siz worker sifatida qo‘shildingiz.`, 'success');
+            } else {
+                currentUser = existing;
+                if (existing.name !== name) {
+                    await supabase.from('users').update({ name }).eq('id', userId);
+                    currentUser.name = name;
+                }
+                showToast(`👋 Salom, ${name}!`, 'success');
+            }
+
+            document.getElementById('userName').textContent = currentUser.name;
+            const roleBadge = document.getElementById('userRoleBadge');
+            roleBadge.textContent = currentUser.role === 'admin' ? 'Admin' : 'Ishchi';
+            roleBadge.className = 'role-badge ' + (currentUser.role === 'admin' ? 'admin' : '');
+
+            if (currentUser.role === 'admin') {
+                document.getElementById('usersTabBtn').style.display = 'inline-block';
+            }
+
+            if (tg) tg.expand();
+
+            return currentUser;
+        }
+
+        // ============================================================
+        //  CONSTANTS
+        // ============================================================
         const EXPENSE_CATEGORIES = ['foam', 'water', 'electricity', 'rent', 'chemicals', 'other', 'wax', 'spare_parts'];
         const CATEGORY_LABELS = {
             foam: '🧴 Pena',
@@ -830,44 +683,16 @@
         let allEntries = [];
         let overviewChartInstance = null;
         let expenseChartInstance = null;
-        let isEditMode = false;
-        let editDate = null;
 
-        // ---------- Load / Save ----------
-        function loadData() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    allEntries = JSON.parse(raw);
-                    allEntries = allEntries.map(e => {
-                        if (!e.expenses) e.expenses = {};
-                        EXPENSE_CATEGORIES.forEach(cat => {
-                            if (e.expenses[cat] === undefined) e.expenses[cat] = 0;
-                        });
-                        if (!e.spare_desc) e.spare_desc = '';
-                        return e;
-                    });
-                } else {
-                    allEntries = [];
-                }
-            } catch (_) {
-                allEntries = [];
-            }
-            allEntries.sort((a, b) => (a.date < b.date ? 1 : -1));
-        }
-
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(allEntries));
-        }
-
-        // ---------- Helpers ----------
+        // ============================================================
+        //  HELPERS
+        // ============================================================
         function formatMoney(val) {
             if (val === undefined || val === null) return '0';
             return Number(val).toLocaleString('uz-UZ');
         }
 
         function formatMoneyShort(val) {
-            if (val === undefined || val === null) return '0';
             const n = Number(val);
             if (n >= 1e9) return (n / 1e9).toFixed(1) + ' mlrd';
             if (n >= 1e6) return (n / 1e6).toFixed(1) + ' mln';
@@ -885,34 +710,9 @@
             return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]) || 1);
         }
 
-        function isSameDay(d1, d2) { return d1 === d2; }
-
-        function isSameWeek(dateStr, refDateStr) {
+        function daysInMonth(dateStr) {
             const d = parseDate(dateStr);
-            const ref = parseDate(refDateStr);
-            const startOfWeek = (d) => {
-                const day = d.getDay();
-                const diff = (day === 0 ? 6 : day - 1);
-                const s = new Date(d);
-                s.setDate(d.getDate() - diff);
-                s.setHours(0, 0, 0, 0);
-                return s;
-            };
-            const s1 = startOfWeek(d);
-            const s2 = startOfWeek(ref);
-            return s1.getTime() === s2.getTime();
-        }
-
-        function isSameMonth(dateStr, refDateStr) {
-            const d = parseDate(dateStr);
-            const ref = parseDate(refDateStr);
-            return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth();
-        }
-
-        function isSameYear(dateStr, refDateStr) {
-            const d = parseDate(dateStr);
-            const ref = parseDate(refDateStr);
-            return d.getFullYear() === ref.getFullYear();
+            return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
         }
 
         function getWeekStart(dateStr) {
@@ -932,12 +732,41 @@
             return e.toISOString().split('T')[0];
         }
 
-        function daysInMonth(dateStr) {
-            const d = parseDate(dateStr);
-            return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+        function isSameDay(d1, d2) { return d1 === d2; }
+
+        function isSameWeek(dateStr, refDateStr) {
+            return getWeekStart(dateStr) === getWeekStart(refDateStr);
         }
 
-        // ---------- Filter entries by period ----------
+        function isSameMonth(dateStr, refDateStr) {
+            const d = parseDate(dateStr);
+            const ref = parseDate(refDateStr);
+            return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth();
+        }
+
+        function isSameYear(dateStr, refDateStr) {
+            return parseDate(dateStr).getFullYear() === parseDate(refDateStr).getFullYear();
+        }
+
+        // ============================================================
+        //  DATA FETCHING & FILTERING
+        // ============================================================
+        async function fetchEntries() {
+            if (!currentUser) return;
+            const { data, error } = await supabase
+                .from('entries')
+                .select('*')
+                .order('date', { ascending: false });
+
+            if (error) {
+                console.error('Fetch error:', error);
+                showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error');
+                return;
+            }
+            allEntries = data || [];
+            renderSummary();
+        }
+
         function filterEntries(period, refDate) {
             if (!refDate) refDate = getToday();
             let filtered = [];
@@ -960,7 +789,6 @@
             return filtered.sort((a, b) => (a.date < b.date ? -1 : 1));
         }
 
-        // ---------- Compute totals ----------
         function computeTotals(entries) {
             let totalIncome = 0;
             let totalExpense = 0;
@@ -969,22 +797,78 @@
 
             entries.forEach(e => {
                 totalIncome += Number(e.income) || 0;
+                const exp = e.expenses || {};
                 EXPENSE_CATEGORIES.forEach(c => {
-                    const val = Number(e.expenses?.[c]) || 0;
+                    const val = Number(exp[c]) || 0;
                     expenseBreakdown[c] += val;
                     totalExpense += val;
                 });
             });
-
             return { totalIncome, totalExpense, expenseBreakdown };
         }
 
-        // ---------- Get period label ----------
+        // ============================================================
+        //  RENDER
+        // ============================================================
+        function renderSummary() {
+            const period = document.getElementById('periodSelect').value;
+            const refDate = getRefDate(period);
+            if (!refDate) return;
+
+            const entries = filterEntries(period, refDate);
+            const { totalIncome, totalExpense, expenseBreakdown } = computeTotals(entries);
+            const profit = totalIncome - totalExpense;
+            const dayCount = entries.length;
+
+            document.getElementById('statIncome').textContent = formatMoney(totalIncome);
+            document.getElementById('statExpense').textContent = formatMoney(totalExpense);
+            document.getElementById('statProfit').textContent = formatMoney(profit);
+            document.getElementById('statProfit').className = 'stat-value' + (profit >= 0 ? ' positive' : ' negative');
+            document.getElementById('statDays').textContent = dayCount;
+
+            let avgIncome = 0,
+                avgExpense = 0,
+                avgProfit = 0;
+            if (dayCount > 0) {
+                avgIncome = totalIncome / dayCount;
+                avgExpense = totalExpense / dayCount;
+                avgProfit = profit / dayCount;
+            }
+            document.getElementById('statIncomeAvg').textContent = `o‘rtacha: ${formatMoney(avgIncome)} / kun`;
+            document.getElementById('statExpenseAvg').textContent = `o‘rtacha: ${formatMoney(avgExpense)} / kun`;
+            document.getElementById('statProfitAvg').textContent = `o‘rtacha: ${formatMoney(avgProfit)} / kun`;
+            document.getElementById('statPeriodLabel').textContent = getPeriodLabel(period, refDate);
+
+            EXPENSE_CATEGORIES.forEach(cat => {
+                const id = 'exp' + cat.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+                const el = document.getElementById(id);
+                if (el) el.textContent = formatMoney(expenseBreakdown[cat] || 0);
+            });
+
+            const spareDescEl = document.getElementById('expSparePartsDesc');
+            if (spareDescEl) {
+                const spareEntries = entries.filter(e => (e.expenses?.spare_parts || 0) > 0);
+                if (spareEntries.length > 0) {
+                    const totalSpare = spareEntries.reduce((s, e) => s + (e.expenses?.spare_parts || 0), 0);
+                    const descs = spareEntries.map(e => {
+                        const desc = e.spare_desc && e.spare_desc.trim() ? e.spare_desc : 'Noma\'lum';
+                        return `${desc} (${formatMoney(e.expenses?.spare_parts)})`;
+                    });
+                    spareDescEl.textContent = `📝 Jami: ${formatMoney(totalSpare)} | ` + descs.join(' | ');
+                } else {
+                    spareDescEl.textContent = '';
+                }
+            }
+
+            renderOverviewChart(entries, period, refDate);
+            renderExpenseChart(expenseBreakdown);
+            renderHistory(entries);
+        }
+
         function getPeriodLabel(period, refDate) {
-            if (!refDate) refDate = getToday();
+            if (!refDate) return '';
             const d = parseDate(refDate);
             if (isNaN(d.getTime())) return 'Invalid Date';
-            
             switch (period) {
                 case 'day':
                     return d.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -1004,100 +888,25 @@
             }
         }
 
-        // ============================================================
-        //  UI RENDER
-        // ============================================================
-        function renderSummary() {
-    const period = document.getElementById('periodSelect').value;
-    const refDate = getRefDate(period);
-    
-    if (!refDate) {
-        showToast('Iltimos, to‘g‘ri sanani tanlang!', 'error');
-        return;
-    }
-    
-    const entries = filterEntries(period, refDate);
-    const { totalIncome, totalExpense, expenseBreakdown } = computeTotals(entries);
-    const profit = totalIncome - totalExpense;
-    const dayCount = entries.length;
-
-    document.getElementById('statIncome').textContent = formatMoney(totalIncome);
-    document.getElementById('statExpense').textContent = formatMoney(totalExpense);
-    document.getElementById('statProfit').textContent = formatMoney(profit);
-    document.getElementById('statProfit').className = 'stat-value' + (profit >= 0 ? ' positive' : ' negative');
-    document.getElementById('statDays').textContent = dayCount;
-
-    let avgIncome = 0,
-        avgExpense = 0,
-        avgProfit = 0;
-    if (dayCount > 0) {
-        avgIncome = totalIncome / dayCount;
-        avgExpense = totalExpense / dayCount;
-        avgProfit = profit / dayCount;
-    }
-    document.getElementById('statIncomeAvg').textContent = `o‘rtacha: ${formatMoney(avgIncome)} / kun`;
-    document.getElementById('statExpenseAvg').textContent = `o‘rtacha: ${formatMoney(avgExpense)} / kun`;
-    document.getElementById('statProfitAvg').textContent = `o‘rtacha: ${formatMoney(avgProfit)} / kun`;
-    document.getElementById('statPeriodLabel').textContent = getPeriodLabel(period, refDate);
-
-    // Update all expense categories
-    EXPENSE_CATEGORIES.forEach(cat => {
-        const id = 'exp' + cat.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
-        const el = document.getElementById(id);
-        if (el) el.textContent = formatMoney(expenseBreakdown[cat] || 0);
-    });
-
-    // 🆕 Show Zapchast description in expenses tab
-    const spareDescEl = document.getElementById('expSparePartsDesc');
-    if (spareDescEl) {
-        const spareEntries = entries.filter(e => e.spare_desc && e.spare_desc.trim() !== '');
-        if (spareEntries.length > 0) {
-            const descs = spareEntries.map(e => `${e.spare_desc} (${formatMoney(e.expenses?.spare_parts || 0)})`);
-            spareDescEl.textContent = '📝 ' + descs.join(', ');
-        } else {
-            spareDescEl.textContent = '';
-        }
-    }
-
-    renderOverviewChart(entries, period, refDate);
-    renderExpenseChart(expenseBreakdown);
-    renderHistory(entries);
-}
-
-
-        // ---------- Get reference date ----------
         function getRefDate(period) {
             switch (period) {
-                case 'day': {
-                    const val = document.getElementById('periodDate').value;
-                    return val || getToday();
-                }
-                case 'week': {
-                    const val = document.getElementById('periodWeekStart').value;
-                    return val || getToday();
-                }
-                case 'month': {
-                    const val = document.getElementById('periodMonth').value;
-                    if (!val) return getToday();
-                    // Convert "2026-06" to "2026-06-01"
-                    return val + '-01';
-                }
-                case 'year': {
-                    const val = document.getElementById('periodYear').value;
-                    if (!val) return getToday();
-                    return val + '-01-01';
-                }
+                case 'day':
+                    return document.getElementById('periodDate').value || getToday();
+                case 'week':
+                    return document.getElementById('periodWeekStart').value || getToday();
+                case 'month':
+                    return document.getElementById('periodMonth').value + '-01' || getToday();
+                case 'year':
+                    return document.getElementById('periodYear').value + '-01-01' || getToday();
                 default:
                     return getToday();
             }
         }
 
-        // ---------- Overview Chart ----------
+        // ---------- Charts ----------
         function renderOverviewChart(entries, period, refDate) {
             const ctx = document.getElementById('overviewChart').getContext('2d');
-            if (overviewChartInstance) {
-                overviewChartInstance.destroy();
-            }
+            if (overviewChartInstance) overviewChartInstance.destroy();
 
             if (!entries.length) {
                 overviewChartInstance = new Chart(ctx, {
@@ -1114,16 +923,16 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'top', labels: { font: { size: 12 } } } },
+                        plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
                         scales: { y: { beginAtZero: true, ticks: { callback: v => formatMoneyShort(v) } } }
                     }
                 });
                 return;
             }
 
-            let labels = [];
-            let incomeData = [];
-            let expenseData = [];
+            let labels = [],
+                incomeData = [],
+                expenseData = [];
 
             if (period === 'day') {
                 const tot = computeTotals(entries);
@@ -1217,34 +1026,21 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'top', labels: { font: { size: 12 } } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(ctx) {
-                                    return ctx.dataset.label + ': ' + formatMoney(ctx.parsed.y) + ' so‘m';
-                                }
-                            }
-                        }
+                        legend: { position: 'top', labels: { font: { size: 11 } } },
+                        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + formatMoney(ctx.parsed.y) +
+                                ' so‘m' } }
                     },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { callback: v => formatMoneyShort(v) }
-                        },
-                        x: {
-                            ticks: { maxRotation: 45, font: { size: 10 } }
-                        }
+                        y: { beginAtZero: true, ticks: { callback: v => formatMoneyShort(v) } },
+                        x: { ticks: { maxRotation: 45, font: { size: 9 } } }
                     }
                 }
             });
         }
 
-        // ---------- Expense Chart ----------
         function renderExpenseChart(expenseBreakdown) {
             const ctx = document.getElementById('expenseChart').getContext('2d');
-            if (expenseChartInstance) {
-                expenseChartInstance.destroy();
-            }
+            if (expenseChartInstance) expenseChartInstance.destroy();
 
             const labels = EXPENSE_CATEGORIES.map(c => CATEGORY_LABELS[c]);
             const data = EXPENSE_CATEGORIES.map(c => expenseBreakdown[c] || 0);
@@ -1263,21 +1059,13 @@
                 type: 'doughnut',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors,
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
+                    datasets: [{ data: data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: { font: { size: 12 }, boxWidth: 14, padding: 10 }
-                        },
+                        legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 12, padding: 8 } },
                         tooltip: {
                             callbacks: {
                                 label: function(ctx) {
@@ -1296,27 +1084,13 @@
         function renderHistory(entries) {
             const container = document.getElementById('historyContainer');
             if (!entries.length) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <span class="big-icon">📭</span>
-                        Bu davrda hech qanday ma'lumot yo‘q.
-                    </div>
-                `;
+                container.innerHTML =
+                `<div class="empty-state">📭 Bu davrda hech qanday ma'lumot yo‘q.</div>`;
                 return;
             }
 
             let html = `<table class="history-table">
-                <thead>
-                    <tr>
-                        <th>📅 Sana</th>
-                        <th>💰 Daromad</th>
-                        <th>💸 Xarajat</th>
-                        <th>📊 Foyda</th>
-                        <th style="min-width:150px;">Xarajat tafsiloti</th>
-                        <th class="text-center">⚙️</th>
-                    </tr>
-                </thead>
-                <tbody>`;
+                <thead><tr><th>📅 Sana</th><th>💰 Daromad</th><th>💸 Xarajat</th><th>📊 Foyda</th><th style="min-width:130px;">Xarajat tafsiloti</th><th class="text-center">⚙️</th></tr></thead><tbody>`;
 
             const sorted = [...entries].sort((a, b) => (a.date < b.date ? 1 : -1));
 
@@ -1330,8 +1104,8 @@
                     if (val > 0) {
                         let label = CATEGORY_LABELS[c];
                         if (c === 'spare_parts' && e.spare_desc && e.spare_desc.trim() !== '') {
-    label += ` <span style="display:inline-block; background:#d4edda; padding:1px 10px; border-radius:12px; font-size:11px; color:#155724; margin-left:4px;">${e.spare_desc}</span>`;
-}
+                            label += ` <span class="desc-chip">${e.spare_desc}</span>`;
+                        }
                         parts.push(`${label}: ${formatMoney(val)}`);
                     }
                 });
@@ -1343,12 +1117,9 @@
                     <td class="text-right">${formatMoney(e.income)}</td>
                     <td class="text-right">${formatMoney(totalExp)}</td>
                     <td class="text-right" style="color:${profit>=0?'#1e8b4c':'#b13e4a'};font-weight:600;">${formatMoney(profit)}</td>
-                    <td class="expense-detail">${expDetail}</td>
+                    <td class="expense-detail" style="font-size:12px;">${expDetail}</td>
                     <td class="text-center">
-                        <div class="action-btns" style="justify-content:center;">
-                            <button class="btn btn-outline btn-sm edit-entry" data-date="${e.date}">✏️</button>
-                            <button class="btn btn-danger btn-sm delete-entry" data-date="${e.date}">🗑️</button>
-                        </div>
+                        <button class="btn btn-outline btn-sm delete-entry" data-date="${e.date}">🗑️</button>
                     </td>
                 </tr>`;
             });
@@ -1364,18 +1135,12 @@
                     }
                 });
             });
-            container.querySelectorAll('.edit-entry').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const date = this.dataset.date;
-                    loadEntryForEdit(date);
-                });
-            });
         }
 
         // ============================================================
         //  CRUD OPERATIONS
         // ============================================================
-        function addEntry() {
+        async function addEntry() {
             const date = document.getElementById('entryDate').value;
             const income = parseFloat(document.getElementById('incomeInput').value) || 0;
 
@@ -1384,93 +1149,126 @@
                 return;
             }
 
-            if (!isEditMode) {
-                const existing = allEntries.find(e => e.date === date);
-                if (existing) {
-                    if (!confirm(`"${date}" sanasi uchun yozuv allaqachon mavjud. Yangilashni xohlaysizmi?`)) {
-                        return;
-                    }
-                    allEntries = allEntries.filter(e => e.date !== date);
-                }
-            } else {
-                allEntries = allEntries.filter(e => e.date !== editDate);
-            }
-
             const expenses = {};
             document.querySelectorAll('.expense-input').forEach(inp => {
                 const cat = inp.dataset.category;
                 expenses[cat] = parseFloat(inp.value) || 0;
             });
+            const spareDesc = document.querySelector('.expense-desc-input').value.trim() || '';
 
-            const spareDescInput = document.querySelector('.expense-desc-input');
-            const spareDesc = spareDescInput ? spareDescInput.value.trim() : '';
+            const existing = allEntries.find(e => e.date === date);
+            if (existing) {
+                if (!confirm(`"${date}" sanasi uchun yozuv allaqachon mavjud. Yangilashni xohlaysizmi?`)) return;
+                const { error } = await supabase
+                    .from('entries')
+                    .update({ income, expenses, spare_desc: spareDesc, user_id: currentUser.id })
+                    .eq('id', existing.id);
 
-            const entry = { date, income, expenses, spare_desc: spareDesc };
-            allEntries.push(entry);
-            saveData();
-            renderSummary();
+                if (error) {
+                    showToast('❌ Yangilashda xatolik: ' + error.message, 'error');
+                    return;
+                }
+                showToast(`✅ ${date} yangilandi!`, 'success');
+            } else {
+                const { error } = await supabase
+                    .from('entries')
+                    .insert([{ date, income, expenses, spare_desc: spareDesc, user_id: currentUser.id }]);
 
-            isEditMode = false;
-            editDate = null;
-            document.getElementById('addEntryBtn').textContent = '➕ Qo‘shish';
+                if (error) {
+                    showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error');
+                    return;
+                }
+                showToast(`✅ ${date} uchun ma'lumot saqlandi!`, 'success');
+            }
 
             clearForm();
-            showToast(`✅ ${date} uchun ma'lumot saqlandi!`, 'success');
+            await fetchEntries();
         }
 
-        function deleteEntry(date) {
-            allEntries = allEntries.filter(e => e.date !== date);
-            saveData();
-            renderSummary();
-            showToast(`🗑️ ${date} sanadagi yozuv o‘chirildi.`, 'success');
-        }
-
-        function loadEntryForEdit(date) {
+        async function deleteEntry(date) {
             const entry = allEntries.find(e => e.date === date);
-            if (!entry) {
-                showToast('Yozuv topilmadi!', 'error');
+            if (!entry) return;
+
+            const { error } = await supabase
+                .from('entries')
+                .delete()
+                .eq('id', entry.id);
+
+            if (error) {
+                showToast('❌ O‘chirishda xatolik: ' + error.message, 'error');
                 return;
             }
-
-            isEditMode = true;
-            editDate = date;
-
-            document.getElementById('entryDate').value = entry.date;
-            document.getElementById('incomeInput').value = entry.income || 0;
-            document.querySelectorAll('.expense-input').forEach(inp => {
-                const cat = inp.dataset.category;
-                inp.value = entry.expenses?.[cat] || 0;
-            });
-            const spareDescInput = document.querySelector('.expense-desc-input');
-            if (spareDescInput) {
-                spareDescInput.value = entry.spare_desc || '';
-            }
-
-            document.getElementById('addEntryBtn').textContent = '🔄 Yangilash';
-            showToast(`✏️ "${date}" yozuvini tahrirlash...`, 'success');
-            document.getElementById('addEntryCard').scrollIntoView({ behavior: 'smooth' });
+            showToast(`🗑️ ${date} sanadagi yozuv o‘chirildi.`, 'success');
+            await fetchEntries();
         }
 
         function clearForm() {
             document.getElementById('entryDate').value = getToday();
             document.getElementById('incomeInput').value = '';
             document.querySelectorAll('.expense-input').forEach(inp => inp.value = '');
-            const spareDescInput = document.querySelector('.expense-desc-input');
-            if (spareDescInput) spareDescInput.value = '';
+            document.querySelector('.expense-desc-input').value = '';
         }
 
-        function clearAllData() {
-            if (!allEntries.length) {
-                showToast('Hech qanday maʼlumot yo‘q.', 'error');
+        // ============================================================
+        //  USER MANAGEMENT
+        // ============================================================
+        async function loadUsers() {
+            if (currentUser?.role !== 'admin') return;
+            const { data, error } = await supabase.from('users').select('*').order('id');
+            if (error) {
+                console.error(error);
                 return;
             }
-            if (confirm('🚨 Barcha maʼlumotlarni o‘chirishga ishonchingiz komilmi? Bu amalni qaytarib bo‘lmaydi!')) {
-                allEntries = [];
-                saveData();
-                renderSummary();
-                showToast('🗑️ Barcha maʼlumotlar tozalandi.', 'success');
-            }
+            const list = document.getElementById('userList');
+            list.innerHTML = data.map(u =>
+                `<div class="user-item">
+                    <span><strong>${u.name}</strong> (${u.id}) 
+                        <span class="role-badge ${u.role === 'admin' ? 'admin' : ''}">${u.role}</span>
+                    </span>
+                    <div>
+                        ${u.role === 'admin' ? 
+                            `<button class="btn btn-outline btn-sm" onclick="changeRole(${u.id}, 'worker')">Ishchi qilish</button>` :
+                            `<button class="btn btn-outline btn-sm" onclick="changeRole(${u.id}, 'admin')">Admin qilish</button>`
+                        }
+                        ${u.id !== currentUser.id ? `<button class="btn btn-danger btn-sm" onclick="removeUser(${u.id})">🗑️</button>` : ''}
+                    </div>
+                </div>`
+            ).join('');
         }
+
+        window.changeRole = async function(userId, newRole) {
+            const { error } = await supabase.from('users').update({ role: newRole }).eq('id', userId);
+            if (error) {
+                showToast('❌ Rolni o‘zgartirishda xatolik', 'error');
+                return;
+            }
+            showToast(`✅ Rol o‘zgartirildi!`, 'success');
+            loadUsers();
+        };
+
+        window.removeUser = async function(userId) {
+            if (!confirm('Bu foydalanuvchini o‘chirishga ishonchingiz komilmi?')) return;
+            const { error } = await supabase.from('users').delete().eq('id', userId);
+            if (error) {
+                showToast('❌ O‘chirishda xatolik', 'error');
+                return;
+            }
+            showToast('✅ Foydalanuvchi o‘chirildi', 'success');
+            loadUsers();
+        };
+
+        document.getElementById('addUserBtn').addEventListener('click', function() {
+            const userId = prompt('Yangi foydalanuvchining Telegram ID sini kiriting:');
+            if (!userId) return;
+            const name = prompt('Foydalanuvchi ismi:');
+            if (!name) return;
+            supabase.from('users').insert([{ id: parseInt(userId), name, role: 'worker' }])
+                .then(() => {
+                    showToast('✅ Foydalanuvchi qo‘shildi', 'success');
+                    loadUsers();
+                })
+                .catch(err => showToast('❌ Xatolik: ' + err.message, 'error'));
+        });
 
         // ============================================================
         //  TOAST
@@ -1484,9 +1282,7 @@
             clearTimeout(toastTimer);
             void el.offsetWidth;
             el.classList.add('show');
-            toastTimer = setTimeout(() => {
-                el.classList.remove('show');
-            }, 3000);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
         }
 
         // ============================================================
@@ -1501,17 +1297,16 @@
 
             const today = getToday();
             if (period === 'day') {
-                const inp = document.getElementById('periodDate');
-                if (!inp.value) inp.value = today;
+                if (!document.getElementById('periodDate').value) document.getElementById('periodDate').value = today;
             } else if (period === 'week') {
-                const inp = document.getElementById('periodWeekStart');
-                if (!inp.value) inp.value = getWeekStart(today);
+                if (!document.getElementById('periodWeekStart').value) document.getElementById('periodWeekStart').value =
+                    getWeekStart(today);
             } else if (period === 'month') {
-                const inp = document.getElementById('periodMonth');
-                if (!inp.value) inp.value = today.slice(0, 7);
+                if (!document.getElementById('periodMonth').value) document.getElementById('periodMonth').value = today.slice(
+                    0, 7);
             } else if (period === 'year') {
-                const inp = document.getElementById('periodYear');
-                if (!inp.value) inp.value = new Date().getFullYear().toString();
+                if (!document.getElementById('periodYear').value) document.getElementById('periodYear').value = new Date()
+                    .getFullYear().toString();
             }
             renderSummary();
         }
@@ -1524,44 +1319,46 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
             document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
-            if (tabId === 'overview' || tabId === 'expenses') {
-                renderSummary();
+            if (tabId === 'users' && currentUser?.role === 'admin') {
+                loadUsers();
             }
+            if (tabId === 'overview' || tabId === 'expenses') renderSummary();
         }
 
         // ============================================================
         //  INIT
         // ============================================================
-        function init() {
-            loadData();
+        async function init() {
+            const user = await initTelegramUser();
+            if (!user) {
+                document.getElementById('userName').textContent = 'Test User';
+                currentUser = { id: 1, name: 'Test', role: 'admin' };
+            }
 
-            const today = getToday();
-            document.getElementById('entryDate').value = today;
-            document.getElementById('periodDate').value = today;
-            document.getElementById('periodWeekStart').value = getWeekStart(today);
-            document.getElementById('periodMonth').value = today.slice(0, 7);
-            document.getElementById('periodYear').value = new Date().getFullYear().toString();
-
+            await fetchEntries();
+            document.getElementById('entryDate').value = getToday();
             updatePeriodUI();
 
-            document.getElementById('addEntryBtn').addEventListener('click', function() {
-                addEntry();
+            document.getElementById('addEntryBtn').addEventListener('click', addEntry);
+            document.getElementById('incomeInput').addEventListener('keydown', e => {
+                if (e.key === 'Enter') addEntry();
             });
-
-            document.getElementById('incomeInput').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    document.getElementById('addEntryBtn').click();
-                }
-            });
-
             document.getElementById('periodSelect').addEventListener('change', updatePeriodUI);
             document.getElementById('periodDate').addEventListener('change', renderSummary);
             document.getElementById('periodWeekStart').addEventListener('change', renderSummary);
             document.getElementById('periodMonth').addEventListener('change', renderSummary);
             document.getElementById('periodYear').addEventListener('change', renderSummary);
-
-            document.getElementById('refreshBtn').addEventListener('click', renderSummary);
-            document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
+            document.getElementById('refreshBtn').addEventListener('click', fetchEntries);
+            document.getElementById('clearAllBtn').addEventListener('click', async function() {
+                if (!confirm('🚨 Barcha maʼlumotlarni o‘chirishga ishonchingiz komilmi?')) return;
+                const { error } = await supabase.from('entries').delete().neq('id', 0);
+                if (error) {
+                    showToast('❌ Xatolik: ' + error.message, 'error');
+                    return;
+                }
+                showToast('🗑️ Barcha maʼlumotlar tozalandi.', 'success');
+                await fetchEntries();
+            });
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1569,11 +1366,16 @@
                 });
             });
 
-            if (allEntries.length) {
-                showToast(`📊 ${allEntries.length} ta yozuv yuklandi.`, 'success');
-            } else {
-                showToast('👋 Xush kelibsiz! Yangi yozuv qo‘shing.', 'success');
+            if (currentUser?.role === 'admin') {
+                document.getElementById('usersTabBtn').style.display = 'inline-block';
             }
+
+            renderSummary();
+        }
+
+        // Fallback for local testing
+        if (!window.Telegram?.WebApp) {
+            window.Telegram = { WebApp: { initDataUnsafe: { user: { id: 123456789, first_name: 'Admin' } } } };
         }
 
         document.addEventListener('DOMContentLoaded', init);
