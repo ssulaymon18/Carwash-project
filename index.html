@@ -444,6 +444,14 @@
             color: #6c757d;
             font-size: 12px;
         }
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            color: #7a9aaa;
+            font-size: 11px;
+            border-top: 1px solid #e0e8ef;
+            margin-top: 4px;
+        }
         @media (max-width: 480px) {
             .header h1 {
                 font-size: 17px;
@@ -518,7 +526,7 @@
 
             <div class="form-row" style="margin-top:6px;">
                 <div class="form-group">
-                    <label for="entryDescription">📝 Izoh (ixtiyoriy)</label>
+                    <label for="entryDescription">📝 Izoh</label>
                     <input type="text" id="entryDescription" placeholder="Masalan: band kun, aksiya..." />
                 </div>
             </div>
@@ -541,18 +549,6 @@
                     <div class="form-group">
                         <label>⚡ Elektr</label>
                         <input type="number" class="expense-input" data-category="electricity" placeholder="0" min="0" step="500" />
-                    </div>
-                    <div class="form-group">
-                        <label>🏢 Ijara</label>
-                        <input type="number" class="expense-input" data-category="rent" placeholder="0" min="0" step="500" />
-                    </div>
-                    <div class="form-group">
-                        <label>🧪 Kimyoviy</label>
-                        <input type="number" class="expense-input" data-category="chemicals" placeholder="0" min="0" step="500" />
-                    </div>
-                    <div class="form-group">
-                        <label>📦 Boshqa</label>
-                        <input type="number" class="expense-input" data-category="other" placeholder="0" min="0" step="500" />
                     </div>
                     <div class="expense-item-with-desc">
                         <div class="form-group">
@@ -650,9 +646,6 @@
                     <div class="stat-item"><div class="stat-label">🧴 Pena</div><div class="stat-value" id="expFoam">0</div></div>
                     <div class="stat-item"><div class="stat-label">💧 Suv</div><div class="stat-value" id="expWater">0</div></div>
                     <div class="stat-item"><div class="stat-label">⚡ Elektr</div><div class="stat-value" id="expElectricity">0</div></div>
-                    <div class="stat-item"><div class="stat-label">🏢 Ijara</div><div class="stat-value" id="expRent">0</div></div>
-                    <div class="stat-item"><div class="stat-label">🧪 Kimyoviy</div><div class="stat-value" id="expChemicals">0</div></div>
-                    <div class="stat-item"><div class="stat-label">📦 Boshqa</div><div class="stat-value" id="expOther">0</div></div>
                     <div class="stat-item"><div class="stat-label">🕯️ Vosk</div><div class="stat-value" id="expWax">0</div></div>
                     <div class="stat-item">
                         <div class="stat-label">🔧 Zapchast</div>
@@ -688,9 +681,9 @@
             </div>
         </section>
 
-        <footer style="text-align:center; padding:10px 0; color:#7a9aaa; font-size:11px; border-top:1px solid #e0e8ef; margin-top:4px;">
-            Bot ishlatishi uchun Sulaymon va Sevdiyor tez-tez o'ynagana kelishsin'
-        </footer>
+        <div class="footer">
+            🚗 ALFA MOY SAM
+        </div>
     </div>
 
     <div class="toast" id="toast"></div>
@@ -778,14 +771,11 @@
         // ============================================================
         //  CONSTANTS
         // ============================================================
-        const EXPENSE_CATEGORIES = ['foam', 'water', 'electricity', 'rent', 'chemicals', 'other', 'wax', 'spare_parts'];
+        const EXPENSE_CATEGORIES = ['foam', 'water', 'electricity', 'wax', 'spare_parts'];
         const CATEGORY_LABELS = {
             foam: '🧴 Pena',
             water: '💧 Suv',
             electricity: '⚡ Elektr',
-            rent: '🏢 Ijara',
-            chemicals: '🧪 Kimyoviy',
-            other: '📦 Boshqa',
             wax: '🕯️ Vosk',
             spare_parts: '🔧 Zapchast'
         };
@@ -1159,9 +1149,6 @@
                 'rgba(46,204,113,0.75)',
                 'rgba(241,196,15,0.75)',
                 'rgba(155,89,182,0.75)',
-                'rgba(231,76,60,0.75)',
-                'rgba(149,165,166,0.75)',
-                'rgba(243,156,18,0.75)',
                 'rgba(192,57,43,0.75)'
             ];
 
