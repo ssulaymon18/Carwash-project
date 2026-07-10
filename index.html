@@ -3,70 +3,89 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Avtoyuvish - Daromad va Xarajatlar</title>
+    <title>ALFA MOY SAM - Avtoyuvish</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
     </script>
-    <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
     <style>
-        /* ---------- RESET & BASE ---------- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f0f4f8;
             color: #1a202c;
-            padding: 12px;
+            padding: 10px;
             min-height: 100vh;
         }
         .container {
             max-width: 480px;
             margin: 0 auto;
         }
-
-        /* ---------- HEADER ---------- */
         .header {
             background: linear-gradient(135deg, #0b3b5c, #1a6b8a);
             color: #fff;
-            padding: 20px 24px;
-            border-radius: 16px;
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
         }
         .header h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
         }
         .header h1 small {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 400;
             opacity: 0.85;
+            display: block;
         }
         .header .currency-badge {
             background: rgba(255, 255, 255, 0.18);
-            padding: 6px 14px;
+            padding: 4px 12px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 14px;
+        }
+        .user-info {
+            font-size: 13px;
+            margin-top: 4px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .role-badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            padding: 1px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .role-badge.admin {
+            background: #cce5ff;
+            color: #004085;
         }
         .card {
             background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            padding: 16px;
+            margin-bottom: 16px;
         }
         .card-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             color: #1a3a4a;
             display: flex;
             align-items: center;
@@ -75,19 +94,23 @@
         .form-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             align-items: flex-end;
         }
         .form-group {
-            flex: 1 1 120px;
-            min-width: 100px;
+            flex: 1 1 100%;
+            min-width: 80px;
+        }
+        .form-group.half {
+            flex: 1 1 calc(50% - 5px);
+            min-width: 80px;
         }
         .form-group label {
             display: block;
             font-size: 12px;
             font-weight: 600;
             color: #2d4a5a;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
         .form-group input,
         .form-group select {
@@ -98,80 +121,124 @@
             font-size: 15px;
             background: #fafcfe;
             outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1a6b8a;
         }
         .expense-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .expense-grid .form-group {
+            flex: unset;
+            min-width: unset;
+        }
+        .expense-grid .form-group label {
+            font-size: 11px;
+        }
+        .expense-grid .form-group input {
+            padding: 8px 10px;
+            font-size: 14px;
         }
         .expense-item-with-desc {
             grid-column: span 2;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             background: #f7fafc;
-            padding: 12px 14px;
-            border-radius: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
             border: 1px solid #e8edf2;
             align-items: flex-end;
         }
         .expense-item-with-desc .form-group {
             flex: 1 1 100px;
-            min-width: 80px;
+            min-width: 70px;
         }
         .expense-item-with-desc .form-group:first-child {
-            flex: 2 1 140px;
+            flex: 2 1 120px;
+        }
+        .expense-item-with-desc .form-group label {
+            font-size: 11px;
+        }
+        .expense-item-with-desc .form-group input {
+            padding: 8px 10px;
+            font-size: 13px;
         }
         .btn {
-            padding: 10px 22px;
+            padding: 10px 20px;
             border: none;
             border-radius: 10px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.2s;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
+            width: 100%;
         }
         .btn-primary {
             background: #1a6b8a;
             color: #fff;
         }
+        .btn-primary:hover {
+            background: #0f5875;
+        }
         .btn-danger {
             background: #b13e4a;
             color: #fff;
+        }
+        .btn-danger:hover {
+            background: #962f3a;
         }
         .btn-outline {
             background: transparent;
             border: 1.5px solid #dce4ec;
             color: #2d4a5a;
         }
+        .btn-outline:hover {
+            background: #eef4f8;
+        }
         .btn-sm {
-            padding: 6px 14px;
-            font-size: 13px;
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
         }
         .btn-success {
             background: #2b7a4b;
             color: #fff;
         }
+        .btn-success:hover {
+            background: #1e643a;
+        }
+        .btn-block {
+            width: 100%;
+        }
         .tabs {
             display: flex;
-            gap: 6px;
-            margin-bottom: 16px;
+            gap: 4px;
+            margin-bottom: 14px;
             border-bottom: 2px solid #e8edf2;
             padding-bottom: 2px;
+            overflow-x: auto;
         }
         .tab-btn {
-            padding: 8px 18px;
+            padding: 8px 14px;
             border: none;
             background: transparent;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 600;
             color: #5a7a8a;
             cursor: pointer;
-            border-radius: 10px 10px 0 0;
+            border-radius: 8px 8px 0 0;
+            white-space: nowrap;
+            transition: all 0.2s;
         }
         .tab-btn.active {
             color: #0b3b5c;
@@ -183,28 +250,40 @@
         }
         .tab-pane.active {
             display: block;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 10px;
+            margin-bottom: 14px;
         }
         .stat-item {
             background: #f7fafc;
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 10px;
             text-align: center;
             border: 1px solid #e8edf2;
         }
         .stat-item .stat-label {
-            font-size: 12px;
+            font-size: 10px;
             color: #5a7a8a;
             font-weight: 500;
             text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
         .stat-item .stat-value {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: #0b3b5c;
         }
@@ -215,15 +294,15 @@
             color: #b13e4a;
         }
         .stat-item .stat-sub {
-            font-size: 13px;
+            font-size: 11px;
             color: #4a6a7a;
         }
         .chart-wrapper {
-            height: 200px;
-            margin-top: 10px;
+            height: 180px;
+            margin-top: 8px;
         }
         .history-scroll {
-            max-height: 280px;
+            max-height: 250px;
             overflow-y: auto;
             border: 1px solid #e8edf2;
             border-radius: 10px;
@@ -231,40 +310,105 @@
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 12px;
         }
         .history-table th {
             background: #e8eff4;
-            padding: 8px 10px;
+            padding: 6px 8px;
             text-align: left;
             position: sticky;
             top: 0;
             z-index: 2;
+            font-size: 11px;
         }
         .history-table td {
-            padding: 8px 10px;
+            padding: 6px 8px;
             border-bottom: 1px solid #eef2f6;
+            vertical-align: middle;
+        }
+        .history-table .text-right {
+            text-align: right;
+        }
+        .history-table .text-center {
+            text-align: center;
         }
         .desc-chip {
             display: inline-block;
             background: #d4edda;
-            padding: 1px 10px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 10px;
             color: #155724;
             margin-left: 4px;
         }
+        .expense-detail {
+            font-size: 11px;
+            color: #5a7a8a;
+        }
+        .empty-state {
+            padding: 30px 16px;
+            text-align: center;
+            color: #8a9aa8;
+            font-size: 14px;
+        }
+        .empty-state .big-icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .period-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .period-selector .form-group {
+            flex: 1 1 100px;
+            min-width: 80px;
+        }
+        .period-selector .form-group label {
+            font-size: 10px;
+        }
+        .period-selector .form-group input,
+        .period-selector .form-group select {
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+        .user-management {
+            margin-top: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        .user-item span {
+            font-size: 13px;
+        }
         .toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 16px;
             left: 50%;
             transform: translateX(-50%);
             background: #1a3a4a;
             color: #fff;
-            padding: 12px 24px;
-            border-radius: 12px;
+            padding: 10px 20px;
+            border-radius: 10px;
             font-weight: 500;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.20);
+            font-size: 13px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 999;
@@ -280,62 +424,15 @@
         .toast.error {
             background: #b13e4a;
         }
-        .role-badge {
-            display: inline-block;
-            background: #fff3cd;
-            color: #856404;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        .role-badge.admin {
-            background: #cce5ff;
-            color: #004085;
-        }
-        .period-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .period-selector .form-group {
-            flex: 1 1 120px;
-            min-width: 100px;
-        }
-        .period-selector .form-group label {
-            font-size: 12px;
-        }
-        .period-selector .form-group input,
-        .period-selector .form-group select {
-            padding: 8px 10px;
-            font-size: 14px;
-        }
-        .user-management {
-            margin-top: 12px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 1px solid #dee2e6;
-        }
-        .user-management .user-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .user-management .user-item:last-child {
-            border-bottom: none;
-        }
         .flex-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
+        }
+        .mt-8 {
+            margin-top: 8px;
         }
         .mt-12 {
             margin-top: 12px;
@@ -345,17 +442,17 @@
         }
         .text-muted {
             color: #6c757d;
-            font-size: 13px;
+            font-size: 12px;
         }
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 18px;
+                font-size: 17px;
             }
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
             }
             .stat-item .stat-value {
-                font-size: 20px;
+                font-size: 18px;
             }
             .expense-grid {
                 grid-template-columns: 1fr 1fr;
@@ -367,29 +464,20 @@
             .expense-item-with-desc .form-group {
                 flex: 1 1 100%;
             }
-            .tabs .tab-btn {
-                padding: 6px 12px;
-                font-size: 13px;
-            }
             .btn {
-                padding: 8px 16px;
                 font-size: 13px;
-                width: 100%;
-                justify-content: center;
+                padding: 8px 16px;
             }
-            .form-group {
-                flex: 1 1 100%;
-                min-width: unset;
+            .tab-btn {
+                font-size: 12px;
+                padding: 6px 10px;
             }
-            .form-row {
-                flex-direction: column;
+            .history-table {
+                font-size: 11px;
             }
-            .period-selector {
-                flex-direction: column;
-            }
-            .period-selector .form-group {
-                flex: 1 1 100%;
-                min-width: unset;
+            .history-table th,
+            .history-table td {
+                padding: 4px 6px;
             }
         }
     </style>
@@ -398,14 +486,14 @@
 
     <div class="container">
 
-        <!-- HEADER with user info -->
+        <!-- HEADER -->
         <header class="header">
             <div>
                 <h1>
-                    🚗 Avtoyuvish
+                    🚗 ALFA MOY SAM
                     <small>daromad &amp; xarajat</small>
                 </h1>
-                <div style="font-size:14px; margin-top:4px; opacity:0.9;">
+                <div class="user-info">
                     👤 <span id="userName">Yuklanmoqda...</span>
                     <span id="userRoleBadge" class="role-badge"></span>
                 </div>
@@ -413,27 +501,30 @@
             <div class="currency-badge">🇺🇿 so‘m</div>
         </header>
 
-        <!-- ADD ENTRY CARD -->
+        <!-- ADD ENTRY -->
         <section class="card" id="addEntryCard">
-            <div class="card-title">
-                <span class="icon">📋</span> Kunlik ma'lumot qo‘shish
-            </div>
+            <div class="card-title">📋 Kunlik ma'lumot qo‘shish</div>
+
             <div class="form-row">
-                <div class="form-group">
+                <div class="form-group half">
                     <label for="entryDate">📅 Sana</label>
                     <input type="date" id="entryDate" />
                 </div>
-                <div class="form-group">
-                    <label for="incomeInput">💰 Daromad (so‘m)</label>
+                <div class="form-group half">
+                    <label for="incomeInput">💰 Daromad</label>
                     <input type="number" id="incomeInput" placeholder="0" min="0" step="1000" />
                 </div>
-                <div class="form-group" style="flex:0 0 auto;">
-                    <label>&nbsp;</label>
-                    <button class="btn btn-primary" id="addEntryBtn" style="width:100%;">➕ Qo‘shish</button>
+            </div>
+
+            <div class="form-row" style="margin-top:6px;">
+                <div class="form-group">
+                    <label for="entryDescription">📝 Izoh (ixtiyoriy)</label>
+                    <input type="text" id="entryDescription" placeholder="Masalan: band kun, aksiya..." />
                 </div>
             </div>
-            <div class="mt-12">
-                <label style="font-weight:600; font-size:14px; color:#2d4a5a;">💸 Xarajatlar (so‘m)</label>
+
+            <div class="mt-8">
+                <label style="font-weight:600; font-size:13px; color:#2d4a5a;">💸 Xarajatlar</label>
                 <div class="expense-grid">
                     <div class="form-group">
                         <label>🧴 Pena</label>
@@ -448,32 +539,44 @@
                         <input type="number" class="expense-input" data-category="water" placeholder="0" min="0" step="500" />
                     </div>
                     <div class="form-group">
-                        <label>⚡ Elektr toki</label>
+                        <label>⚡ Elektr</label>
                         <input type="number" class="expense-input" data-category="electricity" placeholder="0" min="0" step="500" />
                     </div>
+                    <div class="form-group">
+                        <label>🏢 Ijara</label>
+                        <input type="number" class="expense-input" data-category="rent" placeholder="0" min="0" step="500" />
+                    </div>
+                    <div class="form-group">
+                        <label>🧪 Kimyoviy</label>
+                        <input type="number" class="expense-input" data-category="chemicals" placeholder="0" min="0" step="500" />
+                    </div>
+                    <div class="form-group">
+                        <label>📦 Boshqa</label>
+                        <input type="number" class="expense-input" data-category="other" placeholder="0" min="0" step="500" />
+                    </div>
                     <div class="expense-item-with-desc">
-                        <div class="form-group" style="flex:2 1 140px;">
+                        <div class="form-group">
                             <label>🔧 Zapchast (nima?)</label>
-                            <input type="text" class="expense-desc-input" data-category="spare_parts" placeholder="Masalan: filtr, moy, shina..." />
+                            <input type="text" class="expense-desc-input" data-category="spare_parts" placeholder="filtr, moy..." />
                         </div>
-                        <div class="form-group" style="flex:1 1 100px;">
-                            <label>Narxi (so‘m)</label>
+                        <div class="form-group">
+                            <label>Narxi</label>
                             <input type="number" class="expense-input" data-category="spare_parts" placeholder="0" min="0" step="500" />
                         </div>
                     </div>
                 </div>
             </div>
+
+            <button class="btn btn-primary btn-block" id="addEntryBtn" style="margin-top:12px;">➕ Qo‘shish</button>
         </section>
 
-        <!-- SUMMARY CARD -->
+        <!-- SUMMARY -->
         <section class="card">
             <div class="flex-between">
-                <div class="card-title" style="margin-bottom:0;">
-                    <span class="icon">📊</span> Umumiy hisobot
-                </div>
-                <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                    <button class="btn btn-outline btn-sm" id="refreshBtn">🔄 Yangilash</button>
-                    <button class="btn btn-danger btn-sm" id="clearAllBtn">🗑️ Tozalash</button>
+                <div class="card-title" style="margin-bottom:0;">📊 Umumiy hisobot</div>
+                <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                    <button class="btn btn-outline btn-sm" id="refreshBtn">🔄</button>
+                    <button class="btn btn-danger btn-sm" id="clearAllBtn">🗑️</button>
                 </div>
             </div>
 
@@ -512,6 +615,7 @@
                 <button class="tab-btn" data-tab="users" id="usersTabBtn" style="display:none;">👥 Foydalanuvchilar</button>
             </div>
 
+            <!-- OVERVIEW -->
             <div class="tab-pane active" id="tab-overview">
                 <div class="stats-grid">
                     <div class="stat-item">
@@ -540,6 +644,7 @@
                 </div>
             </div>
 
+            <!-- EXPENSES -->
             <div class="tab-pane" id="tab-expenses">
                 <div class="stats-grid" id="expenseStatsGrid">
                     <div class="stat-item"><div class="stat-label">🧴 Pena</div><div class="stat-value" id="expFoam">0</div></div>
@@ -552,34 +657,39 @@
                     <div class="stat-item">
                         <div class="stat-label">🔧 Zapchast</div>
                         <div class="stat-value" id="expSpareParts">0</div>
-                        <div class="stat-sub" id="expSparePartsDesc" style="font-size:12px; color:#5a7a8a; margin-top:4px;"></div>
+                        <div class="stat-sub" id="expSparePartsDesc" style="font-size:10px; color:#5a7a8a; margin-top:2px;"></div>
                     </div>
                 </div>
-                <div class="chart-wrapper" style="height:180px;">
+                <div class="chart-wrapper" style="height:160px;">
                     <canvas id="expenseChart"></canvas>
                 </div>
             </div>
 
+            <!-- HISTORY -->
             <div class="tab-pane" id="tab-history">
                 <div class="history-scroll" id="historyContainer">
-                    <div class="empty-state">📭 Hozircha ma'lumot yo‘q.</div>
+                    <div class="empty-state">
+                        <span class="big-icon">📭</span>
+                        Hozircha ma'lumot yo‘q.
+                    </div>
                 </div>
             </div>
 
+            <!-- USERS -->
             <div class="tab-pane" id="tab-users">
-                <div class="user-management" id="userManagement">
-                    <h4 style="margin-bottom:8px;">👥 Foydalanuvchilar</h4>
+                <div class="user-management">
+                    <h4 style="margin-bottom:6px; font-size:14px;">👥 Foydalanuvchilar</h4>
                     <div id="userList"></div>
-                    <div style="margin-top:12px;">
+                    <div style="margin-top:10px;">
                         <button class="btn btn-success btn-sm" id="addUserBtn">➕ Yangi foydalanuvchi</button>
-                        <span class="text-muted" style="font-size:12px; margin-left:8px;">(Telegram ID ni kiriting)</span>
+                        <span class="text-muted" style="font-size:11px; margin-left:6px;">(Telegram ID)</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer style="text-align:center; padding:12px 0; color:#7a9aaa; font-size:12px; border-top:1px solid #e0e8ef; margin-top:8px;">
-            🚗 Avtoyuvish hisoblagichi &bull; Ma'lumotlar bulutda saqlanadi
+        <footer style="text-align:center; padding:10px 0; color:#7a9aaa; font-size:11px; border-top:1px solid #e0e8ef; margin-top:4px;">
+            🚗 ALFA MOY SAM &bull; Ma'lumotlar bulutda saqlanadi
         </footer>
     </div>
 
@@ -587,7 +697,7 @@
 
     <script>
         // ============================================================
-        //  🔑 CONFIGURATION - PUT YOUR KEYS HERE!
+        //  CONFIGURATION
         // ============================================================
         const SUPABASE_URL = 'https://hauokcicipuxpdjkuumnf.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhdW9rY2ljcHVweGRqa3V1bW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTMwMzksImV4cCI6MjA5OTI2OTAzOX0.ZAoK0t4A3PTe08bGKdY93yclG01SfaJ1ROWjDDRjoW0';
@@ -641,7 +751,7 @@
                     return null;
                 }
                 currentUser = newUser;
-                showToast(`👋 Xush kelibsiz, ${name}! Siz worker sifatida qo‘shildingiz.`, 'success');
+                showToast(`👋 Xush kelibsiz, ${name}!`, 'success');
             } else {
                 currentUser = existing;
                 if (existing.name !== name) {
@@ -1143,6 +1253,7 @@
         async function addEntry() {
             const date = document.getElementById('entryDate').value;
             const income = parseFloat(document.getElementById('incomeInput').value) || 0;
+            const description = document.getElementById('entryDescription').value.trim() || '';
 
             if (!date) {
                 showToast('Iltimos, sanani tanlang!', 'error');
@@ -1161,7 +1272,7 @@
                 if (!confirm(`"${date}" sanasi uchun yozuv allaqachon mavjud. Yangilashni xohlaysizmi?`)) return;
                 const { error } = await supabase
                     .from('entries')
-                    .update({ income, expenses, spare_desc: spareDesc, user_id: currentUser.id })
+                    .update({ income, expenses, spare_desc: spareDesc, description: description, user_id: currentUser.id })
                     .eq('id', existing.id);
 
                 if (error) {
@@ -1172,7 +1283,7 @@
             } else {
                 const { error } = await supabase
                     .from('entries')
-                    .insert([{ date, income, expenses, spare_desc: spareDesc, user_id: currentUser.id }]);
+                    .insert([{ date, income, expenses, spare_desc: spareDesc, description: description, user_id: currentUser.id }]);
 
                 if (error) {
                     showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error');
@@ -1205,6 +1316,7 @@
         function clearForm() {
             document.getElementById('entryDate').value = getToday();
             document.getElementById('incomeInput').value = '';
+            document.getElementById('entryDescription').value = '';
             document.querySelectorAll('.expense-input').forEach(inp => inp.value = '');
             document.querySelector('.expense-desc-input').value = '';
         }
