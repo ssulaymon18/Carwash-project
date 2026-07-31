@@ -583,44 +583,68 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============================================================
-        // 🔐 PASSWORD PROTECTION (3 attempts, 1 minute lockout)
-        // ============================================================
-        var APP_PASSWORD = 'alfamoy2026';
+        
+// ============================================================
+// 🔐 PASSWORD PROTECTION (FIXED for Telegram)
+// ============================================================
+var APP_PASSWORD = 'alfamoy2026';
 
-        function checkPassword() {
-            if (sessionStorage.getItem('authenticated') === 'true') {
-                return true;
-            }
-            var lockUntil = parseInt(localStorage.getItem('lockUntil') || '0');
-            var now = Date.now();
-            if (lockUntil > now) {
-                var remaining = Math.ceil((lockUntil - now) / 1000);
-                showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, ' + remaining + ' soniya kuting.');
-                return false;
-            }
-            var attempts = parseInt(sessionStorage.getItem('attempts') || '0');
-            var entered = prompt('🔐 Iltimos, maxfiy kodni kiriting:');
-            if (entered === APP_PASSWORD) {
-                sessionStorage.setItem('authenticated', 'true');
-                sessionStorage.setItem('attempts', '0');
-                localStorage.removeItem('lockUntil');
-                return true;
-            } else {
-                attempts++;
-                sessionStorage.setItem('attempts', attempts.toString());
-                var remaining = 3 - attempts;
-                if (attempts >= 3) {
-                    localStorage.setItem('lockUntil', (Date.now() + 60000).toString());
-                    showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, 1 daqiqa kuting.');
-                    return false;
-                } else {
-                    alert('❌ Noto‘g‘ri kod! Yana ' + remaining + ' ta urinish qoldi.');
-                    return checkPassword();
-                }
-            }
+function checkPassword() {
+    // If already authenticated, skip
+    if (localStorage.getItem('authenticated') === 'true') {
+        return true;
+    }
+
+    // Check lockout
+    var lockUntil = parseInt(localStorage.getItem('lockUntil') || '0');
+    var now = Date.now();
+
+    if (lockUntil > now) {
+        var remaining = Math.ceil((lockUntil - now) / 1000);
+        var minutes = Math.floor(remaining / 60);
+        var seconds = remaining % 60;
+        var timeMsg = minutes > 0 ? minutes + ' daqiqa ' + seconds + ' soniya' : seconds + ' soniya';
+        showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, ' + timeMsg + ' kuting.');
+        return false;
+    }
+
+    var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
+    var entered = prompt('🔐 Iltimos, maxfiy kodni kiriting:');
+
+    if (entered === APP_PASSWORD) {
+        localStorage.setItem('authenticated', 'true');
+        localStorage.setItem('password_attempts', '0');
+        localStorage.removeItem('lockUntil');
+        return true;
+    } else {
+        attempts++;
+        localStorage.setItem('password_attempts', attempts.toString());
+
+        if (attempts >= 3) {
+            localStorage.setItem('lockUntil', (Date.now() + 60000).toString());
+            showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, 1 daqiqa kuting.');
+            return false;
+        } else {
+            alert('❌ Noto‘g‘ri kod! Yana ' + (3 - attempts) + ' ta urinish qoldi.');
+            // Reload to try again
+            setTimeout(function() { location.reload(); }, 500);
+            return false;
         }
+    }
+}
 
+function showLockScreen(message) {
+    document.body.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f0f4f8; font-family:sans-serif; text-align:center; padding:20px;">
+            <div style="background:#fff; padding:40px 30px; border-radius:20px; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+                <div style="font-size:64px;">🔒</div>
+                <h2 style="color:#b13e4a; margin-top:10px;">Ruxsat yo‘q</h2>
+                <p style="color:#5a7a8a; margin-top:10px; font-size:16px;">${message}</p>
+                <button onclick="location.reload()" style="margin-top:20px; padding:12px 30px; background:#1a6b8a; color:#fff; border:none; border-radius:10px; font-size:16px; cursor:pointer;">🔄 Qayta urinib ko‘rish</button>
+            </div>
+        </div>
+    `;
+}
         function showLockScreen(message) {
             document.body.innerHTML = `
                 <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f0f4f8; font-family:sans-serif; text-align:center; padding:20px;">
