@@ -583,7 +583,7 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        
+
 // ============================================================
 // 🔐 PASSWORD PROTECTION (FIXED for Telegram)
 // ============================================================
@@ -609,7 +609,21 @@ function checkPassword() {
     }
 
     var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
-    var entered = prompt('🔐 Iltimos, maxfiy kodni kiriting:');
+
+    // Use Telegram-friendly password input
+    var entered;
+    if (window.Telegram && window.Telegram.WebApp) {
+        // In Telegram, use prompt (it works differently)
+        entered = prompt('🔐 Iltimos, maxfiy kodni kiriting:');
+        if (entered === null) {
+            // User cancelled - reload to try again
+            setTimeout(function() { location.reload(); }, 100);
+            return false;
+        }
+    } else {
+        // In browser, use regular prompt
+        entered = prompt('🔐 Iltimos, maxfiy kodni kiriting:');
+    }
 
     if (entered === APP_PASSWORD) {
         localStorage.setItem('authenticated', 'true');
@@ -622,11 +636,9 @@ function checkPassword() {
 
         if (attempts >= 3) {
             localStorage.setItem('lockUntil', (Date.now() + 60000).toString());
-            showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, 1 daqiqa kuting.');
             return false;
         } else {
             alert('❌ Noto‘g‘ri kod! Yana ' + (3 - attempts) + ' ta urinish qoldi.');
-            // Reload to try again
             setTimeout(function() { location.reload(); }, 500);
             return false;
         }
