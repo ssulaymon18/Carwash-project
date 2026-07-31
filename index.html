@@ -7,406 +7,82 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
     </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f4f8;
-            color: #1a202c;
-            padding: 10px;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        .header {
-            background: linear-gradient(135deg, #0b3b5c, #1a6b8a);
-            color: #fff;
-            padding: 16px 20px;
-            border-radius: 14px;
-            margin-bottom: 16px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .header h1 {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .header h1 small {
-            font-size: 12px;
-            font-weight: 400;
-            opacity: 0.85;
-            display: block;
-        }
-        .header .currency-badge {
-            background: rgba(255, 255, 255, 0.18);
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .card {
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1a3a4a;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: flex-end;
-        }
-        .form-group {
-            flex: 1 1 100%;
-            min-width: 80px;
-        }
-        .form-group.half {
-            flex: 1 1 calc(50% - 5px);
-            min-width: 80px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: #2d4a5a;
-            margin-bottom: 3px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1.5px solid #dce4ec;
-            border-radius: 10px;
-            font-size: 15px;
-            background: #fafcfe;
-            outline: none;
-        }
-        .form-group input:focus {
-            border-color: #1a6b8a;
-        }
-        .expense-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .expense-grid .form-group {
-            flex: unset;
-            min-width: unset;
-        }
-        .expense-grid .form-group label {
-            font-size: 11px;
-        }
-        .expense-grid .form-group input {
-            padding: 8px 10px;
-            font-size: 14px;
-        }
-        .expense-item-with-desc {
-            grid-column: span 2;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            background: #f7fafc;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid #e8edf2;
-            align-items: flex-end;
-        }
-        .expense-item-with-desc .form-group {
-            flex: 1 1 100px;
-            min-width: 70px;
-        }
-        .expense-item-with-desc .form-group:first-child {
-            flex: 2 1 120px;
-        }
-        .expense-item-with-desc .form-group label {
-            font-size: 11px;
-        }
-        .expense-item-with-desc .form-group input {
-            padding: 8px 10px;
-            font-size: 13px;
-        }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
-            background: #1a6b8a;
-            color: #fff;
-            transition: background 0.2s;
-        }
-        .btn:hover {
-            background: #0f5875;
-        }
-        .btn-danger {
-            background: #b13e4a;
-        }
-        .btn-danger:hover {
-            background: #962f3a;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid #dce4ec;
-            color: #2d4a5a;
-        }
-        .btn-sm {
-            width: auto;
-            padding: 6px 12px;
-            font-size: 12px;
-        }
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mt-12 {
-            margin-top: 12px;
-        }
-        .tabs {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 14px;
-            border-bottom: 2px solid #e8edf2;
-            padding-bottom: 2px;
-            overflow-x: auto;
-        }
-        .tab-btn {
-            padding: 8px 14px;
-            border: none;
-            background: transparent;
-            font-size: 13px;
-            font-weight: 600;
-            color: #5a7a8a;
-            cursor: pointer;
-            border-radius: 8px 8px 0 0;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            color: #0b3b5c;
-            background: #e4eef6;
-            border-bottom: 3px solid #1a6b8a;
-        }
-        .tab-pane {
-            display: none;
-        }
-        .tab-pane.active {
-            display: block;
-            animation: fadeIn 0.2s ease;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-        .stat-item {
-            background: #f7fafc;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #e8edf2;
-        }
-        .stat-item .stat-label {
-            font-size: 10px;
-            color: #5a7a8a;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .stat-item .stat-value {
-            font-size: 22px;
-            font-weight: 700;
-            color: #0b3b5c;
-        }
-        .stat-item .stat-value.positive {
-            color: #1e8b4c;
-        }
-        .stat-item .stat-value.negative {
-            color: #b13e4a;
-        }
-        .chart-wrapper {
-            height: 180px;
-            margin-top: 8px;
-        }
-        .history-scroll {
-            max-height: 250px;
-            overflow-y: auto;
-            border: 1px solid #e8edf2;
-            border-radius: 10px;
-        }
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            border-bottom: 1px solid #eef2f6;
-        }
-        .history-item:last-child {
-            border-bottom: none;
-        }
-        .history-date {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .history-amount {
-            font-weight: 600;
-            color: #1e8b4c;
-            font-size: 14px;
-        }
-        .history-desc {
-            font-size: 12px;
-            color: #5a7a8a;
-        }
-        .history-expenses {
-            font-size: 11px;
-            color: #b13e4a;
-        }
-        .delete-btn {
-            background: #b13e4a;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 4px 10px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        .delete-btn:hover {
-            background: #962f3a;
-        }
-        .period-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .period-selector .form-group {
-            flex: 1 1 100px;
-            min-width: 80px;
-        }
-        .period-selector .form-group label {
-            font-size: 10px;
-        }
-        .period-selector .form-group input,
-        .period-selector .form-group select {
-            padding: 6px 10px;
-            font-size: 13px;
-            border: 1.5px solid #dce4ec;
-            border-radius: 8px;
-            outline: none;
-            background: #fafcfe;
-        }
-        .toast {
-            position: fixed;
-            bottom: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1a3a4a;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 500;
-            font-size: 13px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 999;
-            max-width: 90%;
-            text-align: center;
-        }
-        .toast.show {
-            opacity: 1;
-        }
-        .toast.success {
-            background: #1e6b3a;
-        }
-        .toast.error {
-            background: #b13e4a;
-        }
-        .empty-state {
-            padding: 30px 16px;
-            text-align: center;
-            color: #8a9aa8;
-            font-size: 14px;
-        }
-        .empty-state .big-icon {
-            font-size: 36px;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .footer {
-            text-align: center;
-            padding: 10px 0;
-            color: #7a9aaa;
-            font-size: 11px;
-        }
-        .desc-chip {
-            display: inline-block;
-            background: #d4edda;
-            padding: 1px 8px;
-            border-radius: 10px;
-            font-size: 10px;
-            color: #155724;
-            margin-left: 4px;
-        }
+        /* ---------- YOUR EXISTING STYLES (keep exactly as they are) ---------- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a202c; padding: 10px; min-height: 100vh; }
+        .container { max-width: 480px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #0b3b5c, #1a6b8a); color: #fff; padding: 16px 20px; border-radius: 14px; margin-bottom: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+        .header h1 { font-size: 20px; font-weight: 700; }
+        .header h1 small { font-size: 12px; font-weight: 400; opacity: 0.85; display: block; }
+        .header .currency-badge { background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 40px; font-weight: 600; font-size: 14px; }
+        .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 16px; margin-bottom: 16px; }
+        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #1a3a4a; display: flex; align-items: center; gap: 8px; }
+        .form-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+        .form-group { flex: 1 1 100%; min-width: 80px; }
+        .form-group.half { flex: 1 1 calc(50% - 5px); min-width: 80px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #2d4a5a; margin-bottom: 3px; }
+        .form-group input { width: 100%; padding: 10px 12px; border: 1.5px solid #dce4ec; border-radius: 10px; font-size: 15px; background: #fafcfe; outline: none; }
+        .form-group input:focus { border-color: #1a6b8a; }
+        .expense-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+        .expense-grid .form-group { flex: unset; min-width: unset; }
+        .expense-grid .form-group label { font-size: 11px; }
+        .expense-grid .form-group input { padding: 8px 10px; font-size: 14px; }
+        .expense-item-with-desc { grid-column: span 2; display: flex; flex-wrap: wrap; gap: 8px; background: #f7fafc; padding: 10px 12px; border-radius: 10px; border: 1px solid #e8edf2; align-items: flex-end; }
+        .expense-item-with-desc .form-group { flex: 1 1 100px; min-width: 70px; }
+        .expense-item-with-desc .form-group:first-child { flex: 2 1 120px; }
+        .expense-item-with-desc .form-group label { font-size: 11px; }
+        .expense-item-with-desc .form-group input { padding: 8px 10px; font-size: 13px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; width: 100%; background: #1a6b8a; color: #fff; transition: background 0.2s; }
+        .btn:hover { background: #0f5875; }
+        .btn-danger { background: #b13e4a; }
+        .btn-danger:hover { background: #962f3a; }
+        .btn-outline { background: transparent; border: 1.5px solid #dce4ec; color: #2d4a5a; }
+        .btn-sm { width: auto; padding: 6px 12px; font-size: 12px; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+        .mt-8 { margin-top: 8px; }
+        .mt-12 { margin-top: 12px; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 2px solid #e8edf2; padding-bottom: 2px; overflow-x: auto; }
+        .tab-btn { padding: 8px 14px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: #5a7a8a; cursor: pointer; border-radius: 8px 8px 0 0; white-space: nowrap; transition: all 0.2s; }
+        .tab-btn.active { color: #0b3b5c; background: #e4eef6; border-bottom: 3px solid #1a6b8a; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+        .stat-item { background: #f7fafc; border-radius: 10px; padding: 10px; text-align: center; border: 1px solid #e8edf2; }
+        .stat-item .stat-label { font-size: 10px; color: #5a7a8a; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
+        .stat-item .stat-value { font-size: 22px; font-weight: 700; color: #0b3b5c; }
+        .stat-item .stat-value.positive { color: #1e8b4c; }
+        .stat-item .stat-value.negative { color: #b13e4a; }
+        .chart-wrapper { height: 180px; margin-top: 8px; }
+        .history-scroll { max-height: 250px; overflow-y: auto; border: 1px solid #e8edf2; border-radius: 10px; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #eef2f6; }
+        .history-item:last-child { border-bottom: none; }
+        .history-date { font-weight: 600; font-size: 14px; }
+        .history-amount { font-weight: 600; color: #1e8b4c; font-size: 14px; }
+        .history-desc { font-size: 12px; color: #5a7a8a; }
+        .history-expenses { font-size: 11px; color: #b13e4a; }
+        .delete-btn { background: #b13e4a; color: #fff; border: none; border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
+        .delete-btn:hover { background: #962f3a; }
+        .period-selector { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+        .period-selector .form-group { flex: 1 1 100px; min-width: 80px; }
+        .period-selector .form-group label { font-size: 10px; }
+        .period-selector .form-group input, .period-selector .form-group select { padding: 6px 10px; font-size: 13px; border: 1.5px solid #dce4ec; border-radius: 8px; outline: none; background: #fafcfe; }
+        .toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: #1a3a4a; color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 500; font-size: 13px; opacity: 0; transition: opacity 0.3s ease; z-index: 999; max-width: 90%; text-align: center; }
+        .toast.show { opacity: 1; }
+        .toast.success { background: #1e6b3a; }
+        .toast.error { background: #b13e4a; }
+        .empty-state { padding: 30px 16px; text-align: center; color: #8a9aa8; font-size: 14px; }
+        .empty-state .big-icon { font-size: 36px; display: block; margin-bottom: 8px; }
+        .footer { text-align: center; padding: 10px 0; color: #7a9aaa; font-size: 11px; }
+        .desc-chip { display: inline-block; background: #d4edda; padding: 1px 8px; border-radius: 10px; font-size: 10px; color: #155724; margin-left: 4px; }
         @media (max-width: 480px) {
-            .header h1 {
-                font-size: 17px;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .stat-item .stat-value {
-                font-size: 18px;
-            }
-            .btn {
-                font-size: 13px;
-                padding: 8px 16px;
-            }
-            .expense-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .expense-item-with-desc {
-                grid-column: span 1;
-                flex-direction: column;
-            }
-            .expense-item-with-desc .form-group {
-                flex: 1 1 100%;
-            }
+            .header h1 { font-size: 17px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stat-item .stat-value { font-size: 18px; }
+            .btn { font-size: 13px; padding: 8px 16px; }
+            .expense-grid { grid-template-columns: 1fr 1fr; }
+            .expense-item-with-desc { grid-column: span 1; flex-direction: column; }
+            .expense-item-with-desc .form-group { flex: 1 1 100%; }
         }
     </style>
 </head>
@@ -583,80 +259,122 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        // ============================================================
+        // 🔐 PASSWORD PROTECTION – CUSTOM MODAL (WORKS EVERYWHERE)
+        // ============================================================
+        var APP_PASSWORD = 'alfamoy2026';
 
-// ============================================================
-// 🔐 PASSWORD PROTECTION (FIXED for Telegram)
-// ============================================================
-var APP_PASSWORD = 'alfamoy2026';
+        // This variable prevents multiple modal instances
+        var passwordModalShown = false;
 
-function checkPassword() {
-    // If already authenticated, skip
-    if (localStorage.getItem('authenticated') === 'true') {
-        return true;
-    }
+        function checkPassword() {
+            // If already authenticated, skip
+            if (localStorage.getItem('authenticated') === 'true') {
+                return true;
+            }
 
-    // Check lockout
-    var lockUntil = parseInt(localStorage.getItem('lockUntil') || '0');
-    var now = Date.now();
+            // Check lockout
+            var lockUntil = parseInt(localStorage.getItem('lockUntil') || '0');
+            var now = Date.now();
 
-    if (lockUntil > now) {
-        var remaining = Math.ceil((lockUntil - now) / 1000);
-        var minutes = Math.floor(remaining / 60);
-        var seconds = remaining % 60;
-        var timeMsg = minutes > 0 ? minutes + ' daqiqa ' + seconds + ' soniya' : seconds + ' soniya';
-        showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, ' + timeMsg + ' kuting.');
-        return false;
-    }
+            if (lockUntil > now) {
+                var remaining = Math.ceil((lockUntil - now) / 1000);
+                var minutes = Math.floor(remaining / 60);
+                var seconds = remaining % 60;
+                var timeMsg = minutes > 0 ? minutes + ' daqiqa ' + seconds + ' soniya' : seconds + ' soniya';
+                showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, ' + timeMsg + ' kuting.');
+                return false;
+            }
 
-    var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
-
-    // Use Telegram-friendly password input
-    var entered;
-    if (window.Telegram && window.Telegram.WebApp) {
-        // In Telegram, use prompt (it works differently)
-        entered = prompt('🔐 Iltimos, maxfiy kodni kiriting:');
-        if (entered === null) {
-            // User cancelled - reload to try again
-            setTimeout(function() { location.reload(); }, 100);
-            return false;
+            // Show custom password modal
+            showPasswordModal();
+            return false; // Wait for modal to submit
         }
-    } else {
-        // In browser, use regular prompt
-        entered = prompt('🔐 Iltimos, maxfiy kodni kiriting:');
-    }
 
-    if (entered === APP_PASSWORD) {
-        localStorage.setItem('authenticated', 'true');
-        localStorage.setItem('password_attempts', '0');
-        localStorage.removeItem('lockUntil');
-        return true;
-    } else {
-        attempts++;
-        localStorage.setItem('password_attempts', attempts.toString());
+        function showPasswordModal() {
+            // Prevent multiple modals
+            if (passwordModalShown) return;
+            passwordModalShown = true;
 
-        if (attempts >= 3) {
-            localStorage.setItem('lockUntil', (Date.now() + 60000).toString());
-            return false;
-        } else {
-            alert('❌ Noto‘g‘ri kod! Yana ' + (3 - attempts) + ' ta urinish qoldi.');
-            setTimeout(function() { location.reload(); }, 500);
-            return false;
+            var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
+            var remaining = 3 - attempts;
+
+            // Remove any existing modal
+            var existing = document.getElementById('passwordModal');
+            if (existing) existing.remove();
+
+            var modal = document.createElement('div');
+            modal.id = 'passwordModal';
+            modal.innerHTML = `
+                <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:10000;font-family:system-ui,sans-serif;">
+                    <div style="background:#fff;padding:30px 24px;border-radius:20px;max-width:340px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+                        <div style="font-size:40px;">🔐</div>
+                        <h2 style="font-size:20px;margin:8px 0 4px;color:#1a3a4a;">Maxfiy kod</h2>
+                        <p style="color:#5a7a8a;font-size:14px;margin:0 0 16px;">Iltimos, kodni kiriting</p>
+                        <input type="password" id="passwordInput" placeholder="●●●●●●" style="width:100%;padding:14px 12px;border:2px solid #dce4ec;border-radius:12px;font-size:20px;text-align:center;letter-spacing:6px;background:#fafcfe;outline:none;box-sizing:border-box;">
+                        <div id="passwordError" style="color:#b13e4a;font-size:13px;margin-top:6px;min-height:20px;"></div>
+                        <button id="passwordSubmit" style="width:100%;padding:12px;margin-top:12px;border:none;border-radius:12px;background:#1a6b8a;color:#fff;font-size:17px;font-weight:600;cursor:pointer;">Kirish</button>
+                        <div style="color:#5a7a8a;font-size:12px;margin-top:10px;">Qolgan urinishlar: ${remaining}</div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            var input = document.getElementById('passwordInput');
+            var submitBtn = document.getElementById('passwordSubmit');
+            var errorEl = document.getElementById('passwordError');
+
+            input.focus();
+
+            function submitPassword() {
+                var entered = input.value;
+                var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
+
+                if (entered === APP_PASSWORD) {
+                    localStorage.setItem('authenticated', 'true');
+                    localStorage.setItem('password_attempts', '0');
+                    localStorage.removeItem('lockUntil');
+                    modal.remove();
+                    passwordModalShown = false;
+                    // Load the app
+                    init();
+                    return;
+                } else {
+                    attempts++;
+                    localStorage.setItem('password_attempts', attempts.toString());
+                    var remaining = 3 - attempts;
+
+                    if (attempts >= 3) {
+                        localStorage.setItem('lockUntil', (Date.now() + 60000).toString());
+                        modal.innerHTML = `
+                            <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:10000;font-family:system-ui,sans-serif;">
+                                <div style="background:#fff;padding:30px 24px;border-radius:20px;max-width:340px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+                                    <div style="font-size:48px;">🔒</div>
+                                    <h2 style="color:#b13e4a;margin:8px 0;">Bloklandi</h2>
+                                    <p style="color:#5a7a8a;font-size:15px;">Juda ko‘p urinishlar. Iltimos, 1 daqiqa kuting.</p>
+                                    <button onclick="location.reload()" style="margin-top:16px;padding:12px 30px;background:#1a6b8a;color:#fff;border:none;border-radius:10px;font-size:16px;cursor:pointer;">🔄 Yangilash</button>
+                                </div>
+                            </div>
+                        `;
+                        passwordModalShown = false;
+                        setTimeout(function() { location.reload(); }, 61000);
+                        return;
+                    } else {
+                        errorEl.textContent = '❌ Noto‘g‘ri kod! Yana ' + remaining + ' ta urinish.';
+                        input.value = '';
+                        input.focus();
+                        var remainingEl = modal.querySelector('div:last-child');
+                        if (remainingEl) remainingEl.textContent = 'Qolgan urinishlar: ' + remaining;
+                    }
+                }
+            }
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') submitPassword();
+            });
+            submitBtn.addEventListener('click', submitPassword);
         }
-    }
-}
 
-function showLockScreen(message) {
-    document.body.innerHTML = `
-        <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f0f4f8; font-family:sans-serif; text-align:center; padding:20px;">
-            <div style="background:#fff; padding:40px 30px; border-radius:20px; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.1);">
-                <div style="font-size:64px;">🔒</div>
-                <h2 style="color:#b13e4a; margin-top:10px;">Ruxsat yo‘q</h2>
-                <p style="color:#5a7a8a; margin-top:10px; font-size:16px;">${message}</p>
-                <button onclick="location.reload()" style="margin-top:20px; padding:12px 30px; background:#1a6b8a; color:#fff; border:none; border-radius:10px; font-size:16px; cursor:pointer;">🔄 Qayta urinib ko‘rish</button>
-            </div>
-        </div>
-    `;
-}
         function showLockScreen(message) {
             document.body.innerHTML = `
                 <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f0f4f8; font-family:sans-serif; text-align:center; padding:20px;">
@@ -671,7 +389,7 @@ function showLockScreen(message) {
         }
 
         // ============================================================
-        // CONSTANTS
+        // APP LOGIC (unchanged from your working version)
         // ============================================================
         var EXPENSE_CATEGORIES = ['foam', 'water', 'electricity', 'wax', 'spare_parts'];
         var CATEGORY_LABELS = {
@@ -686,9 +404,6 @@ function showLockScreen(message) {
         var overviewChartInstance = null;
         var expenseChartInstance = null;
 
-        // ============================================================
-        // HELPERS
-        // ============================================================
         function formatMoney(val) {
             if (val === undefined || val === null) return '0';
             return Number(val).toLocaleString('uz-UZ');
@@ -757,9 +472,6 @@ function showLockScreen(message) {
             }
         }
 
-        // ============================================================
-        // DATA FUNCTIONS
-        // ============================================================
         function filterEntries(period, refDate) {
             if (!refDate) refDate = getToday();
             var filtered = [];
@@ -808,9 +520,6 @@ function showLockScreen(message) {
             return { totalIncome: totalIncome, totalExpense: totalExpense, expenseBreakdown: expenseBreakdown };
         }
 
-        // ============================================================
-        // RENDER
-        // ============================================================
         function renderSummary() {
             var period = document.getElementById('periodSelect').value;
             var refDate = getRefDate(period);
@@ -826,7 +535,6 @@ function showLockScreen(message) {
             document.getElementById('statProfit').className = 'stat-value' + (profit >= 0 ? ' positive' : ' negative');
             document.getElementById('statDays').textContent = entries.length;
 
-            // Expense breakdown
             for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
                 var cat = EXPENSE_CATEGORIES[c];
                 var id = 'exp' + cat.split('_').map(function(w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join('');
@@ -839,9 +547,6 @@ function showLockScreen(message) {
             renderHistory(entries);
         }
 
-        // ============================================================
-        // CHARTS
-        // ============================================================
         function renderOverviewChart(entries, period) {
             var ctx = document.getElementById('overviewChart').getContext('2d');
             if (overviewChartInstance) overviewChartInstance.destroy();
@@ -887,9 +592,9 @@ function showLockScreen(message) {
                     labels: labels,
                     datasets: [
                         { label: 'Daromad', data: incomeData, backgroundColor: 'rgba(26,107,138,0.75)',
-                        borderRadius: 4 },
+                            borderRadius: 4 },
                         { label: 'Xarajat', data: expenseData, backgroundColor: 'rgba(200,70,80,0.70)',
-                        borderRadius: 4 }
+                            borderRadius: 4 }
                     ]
                 },
                 options: {
@@ -942,13 +647,11 @@ function showLockScreen(message) {
             });
         }
 
-        // ============================================================
-        // HISTORY
-        // ============================================================
         function renderHistory(entries) {
             var container = document.getElementById('historyContainer');
             if (!entries.length) {
-                container.innerHTML = '<div class="empty-state"><span class="big-icon">📭</span>Bu davrda hech qanday ma\'lumot yo‘q.</div>';
+                container.innerHTML =
+                    '<div class="empty-state"><span class="big-icon">📭</span>Bu davrda hech qanday ma\'lumot yo‘q.</div>';
                 return;
             }
 
@@ -992,9 +695,6 @@ function showLockScreen(message) {
             container.innerHTML = html;
         }
 
-        // ============================================================
-        // CRUD OPERATIONS
-        // ============================================================
         function loadEntries() {
             try {
                 var saved = localStorage.getItem('alfamoy_entries');
@@ -1102,9 +802,6 @@ function showLockScreen(message) {
             }, 3000);
         }
 
-        // ============================================================
-        // PERIOD UI TOGGLES
-        // ============================================================
         function updatePeriodUI() {
             var period = document.getElementById('periodSelect').value;
             document.getElementById('periodDateGroup').style.display = (period === 'day') ? 'block' : 'none';
@@ -1128,9 +825,6 @@ function showLockScreen(message) {
             renderSummary();
         }
 
-        // ============================================================
-        // TAB SWITCHING
-        // ============================================================
         function switchTab(tabId) {
             var panes = document.querySelectorAll('.tab-pane');
             for (var i = 0; i < panes.length; i++) {
@@ -1183,6 +877,7 @@ function showLockScreen(message) {
             console.log('📊 Entries:', allEntries.length);
         }
 
+        // Start the app
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
