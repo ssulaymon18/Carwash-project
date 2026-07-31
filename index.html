@@ -6,8 +6,6 @@
     <title>ALFA MOY SAM - Avtoyuvish</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-    </script>
     <style>
         * {
             margin: 0;
@@ -53,28 +51,6 @@
             font-weight: 600;
             font-size: 14px;
         }
-        .user-info {
-            font-size: 13px;
-            margin-top: 4px;
-            opacity: 0.9;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .role-badge {
-            display: inline-block;
-            background: #fff3cd;
-            color: #856404;
-            padding: 1px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .role-badge.admin {
-            background: #cce5ff;
-            color: #004085;
-        }
         .card {
             background: #fff;
             border-radius: 14px;
@@ -112,8 +88,7 @@
             color: #2d4a5a;
             margin-bottom: 3px;
         }
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 10px 12px;
             border: 1.5px solid #dce4ec;
@@ -121,10 +96,8 @@
             font-size: 15px;
             background: #fafcfe;
             outline: none;
-            transition: border-color 0.2s;
         }
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus {
             border-color: #1a6b8a;
         }
         .expense-grid {
@@ -176,23 +149,16 @@
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
             width: 100%;
-        }
-        .btn-primary {
             background: #1a6b8a;
             color: #fff;
+            transition: background 0.2s;
         }
-        .btn-primary:hover {
+        .btn:hover {
             background: #0f5875;
         }
         .btn-danger {
             background: #b13e4a;
-            color: #fff;
         }
         .btn-danger:hover {
             background: #962f3a;
@@ -202,23 +168,23 @@
             border: 1.5px solid #dce4ec;
             color: #2d4a5a;
         }
-        .btn-outline:hover {
-            background: #eef4f8;
-        }
         .btn-sm {
+            width: auto;
             padding: 6px 12px;
             font-size: 12px;
-            width: auto;
         }
-        .btn-success {
-            background: #2b7a4b;
-            color: #fff;
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
         }
-        .btn-success:hover {
-            background: #1e643a;
+        .mt-8 {
+            margin-top: 8px;
         }
-        .btn-block {
-            width: 100%;
+        .mt-12 {
+            margin-top: 12px;
         }
         .tabs {
             display: flex;
@@ -293,10 +259,6 @@
         .stat-item .stat-value.negative {
             color: #b13e4a;
         }
-        .stat-item .stat-sub {
-            font-size: 11px;
-            color: #4a6a7a;
-        }
         .chart-wrapper {
             height: 180px;
             margin-top: 8px;
@@ -307,54 +269,44 @@
             border: 1px solid #e8edf2;
             border-radius: 10px;
         }
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
-        .history-table th {
-            background: #e8eff4;
-            padding: 6px 8px;
-            text-align: left;
-            position: sticky;
-            top: 0;
-            z-index: 2;
-            font-size: 11px;
-        }
-        .history-table td {
-            padding: 6px 8px;
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
             border-bottom: 1px solid #eef2f6;
-            vertical-align: middle;
         }
-        .history-table .text-right {
-            text-align: right;
+        .history-item:last-child {
+            border-bottom: none;
         }
-        .history-table .text-center {
-            text-align: center;
-        }
-        .desc-chip {
-            display: inline-block;
-            background: #d4edda;
-            padding: 1px 8px;
-            border-radius: 10px;
-            font-size: 10px;
-            color: #155724;
-            margin-left: 4px;
-        }
-        .expense-detail {
-            font-size: 11px;
-            color: #5a7a8a;
-        }
-        .empty-state {
-            padding: 30px 16px;
-            text-align: center;
-            color: #8a9aa8;
+        .history-date {
+            font-weight: 600;
             font-size: 14px;
         }
-        .empty-state .big-icon {
-            font-size: 36px;
-            display: block;
-            margin-bottom: 8px;
+        .history-amount {
+            font-weight: 600;
+            color: #1e8b4c;
+            font-size: 14px;
+        }
+        .history-desc {
+            font-size: 12px;
+            color: #5a7a8a;
+        }
+        .history-expenses {
+            font-size: 11px;
+            color: #b13e4a;
+        }
+        .delete-btn {
+            background: #b13e4a;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background: #962f3a;
         }
         .period-selector {
             display: flex;
@@ -374,28 +326,10 @@
         .period-selector .form-group select {
             padding: 6px 10px;
             font-size: 13px;
-        }
-        .user-management {
-            margin-top: 10px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 1px solid #dee2e6;
-        }
-        .user-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 0;
-            border-bottom: 1px solid #eee;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-        .user-item:last-child {
-            border-bottom: none;
-        }
-        .user-item span {
-            font-size: 13px;
+            border: 1.5px solid #dce4ec;
+            border-radius: 8px;
+            outline: none;
+            background: #fafcfe;
         }
         .toast {
             position: fixed;
@@ -408,9 +342,8 @@
             border-radius: 10px;
             font-weight: 500;
             font-size: 13px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: opacity 0.3s ease;
             z-index: 999;
             max-width: 90%;
             text-align: center;
@@ -424,33 +357,31 @@
         .toast.error {
             background: #b13e4a;
         }
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mt-12 {
-            margin-top: 12px;
-        }
-        .text-center {
+        .empty-state {
+            padding: 30px 16px;
             text-align: center;
+            color: #8a9aa8;
+            font-size: 14px;
         }
-        .text-muted {
-            color: #6c757d;
-            font-size: 12px;
+        .empty-state .big-icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 8px;
         }
         .footer {
             text-align: center;
             padding: 10px 0;
             color: #7a9aaa;
             font-size: 11px;
-            border-top: 1px solid #e0e8ef;
-            margin-top: 4px;
+        }
+        .desc-chip {
+            display: inline-block;
+            background: #d4edda;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            color: #155724;
+            margin-left: 4px;
         }
         @media (max-width: 480px) {
             .header h1 {
@@ -462,6 +393,10 @@
             .stat-item .stat-value {
                 font-size: 18px;
             }
+            .btn {
+                font-size: 13px;
+                padding: 8px 16px;
+            }
             .expense-grid {
                 grid-template-columns: 1fr 1fr;
             }
@@ -472,21 +407,6 @@
             .expense-item-with-desc .form-group {
                 flex: 1 1 100%;
             }
-            .btn {
-                font-size: 13px;
-                padding: 8px 16px;
-            }
-            .tab-btn {
-                font-size: 12px;
-                padding: 6px 10px;
-            }
-            .history-table {
-                font-size: 11px;
-            }
-            .history-table th,
-            .history-table td {
-                padding: 4px 6px;
-            }
         }
     </style>
 </head>
@@ -495,22 +415,15 @@
     <div class="container">
 
         <!-- HEADER -->
-        <header class="header">
+        <div class="header">
             <div>
-                <h1>
-                    🚗 ALFA MOY SAM
-                    <small>daromad &amp; xarajat</small>
-                </h1>
-                <div class="user-info">
-                    👤 <span id="userName">Yuklanmoqda...</span>
-                    <span id="userRoleBadge" class="role-badge"></span>
-                </div>
+                <h1>🚗 ALFA MOY SAM <small>daromad &amp; xarajat</small></h1>
             </div>
             <div class="currency-badge">🇺🇿 so‘m</div>
-        </header>
+        </div>
 
         <!-- ADD ENTRY -->
-        <section class="card" id="addEntryCard">
+        <div class="card" id="addEntryCard">
             <div class="card-title">📋 Kunlik ma'lumot qo‘shish</div>
 
             <div class="form-row">
@@ -524,7 +437,7 @@
                 </div>
             </div>
 
-            <div class="form-row" style="margin-top:6px;">
+            <div class="form-row mt-8">
                 <div class="form-group">
                     <label for="entryDescription">📝 Izoh</label>
                     <input type="text" id="entryDescription" placeholder="Masalan: band kun, aksiya..." />
@@ -563,16 +476,16 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary btn-block" id="addEntryBtn" style="margin-top:12px;">➕ Qo‘shish</button>
-        </section>
+            <button class="btn mt-12" id="addBtn">➕ Qo‘shish</button>
+        </div>
 
         <!-- SUMMARY -->
-        <section class="card">
+        <div class="card">
             <div class="flex-between">
                 <div class="card-title" style="margin-bottom:0;">📊 Umumiy hisobot</div>
                 <div style="display:flex; gap:4px; flex-wrap:wrap;">
                     <button class="btn btn-outline btn-sm" id="refreshBtn">🔄</button>
-                    <button class="btn btn-danger btn-sm" id="clearAllBtn">🗑️</button>
+                    <button class="btn btn-danger btn-sm" id="clearBtn">🗑️</button>
                 </div>
             </div>
 
@@ -608,7 +521,6 @@
                 <button class="tab-btn active" data-tab="overview">📈 Umumiy</button>
                 <button class="tab-btn" data-tab="expenses">📉 Xarajatlar</button>
                 <button class="tab-btn" data-tab="history">📜 Tarix</button>
-                <button class="tab-btn" data-tab="users" id="usersTabBtn" style="display:none;">👥 Foydalanuvchilar</button>
             </div>
 
             <!-- OVERVIEW -->
@@ -617,22 +529,18 @@
                     <div class="stat-item">
                         <div class="stat-label">💰 Daromad</div>
                         <div class="stat-value" id="statIncome">0</div>
-                        <div class="stat-sub" id="statIncomeAvg">o‘rtacha: 0 / kun</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-label">💸 Xarajat</div>
                         <div class="stat-value" id="statExpense">0</div>
-                        <div class="stat-sub" id="statExpenseAvg">o‘rtacha: 0 / kun</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-label">📊 Foyda</div>
                         <div class="stat-value" id="statProfit">0</div>
-                        <div class="stat-sub" id="statProfitAvg">o‘rtacha: 0 / kun</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-label">📅 Kunlar</div>
                         <div class="stat-value" id="statDays">0</div>
-                        <div class="stat-sub" id="statPeriodLabel">ushbu davrda</div>
                     </div>
                 </div>
                 <div class="chart-wrapper">
@@ -650,7 +558,6 @@
                     <div class="stat-item">
                         <div class="stat-label">🔧 Zapchast</div>
                         <div class="stat-value" id="expSpareParts">0</div>
-                        <div class="stat-sub" id="expSparePartsDesc" style="font-size:10px; color:#5a7a8a; margin-top:2px;"></div>
                     </div>
                 </div>
                 <div class="chart-wrapper" style="height:160px;">
@@ -667,112 +574,71 @@
                     </div>
                 </div>
             </div>
-
-            <!-- USERS -->
-            <div class="tab-pane" id="tab-users">
-                <div class="user-management">
-                    <h4 style="margin-bottom:6px; font-size:14px;">👥 Foydalanuvchilar</h4>
-                    <div id="userList"></div>
-                    <div style="margin-top:10px;">
-                        <button class="btn btn-success btn-sm" id="addUserBtn">➕ Yangi foydalanuvchi</button>
-                        <span class="text-muted" style="font-size:11px; margin-left:6px;">(Telegram ID)</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="footer">
-            🚗 ALFA MOY SAM
         </div>
+
+        <div class="footer">🚗 ALFA MOY SAM</div>
+
     </div>
 
     <div class="toast" id="toast"></div>
 
     <script>
         // ============================================================
-        //  CONFIGURATION
+        // 🔐 PASSWORD PROTECTION (3 attempts, 1 minute lockout)
         // ============================================================
-        const SUPABASE_URL = 'https://hauokcicipuxpdjkuumnf.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhdW9rY2ljcHVweGRqa3V1bW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTMwMzksImV4cCI6MjA5OTI2OTAzOX0.ZAoK0t4A3PTe08bGKdY93yclG01SfaJ1ROWjDDRjoW0';
+        var APP_PASSWORD = 'alfamoy2026';
 
-        // ============================================================
-        //  SUPABASE CLIENT
-        // ============================================================
-        const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // ============================================================
-        //  TELEGRAM WEBAPP INIT
-        // ============================================================
-        const tg = window.Telegram?.WebApp;
-        let currentUser = null;
-
-        async function initTelegramUser() {
-            if (!tg) {
-                showToast('⚠️ Telegram muhiti topilmadi.', 'error');
-                return null;
+        function checkPassword() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                return true;
             }
-            const user = tg.initDataUnsafe?.user;
-            if (!user) {
-                showToast('❌ Foydalanuvchi maʼlumoti topilmadi.', 'error');
-                return null;
+            var lockUntil = parseInt(localStorage.getItem('lockUntil') || '0');
+            var now = Date.now();
+            if (lockUntil > now) {
+                var remaining = Math.ceil((lockUntil - now) / 1000);
+                showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, ' + remaining + ' soniya kuting.');
+                return false;
             }
-            const name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-            const userId = user.id;
-
-            let { data: existing, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('id', userId)
-                .maybeSingle();
-
-            if (error && error.code !== 'PGRST116') {
-                console.error('Error fetching user:', error);
-                showToast('❌ Foydalanuvchi maʼlumotini olishda xatolik.', 'error');
-                return null;
-            }
-
-            if (!existing) {
-                const { data: newUser, error: insertError } = await supabase
-                    .from('users')
-                    .insert([{ id: userId, name: name, role: 'worker' }])
-                    .select()
-                    .single();
-
-                if (insertError) {
-                    console.error('Insert error:', insertError);
-                    showToast('❌ Foydalanuvchi yaratishda xatolik.', 'error');
-                    return null;
-                }
-                currentUser = newUser;
-                showToast(`👋 Xush kelibsiz, ${name}!`, 'success');
+            var attempts = parseInt(sessionStorage.getItem('attempts') || '0');
+            var entered = prompt('🔐 Iltimos, maxfiy kodni kiriting:');
+            if (entered === APP_PASSWORD) {
+                sessionStorage.setItem('authenticated', 'true');
+                sessionStorage.setItem('attempts', '0');
+                localStorage.removeItem('lockUntil');
+                return true;
             } else {
-                currentUser = existing;
-                if (existing.name !== name) {
-                    await supabase.from('users').update({ name }).eq('id', userId);
-                    currentUser.name = name;
+                attempts++;
+                sessionStorage.setItem('attempts', attempts.toString());
+                var remaining = 3 - attempts;
+                if (attempts >= 3) {
+                    localStorage.setItem('lockUntil', (Date.now() + 60000).toString());
+                    showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, 1 daqiqa kuting.');
+                    return false;
+                } else {
+                    alert('❌ Noto‘g‘ri kod! Yana ' + remaining + ' ta urinish qoldi.');
+                    return checkPassword();
                 }
-                showToast(`👋 Salom, ${name}!`, 'success');
             }
+        }
 
-            document.getElementById('userName').textContent = currentUser.name;
-            const roleBadge = document.getElementById('userRoleBadge');
-            roleBadge.textContent = currentUser.role === 'admin' ? 'Admin' : 'Ishchi';
-            roleBadge.className = 'role-badge ' + (currentUser.role === 'admin' ? 'admin' : '');
-
-            if (currentUser.role === 'admin') {
-                document.getElementById('usersTabBtn').style.display = 'inline-block';
-            }
-
-            if (tg) tg.expand();
-
-            return currentUser;
+        function showLockScreen(message) {
+            document.body.innerHTML = `
+                <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f0f4f8; font-family:sans-serif; text-align:center; padding:20px;">
+                    <div style="background:#fff; padding:40px 30px; border-radius:20px; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+                        <div style="font-size:64px;">🔒</div>
+                        <h2 style="color:#b13e4a; margin-top:10px;">Ruxsat yo‘q</h2>
+                        <p style="color:#5a7a8a; margin-top:10px; font-size:16px;">${message}</p>
+                        <button onclick="location.reload()" style="margin-top:20px; padding:12px 30px; background:#1a6b8a; color:#fff; border:none; border-radius:10px; font-size:16px; cursor:pointer;">🔄 Qayta urinib ko‘rish</button>
+                    </div>
+                </div>
+            `;
         }
 
         // ============================================================
-        //  CONSTANTS
+        // CONSTANTS
         // ============================================================
-        const EXPENSE_CATEGORIES = ['foam', 'water', 'electricity', 'wax', 'spare_parts'];
-        const CATEGORY_LABELS = {
+        var EXPENSE_CATEGORIES = ['foam', 'water', 'electricity', 'wax', 'spare_parts'];
+        var CATEGORY_LABELS = {
             foam: '🧴 Pena',
             water: '💧 Suv',
             electricity: '⚡ Elektr',
@@ -780,24 +646,16 @@
             spare_parts: '🔧 Zapchast'
         };
 
-        let allEntries = [];
-        let overviewChartInstance = null;
-        let expenseChartInstance = null;
+        var allEntries = [];
+        var overviewChartInstance = null;
+        var expenseChartInstance = null;
 
         // ============================================================
-        //  HELPERS
+        // HELPERS
         // ============================================================
         function formatMoney(val) {
             if (val === undefined || val === null) return '0';
             return Number(val).toLocaleString('uz-UZ');
-        }
-
-        function formatMoneyShort(val) {
-            const n = Number(val);
-            if (n >= 1e9) return (n / 1e9).toFixed(1) + ' mlrd';
-            if (n >= 1e6) return (n / 1e6).toFixed(1) + ' mln';
-            if (n >= 1e3) return (n / 1e3).toFixed(1) + ' ming';
-            return n.toLocaleString('uz-UZ');
         }
 
         function getToday() {
@@ -806,41 +664,31 @@
 
         function parseDate(str) {
             if (!str) return new Date();
-            const parts = str.split('-');
+            var parts = str.split('-');
             return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]) || 1);
-        }
-
-        function daysInMonth(dateStr) {
-            const d = parseDate(dateStr);
-            return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
-        }
-
-        function getWeekStart(dateStr) {
-            const d = parseDate(dateStr);
-            const day = d.getDay();
-            const diff = (day === 0 ? 6 : day - 1);
-            const s = new Date(d);
-            s.setDate(d.getDate() - diff);
-            s.setHours(0, 0, 0, 0);
-            return s.toISOString().split('T')[0];
-        }
-
-        function getWeekEnd(dateStr) {
-            const s = parseDate(getWeekStart(dateStr));
-            const e = new Date(s);
-            e.setDate(s.getDate() + 6);
-            return e.toISOString().split('T')[0];
         }
 
         function isSameDay(d1, d2) { return d1 === d2; }
 
         function isSameWeek(dateStr, refDateStr) {
-            return getWeekStart(dateStr) === getWeekStart(refDateStr);
+            var d = parseDate(dateStr);
+            var ref = parseDate(refDateStr);
+            var day = d.getDay();
+            var diff = (day === 0 ? 6 : day - 1);
+            var start = new Date(d);
+            start.setDate(d.getDate() - diff);
+            start.setHours(0, 0, 0, 0);
+            var refDay = ref.getDay();
+            var refDiff = (refDay === 0 ? 6 : refDay - 1);
+            var refStart = new Date(ref);
+            refStart.setDate(ref.getDate() - refDiff);
+            refStart.setHours(0, 0, 0, 0);
+            return start.getTime() === refStart.getTime();
         }
 
         function isSameMonth(dateStr, refDateStr) {
-            const d = parseDate(dateStr);
-            const ref = parseDate(refDateStr);
+            var d = parseDate(dateStr);
+            var ref = parseDate(refDateStr);
             return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth();
         }
 
@@ -848,144 +696,14 @@
             return parseDate(dateStr).getFullYear() === parseDate(refDateStr).getFullYear();
         }
 
-        // ============================================================
-        //  DATA FETCHING & FILTERING
-        // ============================================================
-        async function fetchEntries() {
-            if (!currentUser) return;
-            const { data, error } = await supabase
-                .from('entries')
-                .select('*')
-                .order('date', { ascending: false });
-
-            if (error) {
-                console.error('Fetch error:', error);
-                showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error');
-                return;
-            }
-            allEntries = data || [];
-            renderSummary();
-        }
-
-        function filterEntries(period, refDate) {
-            if (!refDate) refDate = getToday();
-            let filtered = [];
-            switch (period) {
-                case 'day':
-                    filtered = allEntries.filter(e => isSameDay(e.date, refDate));
-                    break;
-                case 'week':
-                    filtered = allEntries.filter(e => isSameWeek(e.date, refDate));
-                    break;
-                case 'month':
-                    filtered = allEntries.filter(e => isSameMonth(e.date, refDate));
-                    break;
-                case 'year':
-                    filtered = allEntries.filter(e => isSameYear(e.date, refDate));
-                    break;
-                default:
-                    filtered = [...allEntries];
-            }
-            return filtered.sort((a, b) => (a.date < b.date ? -1 : 1));
-        }
-
-        function computeTotals(entries) {
-            let totalIncome = 0;
-            let totalExpense = 0;
-            const expenseBreakdown = {};
-            EXPENSE_CATEGORIES.forEach(c => expenseBreakdown[c] = 0);
-
-            entries.forEach(e => {
-                totalIncome += Number(e.income) || 0;
-                const exp = e.expenses || {};
-                EXPENSE_CATEGORIES.forEach(c => {
-                    const val = Number(exp[c]) || 0;
-                    expenseBreakdown[c] += val;
-                    totalExpense += val;
-                });
-            });
-            return { totalIncome, totalExpense, expenseBreakdown };
-        }
-
-        // ============================================================
-        //  RENDER
-        // ============================================================
-        function renderSummary() {
-            const period = document.getElementById('periodSelect').value;
-            const refDate = getRefDate(period);
-            if (!refDate) return;
-
-            const entries = filterEntries(period, refDate);
-            const { totalIncome, totalExpense, expenseBreakdown } = computeTotals(entries);
-            const profit = totalIncome - totalExpense;
-            const dayCount = entries.length;
-
-            document.getElementById('statIncome').textContent = formatMoney(totalIncome);
-            document.getElementById('statExpense').textContent = formatMoney(totalExpense);
-            document.getElementById('statProfit').textContent = formatMoney(profit);
-            document.getElementById('statProfit').className = 'stat-value' + (profit >= 0 ? ' positive' : ' negative');
-            document.getElementById('statDays').textContent = dayCount;
-
-            let avgIncome = 0,
-                avgExpense = 0,
-                avgProfit = 0;
-            if (dayCount > 0) {
-                avgIncome = totalIncome / dayCount;
-                avgExpense = totalExpense / dayCount;
-                avgProfit = profit / dayCount;
-            }
-            document.getElementById('statIncomeAvg').textContent = `o‘rtacha: ${formatMoney(avgIncome)} / kun`;
-            document.getElementById('statExpenseAvg').textContent = `o‘rtacha: ${formatMoney(avgExpense)} / kun`;
-            document.getElementById('statProfitAvg').textContent = `o‘rtacha: ${formatMoney(avgProfit)} / kun`;
-            document.getElementById('statPeriodLabel').textContent = getPeriodLabel(period, refDate);
-
-            EXPENSE_CATEGORIES.forEach(cat => {
-                const id = 'exp' + cat.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
-                const el = document.getElementById(id);
-                if (el) el.textContent = formatMoney(expenseBreakdown[cat] || 0);
-            });
-
-            const spareDescEl = document.getElementById('expSparePartsDesc');
-            if (spareDescEl) {
-                const spareEntries = entries.filter(e => (e.expenses?.spare_parts || 0) > 0);
-                if (spareEntries.length > 0) {
-                    const totalSpare = spareEntries.reduce((s, e) => s + (e.expenses?.spare_parts || 0), 0);
-                    const descs = spareEntries.map(e => {
-                        const desc = e.spare_desc && e.spare_desc.trim() ? e.spare_desc : 'Noma\'lum';
-                        return `${desc} (${formatMoney(e.expenses?.spare_parts)})`;
-                    });
-                    spareDescEl.textContent = `📝 Jami: ${formatMoney(totalSpare)} | ` + descs.join(' | ');
-                } else {
-                    spareDescEl.textContent = '';
-                }
-            }
-
-            renderOverviewChart(entries, period, refDate);
-            renderExpenseChart(expenseBreakdown);
-            renderHistory(entries);
-        }
-
-        function getPeriodLabel(period, refDate) {
-            if (!refDate) return '';
-            const d = parseDate(refDate);
-            if (isNaN(d.getTime())) return 'Invalid Date';
-            switch (period) {
-                case 'day':
-                    return d.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long', year: 'numeric' });
-                case 'week': {
-                    const start = getWeekStart(refDate);
-                    const end = getWeekEnd(refDate);
-                    const s = parseDate(start);
-                    const e = parseDate(end);
-                    return `${s.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short' })} – ${e.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short', year: 'numeric' })}`;
-                }
-                case 'month':
-                    return d.toLocaleDateString('uz-UZ', { month: 'long', year: 'numeric' });
-                case 'year':
-                    return d.getFullYear().toString();
-                default:
-                    return '';
-            }
+        function getWeekStart(dateStr) {
+            var d = parseDate(dateStr);
+            var day = d.getDay();
+            var diff = (day === 0 ? 6 : day - 1);
+            var s = new Date(d);
+            s.setDate(d.getDate() - diff);
+            s.setHours(0, 0, 0, 0);
+            return s.toISOString().split('T')[0];
         }
 
         function getRefDate(period) {
@@ -1003,9 +721,93 @@
             }
         }
 
-        // ---------- Charts ----------
-        function renderOverviewChart(entries, period, refDate) {
-            const ctx = document.getElementById('overviewChart').getContext('2d');
+        // ============================================================
+        // DATA FUNCTIONS
+        // ============================================================
+        function filterEntries(period, refDate) {
+            if (!refDate) refDate = getToday();
+            var filtered = [];
+            for (var i = 0; i < allEntries.length; i++) {
+                var e = allEntries[i];
+                var match = false;
+                switch (period) {
+                    case 'day':
+                        match = isSameDay(e.date, refDate);
+                        break;
+                    case 'week':
+                        match = isSameWeek(e.date, refDate);
+                        break;
+                    case 'month':
+                        match = isSameMonth(e.date, refDate);
+                        break;
+                    case 'year':
+                        match = isSameYear(e.date, refDate);
+                        break;
+                    default:
+                        match = true;
+                }
+                if (match) filtered.push(e);
+            }
+            return filtered.sort(function(a, b) { return a.date < b.date ? -1 : 1; });
+        }
+
+        function computeTotals(entries) {
+            var totalIncome = 0;
+            var totalExpense = 0;
+            var expenseBreakdown = {};
+            for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
+                expenseBreakdown[EXPENSE_CATEGORIES[c]] = 0;
+            }
+            for (var i = 0; i < entries.length; i++) {
+                var e = entries[i];
+                totalIncome += Number(e.income) || 0;
+                var exp = e.expenses || {};
+                for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
+                    var cat = EXPENSE_CATEGORIES[c];
+                    var val = Number(exp[cat]) || 0;
+                    expenseBreakdown[cat] += val;
+                    totalExpense += val;
+                }
+            }
+            return { totalIncome: totalIncome, totalExpense: totalExpense, expenseBreakdown: expenseBreakdown };
+        }
+
+        // ============================================================
+        // RENDER
+        // ============================================================
+        function renderSummary() {
+            var period = document.getElementById('periodSelect').value;
+            var refDate = getRefDate(period);
+            if (!refDate) return;
+
+            var entries = filterEntries(period, refDate);
+            var totals = computeTotals(entries);
+            var profit = totals.totalIncome - totals.totalExpense;
+
+            document.getElementById('statIncome').textContent = formatMoney(totals.totalIncome);
+            document.getElementById('statExpense').textContent = formatMoney(totals.totalExpense);
+            document.getElementById('statProfit').textContent = formatMoney(profit);
+            document.getElementById('statProfit').className = 'stat-value' + (profit >= 0 ? ' positive' : ' negative');
+            document.getElementById('statDays').textContent = entries.length;
+
+            // Expense breakdown
+            for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
+                var cat = EXPENSE_CATEGORIES[c];
+                var id = 'exp' + cat.split('_').map(function(w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join('');
+                var el = document.getElementById(id);
+                if (el) el.textContent = formatMoney(totals.expenseBreakdown[cat] || 0);
+            }
+
+            renderOverviewChart(entries, period);
+            renderExpenseChart(totals.expenseBreakdown);
+            renderHistory(entries);
+        }
+
+        // ============================================================
+        // CHARTS
+        // ============================================================
+        function renderOverviewChart(entries, period) {
+            var ctx = document.getElementById('overviewChart').getContext('2d');
             if (overviewChartInstance) overviewChartInstance.destroy();
 
             if (!entries.length) {
@@ -1014,143 +816,70 @@
                     data: {
                         labels: ['Maʼlumot yo‘q'],
                         datasets: [
-                            { label: 'Daromad', data: [0], backgroundColor: 'rgba(26,107,138,0.6)',
-                            borderRadius: 4 },
-                            { label: 'Xarajat', data: [0], backgroundColor: 'rgba(200,70,80,0.6)',
-                            borderRadius: 4 }
+                            { label: 'Daromad', data: [0], backgroundColor: 'rgba(26,107,138,0.6)', borderRadius: 4 },
+                            { label: 'Xarajat', data: [0], backgroundColor: 'rgba(200,70,80,0.6)', borderRadius: 4 }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
-                        scales: { y: { beginAtZero: true, ticks: { callback: v => formatMoneyShort(v) } } }
+                        plugins: { legend: { position: 'top' } },
+                        scales: { y: { beginAtZero: true } }
                     }
                 });
                 return;
             }
 
-            let labels = [],
-                incomeData = [],
-                expenseData = [];
+            var labels = [];
+            var incomeData = [];
+            var expenseData = [];
 
-            if (period === 'day') {
-                const tot = computeTotals(entries);
-                labels = ['Kun'];
-                incomeData = [tot.totalIncome];
-                expenseData = [tot.totalExpense];
-            } else if (period === 'week') {
-                const days = ['Dush', 'Sesh', 'Chor', 'Pay', 'Jum', 'Shan', 'Yak'];
-                const dayMap = {};
-                const start = getWeekStart(refDate);
-                for (let i = 0; i < 7; i++) {
-                    const d = new Date(parseDate(start));
-                    d.setDate(d.getDate() + i);
-                    const key = d.toISOString().split('T')[0];
-                    dayMap[key] = { income: 0, expense: 0, label: days[i] };
+            for (var i = 0; i < entries.length; i++) {
+                var e = entries[i];
+                labels.push(e.date);
+                incomeData.push(Number(e.income) || 0);
+                var exp = 0;
+                for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
+                    exp += Number(e.expenses?.[EXPENSE_CATEGORIES[c]]) || 0;
                 }
-                entries.forEach(e => {
-                    if (dayMap[e.date]) {
-                        dayMap[e.date].income += Number(e.income) || 0;
-                        let exp = 0;
-                        EXPENSE_CATEGORIES.forEach(c => exp += Number(e.expenses?.[c]) || 0);
-                        dayMap[e.date].expense += exp;
-                    }
-                });
-                const keys = Object.keys(dayMap).sort();
-                labels = keys.map(k => dayMap[k].label);
-                incomeData = keys.map(k => dayMap[k].income);
-                expenseData = keys.map(k => dayMap[k].expense);
-            } else if (period === 'month') {
-                const dayMap = {};
-                const monthStart = refDate.slice(0, 7) + '-01';
-                const daysInM = daysInMonth(monthStart);
-                for (let i = 1; i <= daysInM; i++) {
-                    const d = new Date(parseDate(monthStart));
-                    d.setDate(i);
-                    const key = d.toISOString().split('T')[0];
-                    dayMap[key] = { income: 0, expense: 0, label: i.toString() };
-                }
-                entries.forEach(e => {
-                    if (dayMap[e.date]) {
-                        dayMap[e.date].income += Number(e.income) || 0;
-                        let exp = 0;
-                        EXPENSE_CATEGORIES.forEach(c => exp += Number(e.expenses?.[c]) || 0);
-                        dayMap[e.date].expense += exp;
-                    }
-                });
-                const keys = Object.keys(dayMap).sort();
-                labels = keys.map((k, idx) => (idx % 3 === 0 || idx === keys.length - 1) ? dayMap[k].label : '');
-                incomeData = keys.map(k => dayMap[k].income);
-                expenseData = keys.map(k => dayMap[k].expense);
-            } else if (period === 'year') {
-                const monthMap = {};
-                const yearStr = refDate.slice(0, 4);
-                for (let m = 0; m < 12; m++) {
-                    const d = new Date(parseInt(yearStr), m, 1);
-                    const key = d.toISOString().split('T')[0];
-                    monthMap[key] = { income: 0, expense: 0, label: d.toLocaleDateString('uz-UZ', { month: 'short' }) };
-                }
-                entries.forEach(e => {
-                    const monthKey = e.date.slice(0, 7) + '-01';
-                    if (monthMap[monthKey]) {
-                        monthMap[monthKey].income += Number(e.income) || 0;
-                        let exp = 0;
-                        EXPENSE_CATEGORIES.forEach(c => exp += Number(e.expenses?.[c]) || 0);
-                        monthMap[monthKey].expense += exp;
-                    }
-                });
-                const keys = Object.keys(monthMap).sort();
-                labels = keys.map(k => monthMap[k].label);
-                incomeData = keys.map(k => monthMap[k].income);
-                expenseData = keys.map(k => monthMap[k].expense);
+                expenseData.push(exp);
             }
 
             overviewChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: 'Daromad',
-                        data: incomeData,
-                        backgroundColor: 'rgba(26,107,138,0.75)',
-                        borderRadius: 4,
-                    }, {
-                        label: 'Xarajat',
-                        data: expenseData,
-                        backgroundColor: 'rgba(200,70,80,0.70)',
-                        borderRadius: 4,
-                    }]
+                    datasets: [
+                        { label: 'Daromad', data: incomeData, backgroundColor: 'rgba(26,107,138,0.75)',
+                        borderRadius: 4 },
+                        { label: 'Xarajat', data: expenseData, backgroundColor: 'rgba(200,70,80,0.70)',
+                        borderRadius: 4 }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { font: { size: 11 } } },
-                        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + formatMoney(ctx.parsed.y) +
-                                ' so‘m' } }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { callback: v => formatMoneyShort(v) } },
-                        x: { ticks: { maxRotation: 45, font: { size: 9 } } }
-                    }
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { beginAtZero: true } }
                 }
             });
         }
 
         function renderExpenseChart(expenseBreakdown) {
-            const ctx = document.getElementById('expenseChart').getContext('2d');
+            var ctx = document.getElementById('expenseChart').getContext('2d');
             if (expenseChartInstance) expenseChartInstance.destroy();
 
-            const labels = EXPENSE_CATEGORIES.map(c => CATEGORY_LABELS[c]);
-            const data = EXPENSE_CATEGORIES.map(c => expenseBreakdown[c] || 0);
-            const colors = [
-                'rgba(52,152,219,0.75)',
-                'rgba(46,204,113,0.75)',
-                'rgba(241,196,15,0.75)',
-                'rgba(155,89,182,0.75)',
-                'rgba(192,57,43,0.75)'
+            var labels = [];
+            var data = [];
+            var colors = ['rgba(52,152,219,0.75)', 'rgba(46,204,113,0.75)', 'rgba(241,196,15,0.75)',
+                'rgba(155,89,182,0.75)', 'rgba(192,57,43,0.75)'
             ];
+
+            for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
+                var cat = EXPENSE_CATEGORIES[c];
+                labels.push(CATEGORY_LABELS[cat]);
+                data.push(expenseBreakdown[cat] || 0);
+            }
 
             expenseChartInstance = new Chart(ctx, {
                 type: 'doughnut',
@@ -1162,12 +891,12 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 12, padding: 8 } },
+                        legend: { position: 'right' },
                         tooltip: {
                             callbacks: {
                                 label: function(ctx) {
-                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                                    const pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
+                                    var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                                    var pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
                                     return ctx.label + ': ' + formatMoney(ctx.parsed) + ' so‘m (' + pct + '%)';
                                 }
                             }
@@ -1177,224 +906,177 @@
             });
         }
 
-        // ---------- History ----------
+        // ============================================================
+        // HISTORY
+        // ============================================================
         function renderHistory(entries) {
-            const container = document.getElementById('historyContainer');
+            var container = document.getElementById('historyContainer');
             if (!entries.length) {
-                container.innerHTML =
-                `<div class="empty-state">📭 Bu davrda hech qanday ma'lumot yo‘q.</div>`;
+                container.innerHTML = '<div class="empty-state"><span class="big-icon">📭</span>Bu davrda hech qanday ma\'lumot yo‘q.</div>';
                 return;
             }
 
-            let html = `<table class="history-table">
-                <thead><tr><th>📅 Sana</th><th>💰 Daromad</th><th>💸 Xarajat</th><th>📊 Foyda</th><th style="min-width:130px;">Xarajat tafsiloti</th><th class="text-center">⚙️</th></tr></thead><tbody>`;
+            var sorted = entries.slice().sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+            var html = '';
 
-            const sorted = [...entries].sort((a, b) => (a.date < b.date ? 1 : -1));
-
-            sorted.forEach(e => {
-                let totalExp = 0;
-                let expDetail = '';
-                const parts = [];
-                EXPENSE_CATEGORIES.forEach(c => {
-                    const val = Number(e.expenses?.[c]) || 0;
+            for (var i = 0; i < sorted.length; i++) {
+                var e = sorted[i];
+                var totalExp = 0;
+                var expParts = [];
+                for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
+                    var cat = EXPENSE_CATEGORIES[c];
+                    var val = Number(e.expenses?.[cat]) || 0;
                     totalExp += val;
                     if (val > 0) {
-                        let label = CATEGORY_LABELS[c];
-                        if (c === 'spare_parts' && e.spare_desc && e.spare_desc.trim() !== '') {
-                            label += ` <span class="desc-chip">${e.spare_desc}</span>`;
+                        var label = CATEGORY_LABELS[cat];
+                        if (cat === 'spare_parts' && e.spare_desc) {
+                            label += ' <span class="desc-chip">' + e.spare_desc + '</span>';
                         }
-                        parts.push(`${label}: ${formatMoney(val)}`);
+                        expParts.push(label + ': ' + formatMoney(val));
                     }
-                });
-                expDetail = parts.length ? parts.join(' | ') : '—';
-                const profit = (Number(e.income) || 0) - totalExp;
+                }
+                var profit = (Number(e.income) || 0) - totalExp;
 
-                html += `<tr>
-                    <td><strong>${e.date}</strong></td>
-                    <td class="text-right">${formatMoney(e.income)}</td>
-                    <td class="text-right">${formatMoney(totalExp)}</td>
-                    <td class="text-right" style="color:${profit>=0?'#1e8b4c':'#b13e4a'};font-weight:600;">${formatMoney(profit)}</td>
-                    <td class="expense-detail" style="font-size:12px;">${expDetail}</td>
-                    <td class="text-center">
-                        <button class="btn btn-outline btn-sm delete-entry" data-date="${e.date}">🗑️</button>
-                    </td>
-                </tr>`;
-            });
+                html += '<div class="history-item">';
+                html += '<div>';
+                html += '<div class="history-date">' + e.date + '</div>';
+                if (e.description) html += '<div class="history-desc">' + e.description + '</div>';
+                if (expParts.length) html += '<div class="history-expenses">' + expParts.join(' | ') + '</div>';
+                html += '</div>';
+                html += '<div style="display:flex; align-items:center; gap:8px;">';
+                html += '<div style="text-align:right;">';
+                html += '<div class="history-amount">' + formatMoney(e.income) + ' so‘m</div>';
+                html += '<div style="font-size:11px; color:' + (profit >= 0 ? '#1e8b4c' : '#b13e4a') + ';">' +
+                    (profit >= 0 ? '✅' : '❌') + ' ' + formatMoney(profit) + '</div>';
+                html += '</div>';
+                html += '<button class="delete-btn" onclick="deleteEntry(\'' + e.date + '\')">🗑️</button>';
+                html += '</div></div>';
+            }
 
-            html += `</tbody></table>`;
             container.innerHTML = html;
-
-            container.querySelectorAll('.delete-entry').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const date = this.dataset.date;
-                    if (confirm(`"${date}" sanadagi yozuvni o‘chirishga ishonchingiz komilmi?`)) {
-                        deleteEntry(date);
-                    }
-                });
-            });
         }
 
         // ============================================================
-        //  CRUD OPERATIONS
+        // CRUD OPERATIONS
         // ============================================================
-        async function addEntry() {
-            const date = document.getElementById('entryDate').value;
-            const income = parseFloat(document.getElementById('incomeInput').value) || 0;
-            const description = document.getElementById('entryDescription').value.trim() || '';
+        function loadEntries() {
+            try {
+                var saved = localStorage.getItem('alfamoy_entries');
+                if (saved) {
+                    allEntries = JSON.parse(saved);
+                }
+            } catch (e) {
+                allEntries = [];
+            }
+            renderSummary();
+        }
+
+        function saveEntries() {
+            localStorage.setItem('alfamoy_entries', JSON.stringify(allEntries));
+            renderSummary();
+        }
+
+        function addEntry() {
+            var date = document.getElementById('entryDate').value;
+            var income = parseFloat(document.getElementById('incomeInput').value) || 0;
+            var description = document.getElementById('entryDescription').value.trim() || '';
 
             if (!date) {
                 showToast('Iltimos, sanani tanlang!', 'error');
                 return;
             }
 
-            const expenses = {};
-            document.querySelectorAll('.expense-input').forEach(inp => {
-                const cat = inp.dataset.category;
+            var expenses = {};
+            var expenseInputs = document.querySelectorAll('.expense-input');
+            for (var i = 0; i < expenseInputs.length; i++) {
+                var inp = expenseInputs[i];
+                var cat = inp.dataset.category;
                 expenses[cat] = parseFloat(inp.value) || 0;
-            });
-            const spareDesc = document.querySelector('.expense-desc-input').value.trim() || '';
-
-            const existing = allEntries.find(e => e.date === date);
-            if (existing) {
-                if (!confirm(`"${date}" sanasi uchun yozuv allaqachon mavjud. Yangilashni xohlaysizmi?`)) return;
-                const { error } = await supabase
-                    .from('entries')
-                    .update({ income, expenses, spare_desc: spareDesc, description: description, user_id: currentUser.id })
-                    .eq('id', existing.id);
-
-                if (error) {
-                    showToast('❌ Yangilashda xatolik: ' + error.message, 'error');
-                    return;
-                }
-                showToast(`✅ ${date} yangilandi!`, 'success');
-            } else {
-                const { error } = await supabase
-                    .from('entries')
-                    .insert([{ date, income, expenses, spare_desc: spareDesc, description: description, user_id: currentUser.id }]);
-
-                if (error) {
-                    showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error');
-                    return;
-                }
-                showToast(`✅ ${date} uchun ma'lumot saqlandi!`, 'success');
             }
 
+            var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || '';
+
+            var existingIndex = -1;
+            for (var i = 0; i < allEntries.length; i++) {
+                if (allEntries[i].date === date) {
+                    existingIndex = i;
+                    break;
+                }
+            }
+
+            if (existingIndex !== -1) {
+                if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return;
+                allEntries[existingIndex] = { date: date, income: income, description: description, expenses: expenses,
+                    spare_desc: spareDesc };
+            } else {
+                allEntries.push({ date: date, income: income, description: description, expenses: expenses,
+                    spare_desc: spareDesc });
+            }
+
+            saveEntries();
             clearForm();
-            await fetchEntries();
+            showToast('✅ ' + date + ' uchun saqlandi!', 'success');
         }
 
-        async function deleteEntry(date) {
-            const entry = allEntries.find(e => e.date === date);
-            if (!entry) return;
+        function deleteEntry(date) {
+            if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return;
+            var newEntries = [];
+            for (var i = 0; i < allEntries.length; i++) {
+                if (allEntries[i].date !== date) {
+                    newEntries.push(allEntries[i]);
+                }
+            }
+            allEntries = newEntries;
+            saveEntries();
+            showToast('🗑️ ' + date + ' o‘chirildi', 'success');
+        }
 
-            const { error } = await supabase
-                .from('entries')
-                .delete()
-                .eq('id', entry.id);
-
-            if (error) {
-                showToast('❌ O‘chirishda xatolik: ' + error.message, 'error');
+        function clearAll() {
+            if (allEntries.length === 0) {
+                showToast('Hech qanday maʼlumot yo‘q', 'error');
                 return;
             }
-            showToast(`🗑️ ${date} sanadagi yozuv o‘chirildi.`, 'success');
-            await fetchEntries();
+            if (!confirm('🚨 Barcha maʼlumotlarni o‘chirish?')) return;
+            allEntries = [];
+            saveEntries();
+            showToast('🗑️ Barchasi tozalandi', 'success');
         }
 
         function clearForm() {
             document.getElementById('entryDate').value = getToday();
             document.getElementById('incomeInput').value = '';
             document.getElementById('entryDescription').value = '';
-            document.querySelectorAll('.expense-input').forEach(inp => inp.value = '');
-            document.querySelector('.expense-desc-input').value = '';
+            var expenseInputs = document.querySelectorAll('.expense-input');
+            for (var i = 0; i < expenseInputs.length; i++) {
+                expenseInputs[i].value = '';
+            }
+            var descInput = document.querySelector('.expense-desc-input');
+            if (descInput) descInput.value = '';
         }
 
-        // ============================================================
-        //  USER MANAGEMENT
-        // ============================================================
-        async function loadUsers() {
-            if (currentUser?.role !== 'admin') return;
-            const { data, error } = await supabase.from('users').select('*').order('id');
-            if (error) {
-                console.error(error);
-                return;
-            }
-            const list = document.getElementById('userList');
-            list.innerHTML = data.map(u =>
-                `<div class="user-item">
-                    <span><strong>${u.name}</strong> (${u.id}) 
-                        <span class="role-badge ${u.role === 'admin' ? 'admin' : ''}">${u.role}</span>
-                    </span>
-                    <div>
-                        ${u.role === 'admin' ? 
-                            `<button class="btn btn-outline btn-sm" onclick="changeRole(${u.id}, 'worker')">Ishchi qilish</button>` :
-                            `<button class="btn btn-outline btn-sm" onclick="changeRole(${u.id}, 'admin')">Admin qilish</button>`
-                        }
-                        ${u.id !== currentUser.id ? `<button class="btn btn-danger btn-sm" onclick="removeUser(${u.id})">🗑️</button>` : ''}
-                    </div>
-                </div>`
-            ).join('');
-        }
-
-        window.changeRole = async function(userId, newRole) {
-            const { error } = await supabase.from('users').update({ role: newRole }).eq('id', userId);
-            if (error) {
-                showToast('❌ Rolni o‘zgartirishda xatolik', 'error');
-                return;
-            }
-            showToast(`✅ Rol o‘zgartirildi!`, 'success');
-            loadUsers();
-        };
-
-        window.removeUser = async function(userId) {
-            if (!confirm('Bu foydalanuvchini o‘chirishga ishonchingiz komilmi?')) return;
-            const { error } = await supabase.from('users').delete().eq('id', userId);
-            if (error) {
-                showToast('❌ O‘chirishda xatolik', 'error');
-                return;
-            }
-            showToast('✅ Foydalanuvchi o‘chirildi', 'success');
-            loadUsers();
-        };
-
-        document.getElementById('addUserBtn').addEventListener('click', function() {
-            const userId = prompt('Yangi foydalanuvchining Telegram ID sini kiriting:');
-            if (!userId) return;
-            const name = prompt('Foydalanuvchi ismi:');
-            if (!name) return;
-            supabase.from('users').insert([{ id: parseInt(userId), name, role: 'worker' }])
-                .then(() => {
-                    showToast('✅ Foydalanuvchi qo‘shildi', 'success');
-                    loadUsers();
-                })
-                .catch(err => showToast('❌ Xatolik: ' + err.message, 'error'));
-        });
-
-        // ============================================================
-        //  TOAST
-        // ============================================================
-        let toastTimer = null;
-
-        function showToast(msg, type = 'success') {
-            const el = document.getElementById('toast');
+        function showToast(msg, type) {
+            var el = document.getElementById('toast');
             el.textContent = msg;
-            el.className = 'toast ' + type;
-            clearTimeout(toastTimer);
+            el.className = 'toast ' + (type || 'success');
             void el.offsetWidth;
             el.classList.add('show');
-            toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(function() {
+                el.classList.remove('show');
+            }, 3000);
         }
 
         // ============================================================
-        //  PERIOD UI TOGGLES
+        // PERIOD UI TOGGLES
         // ============================================================
         function updatePeriodUI() {
-            const period = document.getElementById('periodSelect').value;
+            var period = document.getElementById('periodSelect').value;
             document.getElementById('periodDateGroup').style.display = (period === 'day') ? 'block' : 'none';
             document.getElementById('periodWeekGroup').style.display = (period === 'week') ? 'block' : 'none';
             document.getElementById('periodMonthGroup').style.display = (period === 'month') ? 'block' : 'none';
             document.getElementById('periodYearGroup').style.display = (period === 'year') ? 'block' : 'none';
 
-            const today = getToday();
+            var today = getToday();
             if (period === 'day') {
                 if (!document.getElementById('periodDate').value) document.getElementById('periodDate').value = today;
             } else if (period === 'week') {
@@ -1411,74 +1093,61 @@
         }
 
         // ============================================================
-        //  TAB SWITCHING
+        // TAB SWITCHING
         // ============================================================
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
-            if (tabId === 'users' && currentUser?.role === 'admin') {
-                loadUsers();
+            var panes = document.querySelectorAll('.tab-pane');
+            for (var i = 0; i < panes.length; i++) {
+                panes[i].classList.remove('active');
             }
+            var btns = document.querySelectorAll('.tab-btn');
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove('active');
+            }
+            document.getElementById('tab-' + tabId).classList.add('active');
+            var activeBtn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+            if (activeBtn) activeBtn.classList.add('active');
             if (tabId === 'overview' || tabId === 'expenses') renderSummary();
         }
 
         // ============================================================
-        //  INIT
+        // INIT
         // ============================================================
-        async function init() {
-            const user = await initTelegramUser();
-            if (!user) {
-                document.getElementById('userName').textContent = 'Test User';
-                currentUser = { id: 1, name: 'Test', role: 'admin' };
-            }
+        function init() {
+            console.log('🚀 ALFA MOY SAM starting...');
 
-            await fetchEntries();
+            if (!checkPassword()) return;
+
             document.getElementById('entryDate').value = getToday();
             updatePeriodUI();
+            loadEntries();
 
-            document.getElementById('addEntryBtn').addEventListener('click', addEntry);
-            document.getElementById('incomeInput').addEventListener('keydown', e => {
-                if (e.key === 'Enter') addEntry();
-            });
+            document.getElementById('addBtn').addEventListener('click', addEntry);
+            document.getElementById('clearBtn').addEventListener('click', clearAll);
+            document.getElementById('refreshBtn').addEventListener('click', loadEntries);
+
             document.getElementById('periodSelect').addEventListener('change', updatePeriodUI);
             document.getElementById('periodDate').addEventListener('change', renderSummary);
             document.getElementById('periodWeekStart').addEventListener('change', renderSummary);
             document.getElementById('periodMonth').addEventListener('change', renderSummary);
             document.getElementById('periodYear').addEventListener('change', renderSummary);
-            document.getElementById('refreshBtn').addEventListener('click', fetchEntries);
-            document.getElementById('clearAllBtn').addEventListener('click', async function() {
-                if (!confirm('🚨 Barcha maʼlumotlarni o‘chirishga ishonchingiz komilmi?')) return;
-                const { error } = await supabase.from('entries').delete().neq('id', 0);
-                if (error) {
-                    showToast('❌ Xatolik: ' + error.message, 'error');
-                    return;
-                }
-                showToast('🗑️ Barcha maʼlumotlar tozalandi.', 'success');
-                await fetchEntries();
-            });
 
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+            var tabBtns = document.querySelectorAll('.tab-btn');
+            for (var i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].addEventListener('click', function() {
                     switchTab(this.dataset.tab);
                 });
-            });
-
-            if (currentUser?.role === 'admin') {
-                document.getElementById('usersTabBtn').style.display = 'inline-block';
             }
 
-            renderSummary();
-        }
+            document.getElementById('incomeInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') addEntry();
+            });
 
-        // Fallback for local testing
-        if (!window.Telegram?.WebApp) {
-            window.Telegram = { WebApp: { initDataUnsafe: { user: { id: 123456789, first_name: 'Admin' } } } };
+            console.log('✅ ALFA MOY SAM loaded!');
+            console.log('📊 Entries:', allEntries.length);
         }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
-
 </body>
 </html>
