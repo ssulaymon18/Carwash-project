@@ -259,6 +259,26 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        // At the very top of your <script> section, add:
+var SUPABASE_URL = 'https://hauokcicipuxpdjkuumnf.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhdW9rY2ljcHVweGRqa3V1bW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTMwMzksImV4cCI6MjA5OTI2OTAzOX0.ZAoK0t4A3PTe08bGKdY93yclG01SfaJ1ROWjDDRjoW0'; // Replace with your key
+var supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Test connection
+async function testSupabase() {
+    try {
+        var { data, error } = await supabase.from('users').select('*');
+        if (error) {
+            console.error('❌ Connection error:', error);
+        } else {
+            console.log('✅ Supabase connected! Users:', data);
+        }
+    } catch (e) {
+        console.error('❌ Error:', e);
+    }
+}
+testSupabase();
+
         // ============================================================
         // 🔐 PASSWORD PROTECTION – CUSTOM MODAL (WORKS EVERYWHERE)
         // ============================================================
@@ -695,77 +715,172 @@
             container.innerHTML = html;
         }
 
-        function loadEntries() {
-            try {
-                var saved = localStorage.getItem('alfamoy_entries');
-                if (saved) {
-                    allEntries = JSON.parse(saved);
-                }
-            } catch (e) {
-                allEntries = [];
-            }
+        async function loadEntries() {
+    if (!currentUser) {
+        allEntries = [];
+        renderSummary();
+        return;
+    }
+
+    try {
+        var { data, error } = await supabase
+            .from('entries')
+            .select('*')
+            .order('date', { ascending: false });
+
+        if (error) {
+            console.error('❌ Fetch error:', error);
+            showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error');
+            allEntries = [];
             renderSummary();
+            return;
         }
 
-        function saveEntries() {
-            localStorage.setItem('alfamoy_entries', JSON.stringify(allEntries));
-            renderSummary();
+        allEntries = data || [];
+        renderSummary();
+    } catch (e) {
+        console.error('❌ loadEntries error:', e);
+        allEntries = [];
+        renderSummary();
+    }
+}
+
+       async function saveEntries() {
+    // Save to Supabase
+    if (!currentUser) return;
+
+    try {
+        var latestEntry = allEntries[allEntries.length - 1];
+        if (!latestEntry) return;
+
+        var { error } = await supabase
+            .from('entries')
+            .insert([{
+                date: latestEntry.date,
+                income: latestEntry.income,
+                expenses: latestEntry.expenses || {},
+                spare_desc: latestEntry.spare_desc || '',
+                description: latestEntry.description || '',
+                user_id: currentUser.id
+            }]);
+
+        if (error) {
+            console.error('❌ Save error:', error);
+            showToast('❌ Saqlashda xatolik: ' + error.message, 'error');
+            return;
         }
 
-        function addEntry() {
-            var date = document.getElementById('entryDate').value;
-            var income = parseFloat(document.getElementById('incomeInput').value) || 0;
-            var description = document.getElementById('entryDescription').value.trim() || '';
+        renderSummary();
+    } catch (e) {
+        console.error('❌ saveEntries error:', e);
+    }
+}
 
-            if (!date) {
-                showToast('Iltimos, sanani tanlang!', 'error');
+        async function addEntry() {
+    var date = document.getElementById('entryDate').value;
+    var income = parseFloat(document.getElementById('incomeInput').value) || 0;
+    var description = document.getElementById('entryDescription').value.trim() || '';
+
+    if (!date) {
+        showToast('Iltimos, sanani tanlang!', 'error');
+        return;
+    }
+
+    var expenses = {};
+    var expenseInputs = document.querySelectorAll('.expense-input');
+    for (var i = 0; i < expenseInputs.length; i++) {
+        var inp = expenseInputs[i];
+        var cat = inp.dataset.category;
+        expenses[cat] = parseFloat(inp.value) || 0;
+    }
+
+    var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || '';
+
+    // Check if entry exists
+    var existing = allEntries.find(function(e) { return e.date === date; });
+
+    if (existing) {
+        if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return;
+
+        try {
+            var { error } = await supabase
+                .from('entries')
+                .update({
+                    income: income,
+                    expenses: expenses,
+                    spare_desc: spareDesc,
+                    description: description
+                })
+                .eq('id', existing.id);
+
+            if (error) {
+                console.error('❌ Update error:', error);
+                showToast('❌ Yangilashda xatolik: ' + error.message, 'error');
                 return;
             }
 
-            var expenses = {};
-            var expenseInputs = document.querySelectorAll('.expense-input');
-            for (var i = 0; i < expenseInputs.length; i++) {
-                var inp = expenseInputs[i];
-                var cat = inp.dataset.category;
-                expenses[cat] = parseFloat(inp.value) || 0;
+            showToast('✅ ' + date + ' yangilandi!', 'success');
+        } catch (e) {
+            console.error('❌ updateEntry error:', e);
+            showToast('❌ Xatolik yuz berdi.', 'error');
+            return;
+        }
+    } else {
+        try {
+            var { error } = await supabase
+                .from('entries')
+                .insert([{
+                    date: date,
+                    income: income,
+                    expenses: expenses,
+                    spare_desc: spareDesc,
+                    description: description,
+                    user_id: currentUser ? currentUser.id : 1
+                }]);
+
+            if (error) {
+                console.error('❌ Insert error:', error);
+                showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error');
+                return;
             }
 
-            var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || '';
-
-            var existingIndex = -1;
-            for (var i = 0; i < allEntries.length; i++) {
-                if (allEntries[i].date === date) {
-                    existingIndex = i;
-                    break;
-                }
-            }
-
-            if (existingIndex !== -1) {
-                if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return;
-                allEntries[existingIndex] = { date: date, income: income, description: description, expenses: expenses,
-                    spare_desc: spareDesc };
-            } else {
-                allEntries.push({ date: date, income: income, description: description, expenses: expenses,
-                    spare_desc: spareDesc });
-            }
-
-            saveEntries();
-            clearForm();
             showToast('✅ ' + date + ' uchun saqlandi!', 'success');
+        } catch (e) {
+            console.error('❌ addEntry error:', e);
+            showToast('❌ Xatolik yuz berdi.', 'error');
+            return;
+        }
+    }
+
+    clearForm();
+    await loadEntries();
+}
+
+        async function deleteEntry(date) {
+    var entry = allEntries.find(function(e) { return e.date === date; });
+    if (!entry) return;
+
+    if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return;
+
+    try {
+        var { error } = await supabase
+            .from('entries')
+            .delete()
+            .eq('id', entry.id);
+
+        if (error) {
+            console.error('❌ Delete error:', error);
+            showToast('❌ O‘chirishda xatolik: ' + error.message, 'error');
+            return;
         }
 
-        function deleteEntry(date) {
-            if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return;
-            var newEntries = [];
-            for (var i = 0; i < allEntries.length; i++) {
-                if (allEntries[i].date !== date) {
-                    newEntries.push(allEntries[i]);
-                }
-            }
-            allEntries = newEntries;
-            saveEntries();
-            showToast('🗑️ ' + date + ' o‘chirildi', 'success');
-        }
+        showToast('🗑️ ' + date + ' o‘chirildi', 'success');
+        await loadEntries();
+    } catch (e) {
+        console.error('❌ deleteEntry error:', e);
+        showToast('❌ Xatolik yuz berdi.', 'error');
+    }
+}
 
         function clearAll() {
             if (allEntries.length === 0) {
@@ -845,6 +960,26 @@
         // ============================================================
         function init() {
             console.log('🚀 ALFA MOY SAM starting...');
+            // Initialize Telegram user
+if (window.Telegram && window.Telegram.WebApp) {
+    var user = window.Telegram.WebApp.initDataUnsafe?.user;
+    if (user) {
+        var name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+        var userId = user.id;
+        currentUser = { id: userId, name: name, role: 'admin' };
+        document.getElementById('userName').textContent = name;
+        document.getElementById('userRoleBadge').textContent = 'Admin';
+        document.getElementById('userRoleBadge').className = 'role-badge admin';
+        console.log('👤 User:', name);
+    }
+}
+// Fallback if no Telegram
+if (!currentUser) {
+    currentUser = { id: 1, name: 'Test User', role: 'admin' };
+    document.getElementById('userName').textContent = 'Test User';
+    document.getElementById('userRoleBadge').textContent = 'Admin';
+    document.getElementById('userRoleBadge').className = 'role-badge admin';
+}
 
             if (!checkPassword()) return;
 
