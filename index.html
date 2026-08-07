@@ -92,7 +92,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- HEADER -->
         <div class="header">
             <div>
                 <h1>🚗 ALFA MOY SAM <small>daromad &amp; xarajat</small></h1>
@@ -100,7 +99,6 @@
             <div class="currency-badge">🇺🇿 so‘m</div>
         </div>
 
-        <!-- ADD ENTRY -->
         <div class="card" id="addEntryCard">
             <div class="card-title">📋 Kunlik ma'lumot qo‘shish</div>
             <div class="form-row">
@@ -122,38 +120,19 @@
             <div class="mt-8">
                 <label style="font-weight:600; font-size:13px; color:#2d4a5a;">💸 Xarajatlar</label>
                 <div class="expense-grid">
-                    <div class="form-group">
-                        <label>🧴 Pena</label>
-                        <input type="number" class="expense-input" data-category="foam" placeholder="0" min="0" step="500" />
-                    </div>
-                    <div class="form-group">
-                        <label>🕯️ Vosk</label>
-                        <input type="number" class="expense-input" data-category="wax" placeholder="0" min="0" step="500" />
-                    </div>
-                    <div class="form-group">
-                        <label>💧 Suv</label>
-                        <input type="number" class="expense-input" data-category="water" placeholder="0" min="0" step="500" />
-                    </div>
-                    <div class="form-group">
-                        <label>⚡ Elektr</label>
-                        <input type="number" class="expense-input" data-category="electricity" placeholder="0" min="0" step="500" />
-                    </div>
+                    <div class="form-group"><label>🧴 Pena</label><input type="number" class="expense-input" data-category="foam" placeholder="0" min="0" step="500" /></div>
+                    <div class="form-group"><label>🕯️ Vosk</label><input type="number" class="expense-input" data-category="wax" placeholder="0" min="0" step="500" /></div>
+                    <div class="form-group"><label>💧 Suv</label><input type="number" class="expense-input" data-category="water" placeholder="0" min="0" step="500" /></div>
+                    <div class="form-group"><label>⚡ Elektr</label><input type="number" class="expense-input" data-category="electricity" placeholder="0" min="0" step="500" /></div>
                     <div class="expense-item-with-desc">
-                        <div class="form-group">
-                            <label>🔧 Zapchast (nima?)</label>
-                            <input type="text" class="expense-desc-input" data-category="spare_parts" placeholder="filtr, moy..." />
-                        </div>
-                        <div class="form-group">
-                            <label>Narxi</label>
-                            <input type="number" class="expense-input" data-category="spare_parts" placeholder="0" min="0" step="500" />
-                        </div>
+                        <div class="form-group"><label>🔧 Zapchast (nima?)</label><input type="text" class="expense-desc-input" data-category="spare_parts" placeholder="filtr, moy..." /></div>
+                        <div class="form-group"><label>Narxi</label><input type="number" class="expense-input" data-category="spare_parts" placeholder="0" min="0" step="500" /></div>
                     </div>
                 </div>
             </div>
             <button class="btn mt-12" id="addBtn">➕ Qo‘shish</button>
         </div>
 
-        <!-- SUMMARY -->
         <div class="card">
             <div class="flex-between">
                 <div class="card-title" style="margin-bottom:0;">📊 Umumiy hisobot</div>
@@ -193,54 +172,35 @@
                 <button class="tab-btn active" data-tab="overview">📈 Umumiy</button>
                 <button class="tab-btn" data-tab="expenses">📉 Xarajatlar</button>
                 <button class="tab-btn" data-tab="history">📜 Tarix</button>
+                <button class="tab-btn" data-tab="users" id="usersTabBtn" style="display:none;">👥 Foydalanuvchilar</button>
             </div>
-            <!-- OVERVIEW -->
             <div class="tab-pane active" id="tab-overview">
                 <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-label">💰 Daromad</div>
-                        <div class="stat-value" id="statIncome">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">💸 Xarajat</div>
-                        <div class="stat-value" id="statExpense">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">📊 Foyda</div>
-                        <div class="stat-value" id="statProfit">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">📅 Kunlar</div>
-                        <div class="stat-value" id="statDays">0</div>
-                    </div>
+                    <div class="stat-item"><div class="stat-label">💰 Daromad</div><div class="stat-value" id="statIncome">0</div></div>
+                    <div class="stat-item"><div class="stat-label">💸 Xarajat</div><div class="stat-value" id="statExpense">0</div></div>
+                    <div class="stat-item"><div class="stat-label">📊 Foyda</div><div class="stat-value" id="statProfit">0</div></div>
+                    <div class="stat-item"><div class="stat-label">📅 Kunlar</div><div class="stat-value" id="statDays">0</div></div>
                 </div>
-                <div class="chart-wrapper">
-                    <canvas id="overviewChart"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="overviewChart"></canvas></div>
             </div>
-            <!-- EXPENSES -->
             <div class="tab-pane" id="tab-expenses">
                 <div class="stats-grid" id="expenseStatsGrid">
                     <div class="stat-item"><div class="stat-label">🧴 Pena</div><div class="stat-value" id="expFoam">0</div></div>
                     <div class="stat-item"><div class="stat-label">💧 Suv</div><div class="stat-value" id="expWater">0</div></div>
                     <div class="stat-item"><div class="stat-label">⚡ Elektr</div><div class="stat-value" id="expElectricity">0</div></div>
                     <div class="stat-item"><div class="stat-label">🕯️ Vosk</div><div class="stat-value" id="expWax">0</div></div>
-                    <div class="stat-item">
-                        <div class="stat-label">🔧 Zapchast</div>
-                        <div class="stat-value" id="expSpareParts">0</div>
-                    </div>
+                    <div class="stat-item"><div class="stat-label">🔧 Zapchast</div><div class="stat-value" id="expSpareParts">0</div></div>
                 </div>
-                <div class="chart-wrapper" style="height:160px;">
-                    <canvas id="expenseChart"></canvas>
-                </div>
+                <div class="chart-wrapper" style="height:160px;"><canvas id="expenseChart"></canvas></div>
             </div>
-            <!-- HISTORY -->
             <div class="tab-pane" id="tab-history">
-                <div class="history-scroll" id="historyContainer">
-                    <div class="empty-state">
-                        <span class="big-icon">📭</span>
-                        Hozircha ma'lumot yo‘q.
-                    </div>
+                <div class="history-scroll" id="historyContainer"><div class="empty-state"><span class="big-icon">📭</span>Hozircha ma'lumot yo‘q.</div></div>
+            </div>
+            <div class="tab-pane" id="tab-users">
+                <div class="user-management">
+                    <h4 style="margin-bottom:6px; font-size:14px;">👥 Foydalanuvchilar</h4>
+                    <div id="userList"></div>
+                    <div style="margin-top:10px;"><button class="btn btn-success btn-sm" id="addUserBtn">➕ Yangi foydalanuvchi</button><span class="text-muted" style="font-size:11px; margin-left:6px;">(Telegram ID)</span></div>
                 </div>
             </div>
         </div>
@@ -249,677 +209,70 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============================================================
-        // 🔑 SUPABASE CONFIGURATION
-        // ============================================================
         var SUPABASE_URL = 'https://hauokcicipuxpdjkuumnf.supabase.co';
         var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhdW9rY2ljcHVweGRqa3V1bW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTMwMzksImV4cCI6MjA5OTI2OTAzOX0.ZAoK0t4A3PTe08bGKdY93yclG01SfaJ1ROWjDDRjoW0';
         var supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log('✅ Supabase initialized!');
 
-        // ============================================================
-        // 🔐 PASSWORD PROTECTION – CUSTOM MODAL (WORKS EVERYWHERE)
-        // ============================================================
         var APP_PASSWORD = 'alfamoy2026';
         var passwordModalShown = false;
-
-        function checkPassword() {
-            if (localStorage.getItem('authenticated') === 'true') return true;
-            var lockUntil = parseInt(localStorage.getItem('lockUntil') || '0');
-            var now = Date.now();
-            if (lockUntil > now) {
-                var remaining = Math.ceil((lockUntil - now) / 1000);
-                var minutes = Math.floor(remaining / 60);
-                var seconds = remaining % 60;
-                var timeMsg = minutes > 0 ? minutes + ' daqiqa ' + seconds + ' soniya' : seconds + ' soniya';
-                showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, ' + timeMsg + ' kuting.');
-                return false;
-            }
-            showPasswordModal();
-            return false;
-        }
-
-        function showPasswordModal() {
-            if (passwordModalShown) return;
-            passwordModalShown = true;
-            var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
-            var remaining = 3 - attempts;
-            var existing = document.getElementById('passwordModal');
-            if (existing) existing.remove();
-            var modal = document.createElement('div');
-            modal.id = 'passwordModal';
-            modal.innerHTML = `
-                <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:10000;font-family:system-ui,sans-serif;">
-                    <div style="background:#fff;padding:30px 24px;border-radius:20px;max-width:340px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
-                        <div style="font-size:40px;">🔐</div>
-                        <h2 style="font-size:20px;margin:8px 0 4px;color:#1a3a4a;">Maxfiy kod</h2>
-                        <p style="color:#5a7a8a;font-size:14px;margin:0 0 16px;">Iltimos, kodni kiriting</p>
-                        <input type="password" id="passwordInput" placeholder="●●●●●●" style="width:100%;padding:14px 12px;border:2px solid #dce4ec;border-radius:12px;font-size:20px;text-align:center;letter-spacing:6px;background:#fafcfe;outline:none;box-sizing:border-box;">
-                        <div id="passwordError" style="color:#b13e4a;font-size:13px;margin-top:6px;min-height:20px;"></div>
-                        <button id="passwordSubmit" style="width:100%;padding:12px;margin-top:12px;border:none;border-radius:12px;background:#1a6b8a;color:#fff;font-size:17px;font-weight:600;cursor:pointer;">Kirish</button>
-                        <div style="color:#5a7a8a;font-size:12px;margin-top:10px;">Qolgan urinishlar: ${remaining}</div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            var input = document.getElementById('passwordInput');
-            var submitBtn = document.getElementById('passwordSubmit');
-            var errorEl = document.getElementById('passwordError');
-            input.focus();
-
-            function submitPassword() {
-                var entered = input.value;
-                var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
-                if (entered === APP_PASSWORD) {
-                    localStorage.setItem('authenticated', 'true');
-                    localStorage.setItem('password_attempts', '0');
-                    localStorage.removeItem('lockUntil');
-                    modal.remove();
-                    passwordModalShown = false;
-                    init();
-                    return;
-                } else {
-                    attempts++;
-                    localStorage.setItem('password_attempts', attempts.toString());
-                    var remaining = 3 - attempts;
-                    if (attempts >= 3) {
-                        localStorage.setItem('lockUntil', (Date.now() + 60000).toString());
-                        modal.innerHTML = `
-                            <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:10000;font-family:system-ui,sans-serif;">
-                                <div style="background:#fff;padding:30px 24px;border-radius:20px;max-width:340px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
-                                    <div style="font-size:48px;">🔒</div>
-                                    <h2 style="color:#b13e4a;margin:8px 0;">Bloklandi</h2>
-                                    <p style="color:#5a7a8a;font-size:15px;">Juda ko‘p urinishlar. Iltimos, 1 daqiqa kuting.</p>
-                                    <button onclick="location.reload()" style="margin-top:16px;padding:12px 30px;background:#1a6b8a;color:#fff;border:none;border-radius:10px;font-size:16px;cursor:pointer;">🔄 Yangilash</button>
-                                </div>
-                            </div>
-                        `;
-                        passwordModalShown = false;
-                        setTimeout(function() { location.reload(); }, 61000);
-                        return;
-                    } else {
-                        errorEl.textContent = '❌ Noto‘g‘ri kod! Yana ' + remaining + ' ta urinish.';
-                        input.value = '';
-                        input.focus();
-                        var remainingEl = modal.querySelector('div:last-child');
-                        if (remainingEl) remainingEl.textContent = 'Qolgan urinishlar: ' + remaining;
-                    }
-                }
-            }
-            input.addEventListener('keydown', function(e) { if (e.key === 'Enter') submitPassword(); });
-            submitBtn.addEventListener('click', submitPassword);
-        }
-
-        function showLockScreen(message) {
-            document.body.innerHTML = `
-                <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f0f4f8; font-family:sans-serif; text-align:center; padding:20px;">
-                    <div style="background:#fff; padding:40px 30px; border-radius:20px; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.1);">
-                        <div style="font-size:64px;">🔒</div>
-                        <h2 style="color:#b13e4a; margin-top:10px;">Ruxsat yo‘q</h2>
-                        <p style="color:#5a7a8a; margin-top:10px; font-size:16px;">${message}</p>
-                        <button onclick="location.reload()" style="margin-top:20px; padding:12px 30px; background:#1a6b8a; color:#fff; border:none; border-radius:10px; font-size:16px; cursor:pointer;">🔄 Qayta urinib ko‘rish</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        // ============================================================
-        // APP LOGIC
-        // ============================================================
         var EXPENSE_CATEGORIES = ['foam', 'water', 'electricity', 'wax', 'spare_parts'];
-        var CATEGORY_LABELS = {
-            foam: '🧴 Pena',
-            water: '💧 Suv',
-            electricity: '⚡ Elektr',
-            wax: '🕯️ Vosk',
-            spare_parts: '🔧 Zapchast'
-        };
-
+        var CATEGORY_LABELS = { foam: '🧴 Pena', water: '💧 Suv', electricity: '⚡ Elektr', wax: '🕯️ Vosk', spare_parts: '🔧 Zapchast' };
         var allEntries = [];
         var overviewChartInstance = null;
         var expenseChartInstance = null;
         var currentUser = null;
 
-        function formatMoney(val) {
-            if (val === undefined || val === null) return '0';
-            return Number(val).toLocaleString('uz-UZ');
-        }
-
-        function getToday() {
-            return new Date().toISOString().split('T')[0];
-        }
-
-        function parseDate(str) {
-            if (!str) return new Date();
-            var parts = str.split('-');
-            return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]) || 1);
-        }
-
+        function formatMoney(val) { if (val === undefined || val === null) return '0'; return Number(val).toLocaleString('uz-UZ'); }
+        function getToday() { return new Date().toISOString().split('T')[0]; }
+        function parseDate(str) { if (!str) return new Date(); var parts = str.split('-'); return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]) || 1); }
         function isSameDay(d1, d2) { return d1 === d2; }
+        function isSameWeek(dateStr, refDateStr) { var d = parseDate(dateStr); var ref = parseDate(refDateStr); var day = d.getDay(); var diff = (day === 0 ? 6 : day - 1); var start = new Date(d); start.setDate(d.getDate() - diff); start.setHours(0, 0, 0, 0); var refDay = ref.getDay(); var refDiff = (refDay === 0 ? 6 : refDay - 1); var refStart = new Date(ref); refStart.setDate(ref.getDate() - refDiff); refStart.setHours(0, 0, 0, 0); return start.getTime() === refStart.getTime(); }
+        function isSameMonth(dateStr, refDateStr) { var d = parseDate(dateStr); var ref = parseDate(refDateStr); return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth(); }
+        function isSameYear(dateStr, refDateStr) { return parseDate(dateStr).getFullYear() === parseDate(refDateStr).getFullYear(); }
+        function getWeekStart(dateStr) { var d = parseDate(dateStr); var day = d.getDay(); var diff = (day === 0 ? 6 : day - 1); var s = new Date(d); s.setDate(d.getDate() - diff); s.setHours(0, 0, 0, 0); return s.toISOString().split('T')[0]; }
+        function getRefDate(period) { switch (period) { case 'day': return document.getElementById('periodDate').value || getToday(); case 'week': return document.getElementById('periodWeekStart').value || getToday(); case 'month': return document.getElementById('periodMonth').value + '-01' || getToday(); case 'year': return document.getElementById('periodYear').value + '-01-01' || getToday(); default: return getToday(); } }
 
-        function isSameWeek(dateStr, refDateStr) {
-            var d = parseDate(dateStr);
-            var ref = parseDate(refDateStr);
-            var day = d.getDay();
-            var diff = (day === 0 ? 6 : day - 1);
-            var start = new Date(d);
-            start.setDate(d.getDate() - diff);
-            start.setHours(0, 0, 0, 0);
-            var refDay = ref.getDay();
-            var refDiff = (refDay === 0 ? 6 : refDay - 1);
-            var refStart = new Date(ref);
-            refStart.setDate(ref.getDate() - refDiff);
-            refStart.setHours(0, 0, 0, 0);
-            return start.getTime() === refStart.getTime();
-        }
+        function filterEntries(period, refDate) { if (!refDate) refDate = getToday(); var filtered = []; for (var i = 0; i < allEntries.length; i++) { var e = allEntries[i]; var match = false; switch (period) { case 'day': match = isSameDay(e.date, refDate); break; case 'week': match = isSameWeek(e.date, refDate); break; case 'month': match = isSameMonth(e.date, refDate); break; case 'year': match = isSameYear(e.date, refDate); break; default: match = true; } if (match) filtered.push(e); } return filtered.sort(function(a, b) { return a.date < b.date ? -1 : 1; }); }
+        function computeTotals(entries) { var totalIncome = 0; var totalExpense = 0; var expenseBreakdown = {}; for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) { expenseBreakdown[EXPENSE_CATEGORIES[c]] = 0; } for (var i = 0; i < entries.length; i++) { var e = entries[i]; totalIncome += Number(e.income) || 0; var exp = e.expenses || {}; for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) { var cat = EXPENSE_CATEGORIES[c]; var val = Number(exp[cat]) || 0; expenseBreakdown[cat] += val; totalExpense += val; } } return { totalIncome: totalIncome, totalExpense: totalExpense, expenseBreakdown: expenseBreakdown }; }
 
-        function isSameMonth(dateStr, refDateStr) {
-            var d = parseDate(dateStr);
-            var ref = parseDate(refDateStr);
-            return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth();
-        }
+        function renderSummary() { var period = document.getElementById('periodSelect').value; var refDate = getRefDate(period); if (!refDate) return; var entries = filterEntries(period, refDate); var totals = computeTotals(entries); var profit = totals.totalIncome - totals.totalExpense; document.getElementById('statIncome').textContent = formatMoney(totals.totalIncome); document.getElementById('statExpense').textContent = formatMoney(totals.totalExpense); document.getElementById('statProfit').textContent = formatMoney(profit); document.getElementById('statProfit').className = 'stat-value' + (profit >= 0 ? ' positive' : ' negative'); document.getElementById('statDays').textContent = entries.length; for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) { var cat = EXPENSE_CATEGORIES[c]; var id = 'exp' + cat.split('_').map(function(w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(''); var el = document.getElementById(id); if (el) el.textContent = formatMoney(totals.expenseBreakdown[cat] || 0); } renderOverviewChart(entries, period); renderExpenseChart(totals.expenseBreakdown); renderHistory(entries); }
 
-        function isSameYear(dateStr, refDateStr) {
-            return parseDate(dateStr).getFullYear() === parseDate(refDateStr).getFullYear();
-        }
+        function renderOverviewChart(entries, period) { var ctx = document.getElementById('overviewChart').getContext('2d'); if (overviewChartInstance) overviewChartInstance.destroy(); if (!entries.length) { overviewChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['Maʼlumot yo‘q'], datasets: [{ label: 'Daromad', data: [0], backgroundColor: 'rgba(26,107,138,0.6)', borderRadius: 4 }, { label: 'Xarajat', data: [0], backgroundColor: 'rgba(200,70,80,0.6)', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } } }); return; } var labels = []; var incomeData = []; var expenseData = []; for (var i = 0; i < entries.length; i++) { var e = entries[i]; labels.push(e.date); incomeData.push(Number(e.income) || 0); var exp = 0; for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) { exp += Number(e.expenses?.[EXPENSE_CATEGORIES[c]]) || 0; } expenseData.push(exp); } overviewChartInstance = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: 'Daromad', data: incomeData, backgroundColor: 'rgba(26,107,138,0.75)', borderRadius: 4 }, { label: 'Xarajat', data: expenseData, backgroundColor: 'rgba(200,70,80,0.70)', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } } }); }
 
-        function getWeekStart(dateStr) {
-            var d = parseDate(dateStr);
-            var day = d.getDay();
-            var diff = (day === 0 ? 6 : day - 1);
-            var s = new Date(d);
-            s.setDate(d.getDate() - diff);
-            s.setHours(0, 0, 0, 0);
-            return s.toISOString().split('T')[0];
-        }
+        function renderExpenseChart(expenseBreakdown) { var ctx = document.getElementById('expenseChart').getContext('2d'); if (expenseChartInstance) expenseChartInstance.destroy(); var labels = []; var data = []; var colors = ['rgba(52,152,219,0.75)', 'rgba(46,204,113,0.75)', 'rgba(241,196,15,0.75)', 'rgba(155,89,182,0.75)', 'rgba(192,57,43,0.75)']; for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) { var cat = EXPENSE_CATEGORIES[c]; labels.push(CATEGORY_LABELS[cat]); data.push(expenseBreakdown[cat] || 0); } expenseChartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' }, tooltip: { callbacks: { label: function(ctx) { var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0); var pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0; return ctx.label + ': ' + formatMoney(ctx.parsed) + ' so‘m (' + pct + '%)'; } } } } } }); }
 
-        function getRefDate(period) {
-            switch (period) {
-                case 'day':
-                    return document.getElementById('periodDate').value || getToday();
-                case 'week':
-                    return document.getElementById('periodWeekStart').value || getToday();
-                case 'month':
-                    return document.getElementById('periodMonth').value + '-01' || getToday();
-                case 'year':
-                    return document.getElementById('periodYear').value + '-01-01' || getToday();
-                default:
-                    return getToday();
-            }
-        }
+        function renderHistory(entries) { var container = document.getElementById('historyContainer'); if (!entries.length) { container.innerHTML = '<div class="empty-state"><span class="big-icon">📭</span>Bu davrda hech qanday ma\'lumot yo‘q.</div>'; return; } var sorted = entries.slice().sort(function(a, b) { return a.date < b.date ? 1 : -1; }); var html = ''; for (var i = 0; i < sorted.length; i++) { var e = sorted[i]; var totalExp = 0; var expParts = []; for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) { var cat = EXPENSE_CATEGORIES[c]; var val = Number(e.expenses?.[cat]) || 0; totalExp += val; if (val > 0) { var label = CATEGORY_LABELS[cat]; if (cat === 'spare_parts' && e.spare_desc) { label += ' <span class="desc-chip">' + e.spare_desc + '</span>'; } expParts.push(label + ': ' + formatMoney(val)); } } var profit = (Number(e.income) || 0) - totalExp; html += '<div class="history-item">'; html += '<div>'; html += '<div class="history-date">' + e.date + '</div>'; if (e.description) html += '<div class="history-desc">' + e.description + '</div>'; if (expParts.length) html += '<div class="history-expenses">' + expParts.join(' | ') + '</div>'; html += '</div>'; html += '<div style="display:flex; align-items:center; gap:8px;">'; html += '<div style="text-align:right;">'; html += '<div class="history-amount">' + formatMoney(e.income) + ' so‘m</div>'; html += '<div style="font-size:11px; color:' + (profit >= 0 ? '#1e8b4c' : '#b13e4a') + ';">' + (profit >= 0 ? '✅' : '❌') + ' ' + formatMoney(profit) + '</div>'; html += '</div>'; html += '<button class="delete-btn" onclick="deleteEntry(\'' + e.date + '\')">🗑️</button>'; html += '</div></div>'; } container.innerHTML = html; }
 
-        function filterEntries(period, refDate) {
-            if (!refDate) refDate = getToday();
-            var filtered = [];
-            for (var i = 0; i < allEntries.length; i++) {
-                var e = allEntries[i];
-                var match = false;
-                switch (period) {
-                    case 'day':
-                        match = isSameDay(e.date, refDate);
-                        break;
-                    case 'week':
-                        match = isSameWeek(e.date, refDate);
-                        break;
-                    case 'month':
-                        match = isSameMonth(e.date, refDate);
-                        break;
-                    case 'year':
-                        match = isSameYear(e.date, refDate);
-                        break;
-                    default:
-                        match = true;
-                }
-                if (match) filtered.push(e);
-            }
-            return filtered.sort(function(a, b) { return a.date < b.date ? -1 : 1; });
-        }
+        function checkPassword() { if (localStorage.getItem('authenticated') === 'true') return true; var lockUntil = parseInt(localStorage.getItem('lockUntil') || '0'); var now = Date.now(); if (lockUntil > now) { var remaining = Math.ceil((lockUntil - now) / 1000); var minutes = Math.floor(remaining / 60); var seconds = remaining % 60; var timeMsg = minutes > 0 ? minutes + ' daqiqa ' + seconds + ' soniya' : seconds + ' soniya'; showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, ' + timeMsg + ' kuting.'); return false; } showPasswordModal(); return false; }
 
-        function computeTotals(entries) {
-            var totalIncome = 0;
-            var totalExpense = 0;
-            var expenseBreakdown = {};
-            for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
-                expenseBreakdown[EXPENSE_CATEGORIES[c]] = 0;
-            }
-            for (var i = 0; i < entries.length; i++) {
-                var e = entries[i];
-                totalIncome += Number(e.income) || 0;
-                var exp = e.expenses || {};
-                for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
-                    var cat = EXPENSE_CATEGORIES[c];
-                    var val = Number(exp[cat]) || 0;
-                    expenseBreakdown[cat] += val;
-                    totalExpense += val;
-                }
-            }
-            return { totalIncome: totalIncome, totalExpense: totalExpense, expenseBreakdown: expenseBreakdown };
-        }
+        function showPasswordModal() { if (passwordModalShown) return; passwordModalShown = true; var attempts = parseInt(localStorage.getItem('password_attempts') || '0'); var remaining = 3 - attempts; var existing = document.getElementById('passwordModal'); if (existing) existing.remove(); var modal = document.createElement('div'); modal.id = 'passwordModal'; modal.innerHTML = `<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:10000;font-family:system-ui,sans-serif;"><div style="background:#fff;padding:30px 24px;border-radius:20px;max-width:340px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.2);"><div style="font-size:40px;">🔐</div><h2 style="font-size:20px;margin:8px 0 4px;color:#1a3a4a;">Maxfiy kod</h2><p style="color:#5a7a8a;font-size:14px;margin:0 0 16px;">Iltimos, kodni kiriting</p><input type="password" id="passwordInput" placeholder="●●●●●●" style="width:100%;padding:14px 12px;border:2px solid #dce4ec;border-radius:12px;font-size:20px;text-align:center;letter-spacing:6px;background:#fafcfe;outline:none;box-sizing:border-box;"><div id="passwordError" style="color:#b13e4a;font-size:13px;margin-top:6px;min-height:20px;"></div><button id="passwordSubmit" style="width:100%;padding:12px;margin-top:12px;border:none;border-radius:12px;background:#1a6b8a;color:#fff;font-size:17px;font-weight:600;cursor:pointer;">Kirish</button><div style="color:#5a7a8a;font-size:12px;margin-top:10px;">Qolgan urinishlar: ${remaining}</div></div></div>`; document.body.appendChild(modal); var input = document.getElementById('passwordInput'); var submitBtn = document.getElementById('passwordSubmit'); var errorEl = document.getElementById('passwordError'); input.focus(); function submitPassword() { var entered = input.value; var attempts = parseInt(localStorage.getItem('password_attempts') || '0'); if (entered === APP_PASSWORD) { localStorage.setItem('authenticated', 'true'); localStorage.setItem('password_attempts', '0'); localStorage.removeItem('lockUntil'); modal.remove(); passwordModalShown = false; init(); return; } else { attempts++; localStorage.setItem('password_attempts', attempts.toString()); var remaining = 3 - attempts; if (attempts >= 3) { localStorage.setItem('lockUntil', (Date.now() + 60000).toString()); modal.innerHTML = `<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:10000;font-family:system-ui,sans-serif;"><div style="background:#fff;padding:30px 24px;border-radius:20px;max-width:340px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.2);"><div style="font-size:48px;">🔒</div><h2 style="color:#b13e4a;margin:8px 0;">Bloklandi</h2><p style="color:#5a7a8a;font-size:15px;">Juda ko‘p urinishlar. Iltimos, 1 daqiqa kuting.</p><button onclick="location.reload()" style="margin-top:16px;padding:12px 30px;background:#1a6b8a;color:#fff;border:none;border-radius:10px;font-size:16px;cursor:pointer;">🔄 Yangilash</button></div></div>`; passwordModalShown = false; setTimeout(function() { location.reload(); }, 61000); return; } else { errorEl.textContent = '❌ Noto‘g‘ri kod! Yana ' + remaining + ' ta urinish.'; input.value = ''; input.focus(); var remainingEl = modal.querySelector('div:last-child'); if (remainingEl) remainingEl.textContent = 'Qolgan urinishlar: ' + remaining; } } } input.addEventListener('keydown', function(e) { if (e.key === 'Enter') submitPassword(); }); submitBtn.addEventListener('click', submitPassword); }
 
-        function renderSummary() {
-            var period = document.getElementById('periodSelect').value;
-            var refDate = getRefDate(period);
-            if (!refDate) return;
+        function showLockScreen(message) { document.body.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f0f4f8; font-family:sans-serif; text-align:center; padding:20px;"><div style="background:#fff; padding:40px 30px; border-radius:20px; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.1);"><div style="font-size:64px;">🔒</div><h2 style="color:#b13e4a; margin-top:10px;">Ruxsat yo‘q</h2><p style="color:#5a7a8a; margin-top:10px; font-size:16px;">${message}</p><button onclick="location.reload()" style="margin-top:20px; padding:12px 30px; background:#1a6b8a; color:#fff; border:none; border-radius:10px; font-size:16px; cursor:pointer;">🔄 Qayta urinib ko‘rish</button></div></div>`; }
 
-            var entries = filterEntries(period, refDate);
-            var totals = computeTotals(entries);
-            var profit = totals.totalIncome - totals.totalExpense;
+        async function loadEntries() { if (!currentUser) { allEntries = []; renderSummary(); return; } try { var { data, error } = await supabase.from('entries').select('*').order('date', { ascending: false }); if (error) { console.error('❌ Fetch error:', error); showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error'); allEntries = []; renderSummary(); return; } allEntries = data || []; renderSummary(); } catch (e) { console.error('❌ loadEntries error:', e); allEntries = []; renderSummary(); } }
 
-            document.getElementById('statIncome').textContent = formatMoney(totals.totalIncome);
-            document.getElementById('statExpense').textContent = formatMoney(totals.totalExpense);
-            document.getElementById('statProfit').textContent = formatMoney(profit);
-            document.getElementById('statProfit').className = 'stat-value' + (profit >= 0 ? ' positive' : ' negative');
-            document.getElementById('statDays').textContent = entries.length;
+        async function addEntry() { var date = document.getElementById('entryDate').value; var income = parseFloat(document.getElementById('incomeInput').value) || 0; var description = document.getElementById('entryDescription').value.trim() || ''; if (!date) { showToast('Iltimos, sanani tanlang!', 'error'); return; } var expenses = {}; var expenseInputs = document.querySelectorAll('.expense-input'); for (var i = 0; i < expenseInputs.length; i++) { var inp = expenseInputs[i]; var cat = inp.dataset.category; expenses[cat] = parseFloat(inp.value) || 0; } var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || ''; var existing = allEntries.find(function(e) { return e.date === date; }); if (existing) { if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return; try { var { error } = await supabase.from('entries').update({ income: income, expenses: expenses, spare_desc: spareDesc, description: description }).eq('id', existing.id); if (error) { console.error('❌ Update error:', error); showToast('❌ Yangilashda xatolik: ' + error.message, 'error'); return; } showToast('✅ ' + date + ' yangilandi!', 'success'); } catch (e) { console.error('❌ updateEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); return; } } else { try { var { error } = await supabase.from('entries').insert([{ date: date, income: income, expenses: expenses, spare_desc: spareDesc, description: description, user_id: currentUser ? currentUser.id : 1 }]); if (error) { console.error('❌ Insert error:', error); showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error'); return; } showToast('✅ ' + date + ' uchun saqlandi!', 'success'); } catch (e) { console.error('❌ addEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); return; } } clearForm(); await loadEntries(); }
 
-            for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
-                var cat = EXPENSE_CATEGORIES[c];
-                var id = 'exp' + cat.split('_').map(function(w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join('');
-                var el = document.getElementById(id);
-                if (el) el.textContent = formatMoney(totals.expenseBreakdown[cat] || 0);
-            }
+        async function deleteEntry(date) { var entry = allEntries.find(function(e) { return e.date === date; }); if (!entry) return; if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return; try { var { error } = await supabase.from('entries').delete().eq('id', entry.id); if (error) { console.error('❌ Delete error:', error); showToast('❌ O‘chirishda xatolik: ' + error.message, 'error'); return; } showToast('🗑️ ' + date + ' o‘chirildi', 'success'); await loadEntries(); } catch (e) { console.error('❌ deleteEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); } }
 
-            renderOverviewChart(entries, period);
-            renderExpenseChart(totals.expenseBreakdown);
-            renderHistory(entries);
-        }
+        async function clearAll() { if (allEntries.length === 0) { showToast('Hech qanday maʼlumot yo‘q', 'error'); return; } if (!confirm('🚨 Barcha maʼlumotlarni o‘chirish?')) return; try { var { error } = await supabase.from('entries').delete().neq('id', 0); if (error) { showToast('❌ Xatolik: ' + error.message, 'error'); return; } showToast('🗑️ Barchasi tozalandi', 'success'); await loadEntries(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } }
 
-        function renderOverviewChart(entries, period) {
-            var ctx = document.getElementById('overviewChart').getContext('2d');
-            if (overviewChartInstance) overviewChartInstance.destroy();
-            if (!entries.length) {
-                overviewChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Maʼlumot yo‘q'],
-                        datasets: [
-                            { label: 'Daromad', data: [0], backgroundColor: 'rgba(26,107,138,0.6)', borderRadius: 4 },
-                            { label: 'Xarajat', data: [0], backgroundColor: 'rgba(200,70,80,0.6)', borderRadius: 4 }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'top' } },
-                        scales: { y: { beginAtZero: true } }
-                    }
-                });
-                return;
-            }
-            var labels = [];
-            var incomeData = [];
-            var expenseData = [];
-            for (var i = 0; i < entries.length; i++) {
-                var e = entries[i];
-                labels.push(e.date);
-                incomeData.push(Number(e.income) || 0);
-                var exp = 0;
-                for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
-                    exp += Number(e.expenses?.[EXPENSE_CATEGORIES[c]]) || 0;
-                }
-                expenseData.push(exp);
-            }
-            overviewChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        { label: 'Daromad', data: incomeData, backgroundColor: 'rgba(26,107,138,0.75)', borderRadius: 4 },
-                        { label: 'Xarajat', data: expenseData, backgroundColor: 'rgba(200,70,80,0.70)', borderRadius: 4 }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top' } },
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
-        }
+        function clearForm() { document.getElementById('entryDate').value = getToday(); document.getElementById('incomeInput').value = ''; document.getElementById('entryDescription').value = ''; var expenseInputs = document.querySelectorAll('.expense-input'); for (var i = 0; i < expenseInputs.length; i++) { expenseInputs[i].value = ''; } var descInput = document.querySelector('.expense-desc-input'); if (descInput) descInput.value = ''; }
 
-        function renderExpenseChart(expenseBreakdown) {
-            var ctx = document.getElementById('expenseChart').getContext('2d');
-            if (expenseChartInstance) expenseChartInstance.destroy();
-            var labels = [];
-            var data = [];
-            var colors = ['rgba(52,152,219,0.75)', 'rgba(46,204,113,0.75)', 'rgba(241,196,15,0.75)',
-                'rgba(155,89,182,0.75)', 'rgba(192,57,43,0.75)'
-            ];
-            for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
-                var cat = EXPENSE_CATEGORIES[c];
-                labels.push(CATEGORY_LABELS[cat]);
-                data.push(expenseBreakdown[cat] || 0);
-            }
-            expenseChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{ data: data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right' },
-                        tooltip: {
-                            callbacks: {
-                                label: function(ctx) {
-                                    var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0);
-                                    var pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
-                                    return ctx.label + ': ' + formatMoney(ctx.parsed) + ' so‘m (' + pct + '%)';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
+        function showToast(msg, type) { var el = document.getElementById('toast'); el.textContent = msg; el.className = 'toast ' + (type || 'success'); void el.offsetWidth; el.classList.add('show'); clearTimeout(window.toastTimer); window.toastTimer = setTimeout(function() { el.classList.remove('show'); }, 3000); }
 
-        function renderHistory(entries) {
-            var container = document.getElementById('historyContainer');
-            if (!entries.length) {
-                container.innerHTML =
-                    '<div class="empty-state"><span class="big-icon">📭</span>Bu davrda hech qanday ma\'lumot yo‘q.</div>';
-                return;
-            }
-            var sorted = entries.slice().sort(function(a, b) { return a.date < b.date ? 1 : -1; });
-            var html = '';
-            for (var i = 0; i < sorted.length; i++) {
-                var e = sorted[i];
-                var totalExp = 0;
-                var expParts = [];
-                for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
-                    var cat = EXPENSE_CATEGORIES[c];
-                    var val = Number(e.expenses?.[cat]) || 0;
-                    totalExp += val;
-                    if (val > 0) {
-                        var label = CATEGORY_LABELS[cat];
-                        if (cat === 'spare_parts' && e.spare_desc) {
-                            label += ' <span class="desc-chip">' + e.spare_desc + '</span>';
-                        }
-                        expParts.push(label + ': ' + formatMoney(val));
-                    }
-                }
-                var profit = (Number(e.income) || 0) - totalExp;
-                html += '<div class="history-item">';
-                html += '<div>';
-                html += '<div class="history-date">' + e.date + '</div>';
-                if (e.description) html += '<div class="history-desc">' + e.description + '</div>';
-                if (expParts.length) html += '<div class="history-expenses">' + expParts.join(' | ') + '</div>';
-                html += '</div>';
-                html += '<div style="display:flex; align-items:center; gap:8px;">';
-                html += '<div style="text-align:right;">';
-                html += '<div class="history-amount">' + formatMoney(e.income) + ' so‘m</div>';
-                html += '<div style="font-size:11px; color:' + (profit >= 0 ? '#1e8b4c' : '#b13e4a') + ';">' +
-                    (profit >= 0 ? '✅' : '❌') + ' ' + formatMoney(profit) + '</div>';
-                html += '</div>';
-                html += '<button class="delete-btn" onclick="deleteEntry(\'' + e.date + '\')">🗑️</button>';
-                html += '</div></div>';
-            }
-            container.innerHTML = html;
-        }
+        function updatePeriodUI() { var period = document.getElementById('periodSelect').value; document.getElementById('periodDateGroup').style.display = (period === 'day') ? 'block' : 'none'; document.getElementById('periodWeekGroup').style.display = (period === 'week') ? 'block' : 'none'; document.getElementById('periodMonthGroup').style.display = (period === 'month') ? 'block' : 'none'; document.getElementById('periodYearGroup').style.display = (period === 'year') ? 'block' : 'none'; var today = getToday(); if (period === 'day') { if (!document.getElementById('periodDate').value) document.getElementById('periodDate').value = today; } else if (period === 'week') { if (!document.getElementById('periodWeekStart').value) document.getElementById('periodWeekStart').value = getWeekStart(today); } else if (period === 'month') { if (!document.getElementById('periodMonth').value) document.getElementById('periodMonth').value = today.slice(0, 7); } else if (period === 'year') { if (!document.getElementById('periodYear').value) document.getElementById('periodYear').value = new Date().getFullYear().toString(); } renderSummary(); }
 
-        // ============================================================
-        // SUPABASE CRUD FUNCTIONS
-        // ============================================================
-        async function loadEntries() {
-            if (!currentUser) {
-                allEntries = [];
-                renderSummary();
-                return;
-            }
-            try {
-                var { data, error } = await supabase
-                    .from('entries')
-                    .select('*')
-                    .order('date', { ascending: false });
-                if (error) {
-                    console.error('❌ Fetch error:', error);
-                    showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error');
-                    allEntries = [];
-                    renderSummary();
-                    return;
-                }
-                allEntries = data || [];
-                renderSummary();
-            } catch (e) {
-                console.error('❌ loadEntries error:', e);
-                allEntries = [];
-                renderSummary();
-            }
-        }
+        function switchTab(tabId) { var panes = document.querySelectorAll('.tab-pane'); for (var i = 0; i < panes.length; i++) { panes[i].classList.remove('active'); } var btns = document.querySelectorAll('.tab-btn'); for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); } document.getElementById('tab-' + tabId).classList.add('active'); var activeBtn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]'); if (activeBtn) activeBtn.classList.add('active'); if (tabId === 'users' && currentUser?.role === 'admin') { loadUsers(); } if (tabId === 'overview' || tabId === 'expenses') renderSummary(); }
 
-        async function addEntry() {
-            var date = document.getElementById('entryDate').value;
-            var income = parseFloat(document.getElementById('incomeInput').value) || 0;
-            var description = document.getElementById('entryDescription').value.trim() || '';
+        async function loadUsers() { if (currentUser?.role !== 'admin') return; try { var { data, error } = await supabase.from('users').select('*').order('id'); if (error) { console.error(error); return; } var list = document.getElementById('userList'); list.innerHTML = data.map(function(u) { return '<div class="user-item"><span><strong>' + u.name + '</strong> (' + u.id + ') <span class="role-badge ' + (u.role === 'admin' ? 'admin' : '') + '">' + u.role + '</span></span><div>' + (u.role === 'admin' ? '<button class="btn btn-outline btn-sm" onclick="changeRole(' + u.id + ', \'worker\')">Ishchi qilish</button>' : '<button class="btn btn-outline btn-sm" onclick="changeRole(' + u.id + ', \'admin\')">Admin qilish</button>') + (u.id !== currentUser.id ? '<button class="btn btn-danger btn-sm" onclick="removeUser(' + u.id + ')">🗑️</button>' : '') + '</div></div>'; }).join(''); } catch (e) { console.error('loadUsers error:', e); } }
 
-            if (!date) {
-                showToast('Iltimos, sanani tanlang!', 'error');
-                return;
-            }
+        window.changeRole = async function(userId, newRole) { try { var { error } = await supabase.from('users').update({ role: newRole }).eq('id', userId); if (error) { showToast('❌ Rolni o‘zgartirishda xatolik', 'error'); return; } showToast('✅ Rol o‘zgartirildi!', 'success'); loadUsers(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } };
+        window.removeUser = async function(userId) { if (!confirm('Bu foydalanuvchini o‘chirishga ishonchingiz komilmi?')) return; try { var { error } = await supabase.from('users').delete().eq('id', userId); if (error) { showToast('❌ O‘chirishda xatolik', 'error'); return; } showToast('✅ Foydalanuvchi o‘chirildi', 'success'); loadUsers(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } };
+        document.getElementById('addUserBtn')?.addEventListener('click', function() { var userId = prompt('Yangi foydalanuvchining Telegram ID sini kiriting:'); if (!userId) return; var name = prompt('Foydalanuvchi ismi:'); if (!name) return; supabase.from('users').insert([{ id: parseInt(userId), name: name, role: 'worker' }]).then(function() { showToast('✅ Foydalanuvchi qo‘shildi', 'success'); loadUsers(); }).catch(function(err) { showToast('❌ Xatolik: ' + err.message, 'error'); }); });
 
-            var expenses = {};
-            var expenseInputs = document.querySelectorAll('.expense-input');
-            for (var i = 0; i < expenseInputs.length; i++) {
-                var inp = expenseInputs[i];
-                var cat = inp.dataset.category;
-                expenses[cat] = parseFloat(inp.value) || 0;
-            }
-
-            var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || '';
-
-            var existing = allEntries.find(function(e) { return e.date === date; });
-
-            if (existing) {
-                if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return;
-                try {
-                    var { error } = await supabase
-                        .from('entries')
-                        .update({
-                            income: income,
-                            expenses: expenses,
-                            spare_desc: spareDesc,
-                            description: description
-                        })
-                        .eq('id', existing.id);
-                    if (error) {
-                        console.error('❌ Update error:', error);
-                        showToast('❌ Yangilashda xatolik: ' + error.message, 'error');
-                        return;
-                    }
-                    showToast('✅ ' + date + ' yangilandi!', 'success');
-                } catch (e) {
-                    console.error('❌ updateEntry error:', e);
-                    showToast('❌ Xatolik yuz berdi.', 'error');
-                    return;
-                }
-            } else {
-                try {
-                    var { error } = await supabase
-                        .from('entries')
-                        .insert([{
-                            date: date,
-                            income: income,
-                            expenses: expenses,
-                            spare_desc: spareDesc,
-                            description: description,
-                            user_id: currentUser ? currentUser.id : 1
-                        }]);
-                    if (error) {
-                        console.error('❌ Insert error:', error);
-                        showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error');
-                        return;
-                    }
-                    showToast('✅ ' + date + ' uchun saqlandi!', 'success');
-                } catch (e) {
-                    console.error('❌ addEntry error:', e);
-                    showToast('❌ Xatolik yuz berdi.', 'error');
-                    return;
-                }
-            }
-            clearForm();
-            await loadEntries();
-        }
-
-        async function deleteEntry(date) {
-            var entry = allEntries.find(function(e) { return e.date === date; });
-            if (!entry) return;
-            if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return;
-            try {
-                var { error } = await supabase
-                    .from('entries')
-                    .delete()
-                    .eq('id', entry.id);
-                if (error) {
-                    console.error('❌ Delete error:', error);
-                    showToast('❌ O‘chirishda xatolik: ' + error.message, 'error');
-                    return;
-                }
-                showToast('🗑️ ' + date + ' o‘chirildi', 'success');
-                await loadEntries();
-            } catch (e) {
-                console.error('❌ deleteEntry error:', e);
-                showToast('❌ Xatolik yuz berdi.', 'error');
-            }
-        }
-
-        async function clearAll() {
-            if (allEntries.length === 0) {
-                showToast('Hech qanday maʼlumot yo‘q', 'error');
-                return;
-            }
-            if (!confirm('🚨 Barcha maʼlumotlarni o‘chirish?')) return;
-            try {
-                var { error } = await supabase.from('entries').delete().neq('id', 0);
-                if (error) {
-                    showToast('❌ Xatolik: ' + error.message, 'error');
-                    return;
-                }
-                showToast('🗑️ Barchasi tozalandi', 'success');
-                await loadEntries();
-            } catch (e) {
-                showToast('❌ Xatolik: ' + e.message, 'error');
-            }
-        }
-
-        function clearForm() {
-            document.getElementById('entryDate').value = getToday();
-            document.getElementById('incomeInput').value = '';
-            document.getElementById('entryDescription').value = '';
-            var expenseInputs = document.querySelectorAll('.expense-input');
-            for (var i = 0; i < expenseInputs.length; i++) {
-                expenseInputs[i].value = '';
-            }
-            var descInput = document.querySelector('.expense-desc-input');
-            if (descInput) descInput.value = '';
-        }
-
-        function showToast(msg, type) {
-            var el = document.getElementById('toast');
-            el.textContent = msg;
-            el.className = 'toast ' + (type || 'success');
-            void el.offsetWidth;
-            el.classList.add('show');
-            clearTimeout(window.toastTimer);
-            window.toastTimer = setTimeout(function() {
-                el.classList.remove('show');
-            }, 3000);
-        }
-
-        function updatePeriodUI() {
-            var period = document.getElementById('periodSelect').value;
-            document.getElementById('periodDateGroup').style.display = (period === 'day') ? 'block' : 'none';
-            document.getElementById('periodWeekGroup').style.display = (period === 'week') ? 'block' : 'none';
-            document.getElementById('periodMonthGroup').style.display = (period === 'month') ? 'block' : 'none';
-            document.getElementById('periodYearGroup').style.display = (period === 'year') ? 'block' : 'none';
-            var today = getToday();
-            if (period === 'day') {
-                if (!document.getElementById('periodDate').value) document.getElementById('periodDate').value = today;
-            } else if (period === 'week') {
-                if (!document.getElementById('periodWeekStart').value) document.getElementById('periodWeekStart').value =
-                    getWeekStart(today);
-            } else if (period === 'month') {
-                if (!document.getElementById('periodMonth').value) document.getElementById('periodMonth').value = today.slice(
-                    0, 7);
-            } else if (period === 'year') {
-                if (!document.getElementById('periodYear').value) document.getElementById('periodYear').value = new Date()
-                    .getFullYear().toString();
-            }
-            renderSummary();
-        }
-
-        function switchTab(tabId) {
-            var panes = document.querySelectorAll('.tab-pane');
-            for (var i = 0; i < panes.length; i++) {
-                panes[i].classList.remove('active');
-            }
-            var btns = document.querySelectorAll('.tab-btn');
-            for (var i = 0; i < btns.length; i++) {
-                btns[i].classList.remove('active');
-            }
-            document.getElementById('tab-' + tabId).classList.add('active');
-            var activeBtn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
-            if (activeBtn) activeBtn.classList.add('active');
-            if (tabId === 'overview' || tabId === 'expenses') renderSummary();
-        }
-
-        // ============================================================
-        // INIT
-        // ============================================================
-        function init() {
-            console.log('🚀 ALFA MOY SAM starting...');
-
-            // Initialize Telegram user
-            if (window.Telegram && window.Telegram.WebApp) {
-                var user = window.Telegram.WebApp.initDataUnsafe?.user;
-                if (user) {
-                    var name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-                    var userId = user.id;
-                    currentUser = { id: userId, name: name, role: 'admin' };
-                    document.getElementById('userName').textContent = name;
-                    document.getElementById('userRoleBadge').textContent = 'Admin';
-                    document.getElementById('userRoleBadge').className = 'role-badge admin';
-                    console.log('👤 User:', name);
-                }
-            }
-            // Fallback if no Telegram
-            if (!currentUser) {
-                currentUser = { id: 1, name: 'Test User', role: 'admin' };
-                document.getElementById('userName').textContent = 'Test User';
-                document.getElementById('userRoleBadge').textContent = 'Admin';
-                document.getElementById('userRoleBadge').className = 'role-badge admin';
-            }
-
-            if (!checkPassword()) return;
-
-            document.getElementById('entryDate').value = getToday();
-            updatePeriodUI();
-            loadEntries();
-
-            document.getElementById('addBtn').addEventListener('click', addEntry);
-            document.getElementById('clearBtn').addEventListener('click', clearAll);
-            document.getElementById('refreshBtn').addEventListener('click', loadEntries);
-
-            document.getElementById('periodSelect').addEventListener('change', updatePeriodUI);
-            document.getElementById('periodDate').addEventListener('change', renderSummary);
-            document.getElementById('periodWeekStart').addEventListener('change', renderSummary);
-            document.getElementById('periodMonth').addEventListener('change', renderSummary);
-            document.getElementById('periodYear').addEventListener('change', renderSummary);
-
-            var tabBtns = document.querySelectorAll('.tab-btn');
-            for (var i = 0; i < tabBtns.length; i++) {
-                tabBtns[i].addEventListener('click', function() {
-                    switchTab(this.dataset.tab);
-                });
-            }
-
-            document.getElementById('incomeInput').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') addEntry();
-            });
-
-            console.log('✅ ALFA MOY SAM loaded!');
-            console.log('📊 Entries:', allEntries.length);
-        }
+        function init() { console.log('🚀 ALFA MOY SAM starting...'); if (window.Telegram && window.Telegram.WebApp) { var user = window.Telegram.WebApp.initDataUnsafe?.user; if (user) { var name = user.first_name + (user.last_name ? ' ' + user.last_name : ''); var userId = user.id; currentUser = { id: userId, name: name, role: 'admin' }; document.getElementById('userName').textContent = name; document.getElementById('userRoleBadge').textContent = 'Admin'; document.getElementById('userRoleBadge').className = 'role-badge admin'; console.log('👤 User:', name); } } if (!currentUser) { currentUser = { id: 1, name: 'Test User', role: 'admin' }; document.getElementById('userName').textContent = 'Test User'; document.getElementById('userRoleBadge').textContent = 'Admin'; document.getElementById('userRoleBadge').className = 'role-badge admin'; } if (!checkPassword()) return; document.getElementById('entryDate').value = getToday(); updatePeriodUI(); loadEntries(); document.getElementById('addBtn').addEventListener('click', addEntry); document.getElementById('clearBtn').addEventListener('click', clearAll); document.getElementById('refreshBtn').addEventListener('click', loadEntries); document.getElementById('periodSelect').addEventListener('change', updatePeriodUI); document.getElementById('periodDate').addEventListener('change', renderSummary); document.getElementById('periodWeekStart').addEventListener('change', renderSummary); document.getElementById('periodMonth').addEventListener('change', renderSummary); document.getElementById('periodYear').addEventListener('change', renderSummary); var tabBtns = document.querySelectorAll('.tab-btn'); for (var i = 0; i < tabBtns.length; i++) { tabBtns[i].addEventListener('click', function() { switchTab(this.dataset.tab); }); } document.getElementById('incomeInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addEntry(); }); console.log('✅ ALFA MOY SAM loaded!'); console.log('📊 Entries:', allEntries.length); }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
