@@ -6,8 +6,9 @@
     <title>ALFA MOY SAM - Avtoyuvish</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js">
+    </script>
     <style>
-        /* ---------- YOUR EXISTING STYLES (keep exactly as they are) ---------- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a202c; padding: 10px; min-height: 100vh; }
         .container { max-width: 480px; margin: 0 auto; }
@@ -15,6 +16,9 @@
         .header h1 { font-size: 20px; font-weight: 700; }
         .header h1 small { font-size: 12px; font-weight: 400; opacity: 0.85; display: block; }
         .header .currency-badge { background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 40px; font-weight: 600; font-size: 14px; }
+        .user-info { font-size: 13px; margin-top: 4px; opacity: 0.9; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .role-badge { display: inline-block; background: #fff3cd; color: #856404; padding: 1px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .role-badge.admin { background: #cce5ff; color: #004085; }
         .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 16px; margin-bottom: 16px; }
         .card-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #1a3a4a; display: flex; align-items: center; gap: 8px; }
         .form-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
@@ -87,9 +91,7 @@
     </style>
 </head>
 <body>
-
     <div class="container">
-
         <!-- HEADER -->
         <div class="header">
             <div>
@@ -101,7 +103,6 @@
         <!-- ADD ENTRY -->
         <div class="card" id="addEntryCard">
             <div class="card-title">📋 Kunlik ma'lumot qo‘shish</div>
-
             <div class="form-row">
                 <div class="form-group half">
                     <label for="entryDate">📅 Sana</label>
@@ -112,14 +113,12 @@
                     <input type="number" id="incomeInput" placeholder="0" min="0" step="1000" />
                 </div>
             </div>
-
             <div class="form-row mt-8">
                 <div class="form-group">
                     <label for="entryDescription">📝 Izoh</label>
                     <input type="text" id="entryDescription" placeholder="Masalan: band kun, aksiya..." />
                 </div>
             </div>
-
             <div class="mt-8">
                 <label style="font-weight:600; font-size:13px; color:#2d4a5a;">💸 Xarajatlar</label>
                 <div class="expense-grid">
@@ -151,7 +150,6 @@
                     </div>
                 </div>
             </div>
-
             <button class="btn mt-12" id="addBtn">➕ Qo‘shish</button>
         </div>
 
@@ -164,7 +162,6 @@
                     <button class="btn btn-danger btn-sm" id="clearBtn">🗑️</button>
                 </div>
             </div>
-
             <div class="period-selector">
                 <div class="form-group">
                     <label>Ko‘rish davri</label>
@@ -192,13 +189,11 @@
                     <input type="number" id="periodYear" min="2020" max="2100" step="1" />
                 </div>
             </div>
-
             <div class="tabs">
                 <button class="tab-btn active" data-tab="overview">📈 Umumiy</button>
                 <button class="tab-btn" data-tab="expenses">📉 Xarajatlar</button>
                 <button class="tab-btn" data-tab="history">📜 Tarix</button>
             </div>
-
             <!-- OVERVIEW -->
             <div class="tab-pane active" id="tab-overview">
                 <div class="stats-grid">
@@ -223,7 +218,6 @@
                     <canvas id="overviewChart"></canvas>
                 </div>
             </div>
-
             <!-- EXPENSES -->
             <div class="tab-pane" id="tab-expenses">
                 <div class="stats-grid" id="expenseStatsGrid">
@@ -240,7 +234,6 @@
                     <canvas id="expenseChart"></canvas>
                 </div>
             </div>
-
             <!-- HISTORY -->
             <div class="tab-pane" id="tab-history">
                 <div class="history-scroll" id="historyContainer">
@@ -251,52 +244,29 @@
                 </div>
             </div>
         </div>
-
         <div class="footer">🚗 ALFA MOY SAM</div>
-
     </div>
-
     <div class="toast" id="toast"></div>
 
     <script>
-        // At the very top of your <script> section, add:
-var SUPABASE_URL = 'https://hauokcicipuxpdjkuumnf.supabase.co';
-var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhdW9rY2ljcHVweGRqa3V1bW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTMwMzksImV4cCI6MjA5OTI2OTAzOX0.ZAoK0t4A3PTe08bGKdY93yclG01SfaJ1ROWjDDRjoW0'; // Replace with your key
-var supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Test connection
-async function testSupabase() {
-    try {
-        var { data, error } = await supabase.from('users').select('*');
-        if (error) {
-            console.error('❌ Connection error:', error);
-        } else {
-            console.log('✅ Supabase connected! Users:', data);
-        }
-    } catch (e) {
-        console.error('❌ Error:', e);
-    }
-}
-testSupabase();
+        // ============================================================
+        // 🔑 SUPABASE CONFIGURATION
+        // ============================================================
+        var SUPABASE_URL = 'https://hauokcicipuxpdjkuumnf.supabase.co';
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhdW9rY2ljcHVweGRqa3V1bW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTMwMzksImV4cCI6MjA5OTI2OTAzOX0.ZAoK0t4A3PTe08bGKdY93yclG01SfaJ1ROWjDDRjoW0';
+        var supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('✅ Supabase initialized!');
 
         // ============================================================
         // 🔐 PASSWORD PROTECTION – CUSTOM MODAL (WORKS EVERYWHERE)
         // ============================================================
         var APP_PASSWORD = 'alfamoy2026';
-
-        // This variable prevents multiple modal instances
         var passwordModalShown = false;
 
         function checkPassword() {
-            // If already authenticated, skip
-            if (localStorage.getItem('authenticated') === 'true') {
-                return true;
-            }
-
-            // Check lockout
+            if (localStorage.getItem('authenticated') === 'true') return true;
             var lockUntil = parseInt(localStorage.getItem('lockUntil') || '0');
             var now = Date.now();
-
             if (lockUntil > now) {
                 var remaining = Math.ceil((lockUntil - now) / 1000);
                 var minutes = Math.floor(remaining / 60);
@@ -305,24 +275,17 @@ testSupabase();
                 showLockScreen('🔒 Juda ko‘p urinishlar. Iltimos, ' + timeMsg + ' kuting.');
                 return false;
             }
-
-            // Show custom password modal
             showPasswordModal();
-            return false; // Wait for modal to submit
+            return false;
         }
 
         function showPasswordModal() {
-            // Prevent multiple modals
             if (passwordModalShown) return;
             passwordModalShown = true;
-
             var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
             var remaining = 3 - attempts;
-
-            // Remove any existing modal
             var existing = document.getElementById('passwordModal');
             if (existing) existing.remove();
-
             var modal = document.createElement('div');
             modal.id = 'passwordModal';
             modal.innerHTML = `
@@ -339,31 +302,26 @@ testSupabase();
                 </div>
             `;
             document.body.appendChild(modal);
-
             var input = document.getElementById('passwordInput');
             var submitBtn = document.getElementById('passwordSubmit');
             var errorEl = document.getElementById('passwordError');
-
             input.focus();
 
             function submitPassword() {
                 var entered = input.value;
                 var attempts = parseInt(localStorage.getItem('password_attempts') || '0');
-
                 if (entered === APP_PASSWORD) {
                     localStorage.setItem('authenticated', 'true');
                     localStorage.setItem('password_attempts', '0');
                     localStorage.removeItem('lockUntil');
                     modal.remove();
                     passwordModalShown = false;
-                    // Load the app
                     init();
                     return;
                 } else {
                     attempts++;
                     localStorage.setItem('password_attempts', attempts.toString());
                     var remaining = 3 - attempts;
-
                     if (attempts >= 3) {
                         localStorage.setItem('lockUntil', (Date.now() + 60000).toString());
                         modal.innerHTML = `
@@ -388,10 +346,7 @@ testSupabase();
                     }
                 }
             }
-
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') submitPassword();
-            });
+            input.addEventListener('keydown', function(e) { if (e.key === 'Enter') submitPassword(); });
             submitBtn.addEventListener('click', submitPassword);
         }
 
@@ -409,7 +364,7 @@ testSupabase();
         }
 
         // ============================================================
-        // APP LOGIC (unchanged from your working version)
+        // APP LOGIC
         // ============================================================
         var EXPENSE_CATEGORIES = ['foam', 'water', 'electricity', 'wax', 'spare_parts'];
         var CATEGORY_LABELS = {
@@ -423,6 +378,7 @@ testSupabase();
         var allEntries = [];
         var overviewChartInstance = null;
         var expenseChartInstance = null;
+        var currentUser = null;
 
         function formatMoney(val) {
             if (val === undefined || val === null) return '0';
@@ -570,7 +526,6 @@ testSupabase();
         function renderOverviewChart(entries, period) {
             var ctx = document.getElementById('overviewChart').getContext('2d');
             if (overviewChartInstance) overviewChartInstance.destroy();
-
             if (!entries.length) {
                 overviewChartInstance = new Chart(ctx, {
                     type: 'bar',
@@ -590,11 +545,9 @@ testSupabase();
                 });
                 return;
             }
-
             var labels = [];
             var incomeData = [];
             var expenseData = [];
-
             for (var i = 0; i < entries.length; i++) {
                 var e = entries[i];
                 labels.push(e.date);
@@ -605,16 +558,13 @@ testSupabase();
                 }
                 expenseData.push(exp);
             }
-
             overviewChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'Daromad', data: incomeData, backgroundColor: 'rgba(26,107,138,0.75)',
-                            borderRadius: 4 },
-                        { label: 'Xarajat', data: expenseData, backgroundColor: 'rgba(200,70,80,0.70)',
-                            borderRadius: 4 }
+                        { label: 'Daromad', data: incomeData, backgroundColor: 'rgba(26,107,138,0.75)', borderRadius: 4 },
+                        { label: 'Xarajat', data: expenseData, backgroundColor: 'rgba(200,70,80,0.70)', borderRadius: 4 }
                     ]
                 },
                 options: {
@@ -629,19 +579,16 @@ testSupabase();
         function renderExpenseChart(expenseBreakdown) {
             var ctx = document.getElementById('expenseChart').getContext('2d');
             if (expenseChartInstance) expenseChartInstance.destroy();
-
             var labels = [];
             var data = [];
             var colors = ['rgba(52,152,219,0.75)', 'rgba(46,204,113,0.75)', 'rgba(241,196,15,0.75)',
                 'rgba(155,89,182,0.75)', 'rgba(192,57,43,0.75)'
             ];
-
             for (var c = 0; c < EXPENSE_CATEGORIES.length; c++) {
                 var cat = EXPENSE_CATEGORIES[c];
                 labels.push(CATEGORY_LABELS[cat]);
                 data.push(expenseBreakdown[cat] || 0);
             }
-
             expenseChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -674,10 +621,8 @@ testSupabase();
                     '<div class="empty-state"><span class="big-icon">📭</span>Bu davrda hech qanday ma\'lumot yo‘q.</div>';
                 return;
             }
-
             var sorted = entries.slice().sort(function(a, b) { return a.date < b.date ? 1 : -1; });
             var html = '';
-
             for (var i = 0; i < sorted.length; i++) {
                 var e = sorted[i];
                 var totalExp = 0;
@@ -695,7 +640,6 @@ testSupabase();
                     }
                 }
                 var profit = (Number(e.income) || 0) - totalExp;
-
                 html += '<div class="history-item">';
                 html += '<div>';
                 html += '<div class="history-date">' + e.date + '</div>';
@@ -711,186 +655,151 @@ testSupabase();
                 html += '<button class="delete-btn" onclick="deleteEntry(\'' + e.date + '\')">🗑️</button>';
                 html += '</div></div>';
             }
-
             container.innerHTML = html;
         }
 
+        // ============================================================
+        // SUPABASE CRUD FUNCTIONS
+        // ============================================================
         async function loadEntries() {
-    if (!currentUser) {
-        allEntries = [];
-        renderSummary();
-        return;
-    }
-
-    try {
-        var { data, error } = await supabase
-            .from('entries')
-            .select('*')
-            .order('date', { ascending: false });
-
-        if (error) {
-            console.error('❌ Fetch error:', error);
-            showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error');
-            allEntries = [];
-            renderSummary();
-            return;
+            if (!currentUser) {
+                allEntries = [];
+                renderSummary();
+                return;
+            }
+            try {
+                var { data, error } = await supabase
+                    .from('entries')
+                    .select('*')
+                    .order('date', { ascending: false });
+                if (error) {
+                    console.error('❌ Fetch error:', error);
+                    showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error');
+                    allEntries = [];
+                    renderSummary();
+                    return;
+                }
+                allEntries = data || [];
+                renderSummary();
+            } catch (e) {
+                console.error('❌ loadEntries error:', e);
+                allEntries = [];
+                renderSummary();
+            }
         }
-
-        allEntries = data || [];
-        renderSummary();
-    } catch (e) {
-        console.error('❌ loadEntries error:', e);
-        allEntries = [];
-        renderSummary();
-    }
-}
-
-       async function saveEntries() {
-    // Save to Supabase
-    if (!currentUser) return;
-
-    try {
-        var latestEntry = allEntries[allEntries.length - 1];
-        if (!latestEntry) return;
-
-        var { error } = await supabase
-            .from('entries')
-            .insert([{
-                date: latestEntry.date,
-                income: latestEntry.income,
-                expenses: latestEntry.expenses || {},
-                spare_desc: latestEntry.spare_desc || '',
-                description: latestEntry.description || '',
-                user_id: currentUser.id
-            }]);
-
-        if (error) {
-            console.error('❌ Save error:', error);
-            showToast('❌ Saqlashda xatolik: ' + error.message, 'error');
-            return;
-        }
-
-        renderSummary();
-    } catch (e) {
-        console.error('❌ saveEntries error:', e);
-    }
-}
 
         async function addEntry() {
-    var date = document.getElementById('entryDate').value;
-    var income = parseFloat(document.getElementById('incomeInput').value) || 0;
-    var description = document.getElementById('entryDescription').value.trim() || '';
+            var date = document.getElementById('entryDate').value;
+            var income = parseFloat(document.getElementById('incomeInput').value) || 0;
+            var description = document.getElementById('entryDescription').value.trim() || '';
 
-    if (!date) {
-        showToast('Iltimos, sanani tanlang!', 'error');
-        return;
-    }
-
-    var expenses = {};
-    var expenseInputs = document.querySelectorAll('.expense-input');
-    for (var i = 0; i < expenseInputs.length; i++) {
-        var inp = expenseInputs[i];
-        var cat = inp.dataset.category;
-        expenses[cat] = parseFloat(inp.value) || 0;
-    }
-
-    var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || '';
-
-    // Check if entry exists
-    var existing = allEntries.find(function(e) { return e.date === date; });
-
-    if (existing) {
-        if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return;
-
-        try {
-            var { error } = await supabase
-                .from('entries')
-                .update({
-                    income: income,
-                    expenses: expenses,
-                    spare_desc: spareDesc,
-                    description: description
-                })
-                .eq('id', existing.id);
-
-            if (error) {
-                console.error('❌ Update error:', error);
-                showToast('❌ Yangilashda xatolik: ' + error.message, 'error');
+            if (!date) {
+                showToast('Iltimos, sanani tanlang!', 'error');
                 return;
             }
 
-            showToast('✅ ' + date + ' yangilandi!', 'success');
-        } catch (e) {
-            console.error('❌ updateEntry error:', e);
-            showToast('❌ Xatolik yuz berdi.', 'error');
-            return;
-        }
-    } else {
-        try {
-            var { error } = await supabase
-                .from('entries')
-                .insert([{
-                    date: date,
-                    income: income,
-                    expenses: expenses,
-                    spare_desc: spareDesc,
-                    description: description,
-                    user_id: currentUser ? currentUser.id : 1
-                }]);
-
-            if (error) {
-                console.error('❌ Insert error:', error);
-                showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error');
-                return;
+            var expenses = {};
+            var expenseInputs = document.querySelectorAll('.expense-input');
+            for (var i = 0; i < expenseInputs.length; i++) {
+                var inp = expenseInputs[i];
+                var cat = inp.dataset.category;
+                expenses[cat] = parseFloat(inp.value) || 0;
             }
 
-            showToast('✅ ' + date + ' uchun saqlandi!', 'success');
-        } catch (e) {
-            console.error('❌ addEntry error:', e);
-            showToast('❌ Xatolik yuz berdi.', 'error');
-            return;
-        }
-    }
+            var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || '';
 
-    clearForm();
-    await loadEntries();
-}
+            var existing = allEntries.find(function(e) { return e.date === date; });
+
+            if (existing) {
+                if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return;
+                try {
+                    var { error } = await supabase
+                        .from('entries')
+                        .update({
+                            income: income,
+                            expenses: expenses,
+                            spare_desc: spareDesc,
+                            description: description
+                        })
+                        .eq('id', existing.id);
+                    if (error) {
+                        console.error('❌ Update error:', error);
+                        showToast('❌ Yangilashda xatolik: ' + error.message, 'error');
+                        return;
+                    }
+                    showToast('✅ ' + date + ' yangilandi!', 'success');
+                } catch (e) {
+                    console.error('❌ updateEntry error:', e);
+                    showToast('❌ Xatolik yuz berdi.', 'error');
+                    return;
+                }
+            } else {
+                try {
+                    var { error } = await supabase
+                        .from('entries')
+                        .insert([{
+                            date: date,
+                            income: income,
+                            expenses: expenses,
+                            spare_desc: spareDesc,
+                            description: description,
+                            user_id: currentUser ? currentUser.id : 1
+                        }]);
+                    if (error) {
+                        console.error('❌ Insert error:', error);
+                        showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error');
+                        return;
+                    }
+                    showToast('✅ ' + date + ' uchun saqlandi!', 'success');
+                } catch (e) {
+                    console.error('❌ addEntry error:', e);
+                    showToast('❌ Xatolik yuz berdi.', 'error');
+                    return;
+                }
+            }
+            clearForm();
+            await loadEntries();
+        }
 
         async function deleteEntry(date) {
-    var entry = allEntries.find(function(e) { return e.date === date; });
-    if (!entry) return;
-
-    if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return;
-
-    try {
-        var { error } = await supabase
-            .from('entries')
-            .delete()
-            .eq('id', entry.id);
-
-        if (error) {
-            console.error('❌ Delete error:', error);
-            showToast('❌ O‘chirishda xatolik: ' + error.message, 'error');
-            return;
+            var entry = allEntries.find(function(e) { return e.date === date; });
+            if (!entry) return;
+            if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return;
+            try {
+                var { error } = await supabase
+                    .from('entries')
+                    .delete()
+                    .eq('id', entry.id);
+                if (error) {
+                    console.error('❌ Delete error:', error);
+                    showToast('❌ O‘chirishda xatolik: ' + error.message, 'error');
+                    return;
+                }
+                showToast('🗑️ ' + date + ' o‘chirildi', 'success');
+                await loadEntries();
+            } catch (e) {
+                console.error('❌ deleteEntry error:', e);
+                showToast('❌ Xatolik yuz berdi.', 'error');
+            }
         }
 
-        showToast('🗑️ ' + date + ' o‘chirildi', 'success');
-        await loadEntries();
-    } catch (e) {
-        console.error('❌ deleteEntry error:', e);
-        showToast('❌ Xatolik yuz berdi.', 'error');
-    }
-}
-
-        function clearAll() {
+        async function clearAll() {
             if (allEntries.length === 0) {
                 showToast('Hech qanday maʼlumot yo‘q', 'error');
                 return;
             }
             if (!confirm('🚨 Barcha maʼlumotlarni o‘chirish?')) return;
-            allEntries = [];
-            saveEntries();
-            showToast('🗑️ Barchasi tozalandi', 'success');
+            try {
+                var { error } = await supabase.from('entries').delete().neq('id', 0);
+                if (error) {
+                    showToast('❌ Xatolik: ' + error.message, 'error');
+                    return;
+                }
+                showToast('🗑️ Barchasi tozalandi', 'success');
+                await loadEntries();
+            } catch (e) {
+                showToast('❌ Xatolik: ' + e.message, 'error');
+            }
         }
 
         function clearForm() {
@@ -923,7 +832,6 @@ testSupabase();
             document.getElementById('periodWeekGroup').style.display = (period === 'week') ? 'block' : 'none';
             document.getElementById('periodMonthGroup').style.display = (period === 'month') ? 'block' : 'none';
             document.getElementById('periodYearGroup').style.display = (period === 'year') ? 'block' : 'none';
-
             var today = getToday();
             if (period === 'day') {
                 if (!document.getElementById('periodDate').value) document.getElementById('periodDate').value = today;
@@ -960,26 +868,27 @@ testSupabase();
         // ============================================================
         function init() {
             console.log('🚀 ALFA MOY SAM starting...');
+
             // Initialize Telegram user
-if (window.Telegram && window.Telegram.WebApp) {
-    var user = window.Telegram.WebApp.initDataUnsafe?.user;
-    if (user) {
-        var name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-        var userId = user.id;
-        currentUser = { id: userId, name: name, role: 'admin' };
-        document.getElementById('userName').textContent = name;
-        document.getElementById('userRoleBadge').textContent = 'Admin';
-        document.getElementById('userRoleBadge').className = 'role-badge admin';
-        console.log('👤 User:', name);
-    }
-}
-// Fallback if no Telegram
-if (!currentUser) {
-    currentUser = { id: 1, name: 'Test User', role: 'admin' };
-    document.getElementById('userName').textContent = 'Test User';
-    document.getElementById('userRoleBadge').textContent = 'Admin';
-    document.getElementById('userRoleBadge').className = 'role-badge admin';
-}
+            if (window.Telegram && window.Telegram.WebApp) {
+                var user = window.Telegram.WebApp.initDataUnsafe?.user;
+                if (user) {
+                    var name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+                    var userId = user.id;
+                    currentUser = { id: userId, name: name, role: 'admin' };
+                    document.getElementById('userName').textContent = name;
+                    document.getElementById('userRoleBadge').textContent = 'Admin';
+                    document.getElementById('userRoleBadge').className = 'role-badge admin';
+                    console.log('👤 User:', name);
+                }
+            }
+            // Fallback if no Telegram
+            if (!currentUser) {
+                currentUser = { id: 1, name: 'Test User', role: 'admin' };
+                document.getElementById('userName').textContent = 'Test User';
+                document.getElementById('userRoleBadge').textContent = 'Admin';
+                document.getElementById('userRoleBadge').className = 'role-badge admin';
+            }
 
             if (!checkPassword()) return;
 
@@ -1012,7 +921,6 @@ if (!currentUser) {
             console.log('📊 Entries:', allEntries.length);
         }
 
-        // Start the app
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
