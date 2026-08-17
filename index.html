@@ -4,10 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>ALFA MOY SAM - Avtoyuvish</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
-    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a202c; padding: 10px; min-height: 100vh; }
@@ -16,7 +14,7 @@
         .header h1 { font-size: 20px; font-weight: 700; }
         .header h1 small { font-size: 12px; font-weight: 400; opacity: 0.85; display: block; }
         .header .currency-badge { background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 40px; font-weight: 600; font-size: 14px; }
-        .user-info { font-size: 13px; margin-top: 4px; opacity: 0.9; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .user-info { font-size: 13px; margin-top: 8px; opacity: 0.9; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .role-badge { display: inline-block; background: #fff3cd; color: #856404; padding: 1px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
         .role-badge.admin { background: #cce5ff; color: #004085; }
         .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 16px; margin-bottom: 16px; }
@@ -95,6 +93,11 @@
         <div class="header">
             <div>
                 <h1>🚗 ALFA MOY SAM <small>daromad &amp; xarajat</small></h1>
+                <!-- Added user info container to prevent JS crash -->
+                <div class="user-info">
+                    👤 <span id="userName">User</span>
+                    <span id="userRoleBadge" class="role-badge">...</span>
+                </div>
             </div>
             <div class="currency-badge">🇺🇿 so‘m</div>
         </div>
@@ -209,12 +212,11 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // At the top of your <script> section:
         var SUPABASE_URL = 'https://hauokcicipuxpdjkuumnf.supabase.co';
         var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhdW9rY2ljcHVweGRqa3V1bW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTMwMzksImV4cCI6MjA5OTI2OTAzOX0.ZAoK0t4A3PTe08bGKdY93yclG01SfaJ1ROWjDDRjoW0';
 
-        // ✅ FIX: use supabase directly (not supabaseJs)
-        var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // ✅ Renamed the client variable to prevent the namespace crash
+        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log('✅ Supabase initialized!');
 
         var APP_PASSWORD = 'alfamoy2026';
@@ -253,13 +255,13 @@
 
         function showLockScreen(message) { document.body.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f0f4f8; font-family:sans-serif; text-align:center; padding:20px;"><div style="background:#fff; padding:40px 30px; border-radius:20px; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.1);"><div style="font-size:64px;">🔒</div><h2 style="color:#b13e4a; margin-top:10px;">Ruxsat yo‘q</h2><p style="color:#5a7a8a; margin-top:10px; font-size:16px;">${message}</p><button onclick="location.reload()" style="margin-top:20px; padding:12px 30px; background:#1a6b8a; color:#fff; border:none; border-radius:10px; font-size:16px; cursor:pointer;">🔄 Qayta urinib ko‘rish</button></div></div>`; }
 
-        async function loadEntries() { if (!currentUser) { allEntries = []; renderSummary(); return; } try { var { data, error } = await supabase.from('entries').select('*').order('date', { ascending: false }); if (error) { console.error('❌ Fetch error:', error); showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error'); allEntries = []; renderSummary(); return; } allEntries = data || []; renderSummary(); } catch (e) { console.error('❌ loadEntries error:', e); allEntries = []; renderSummary(); } }
+        async function loadEntries() { if (!currentUser) { allEntries = []; renderSummary(); return; } try { var { data, error } = await supabaseClient.from('entries').select('*').order('date', { ascending: false }); if (error) { console.error('❌ Fetch error:', error); showToast('❌ Maʼlumotlarni yuklashda xatolik.', 'error'); allEntries = []; renderSummary(); return; } allEntries = data || []; renderSummary(); } catch (e) { console.error('❌ loadEntries error:', e); allEntries = []; renderSummary(); } }
 
-        async function addEntry() { var date = document.getElementById('entryDate').value; var income = parseFloat(document.getElementById('incomeInput').value) || 0; var description = document.getElementById('entryDescription').value.trim() || ''; if (!date) { showToast('Iltimos, sanani tanlang!', 'error'); return; } var expenses = {}; var expenseInputs = document.querySelectorAll('.expense-input'); for (var i = 0; i < expenseInputs.length; i++) { var inp = expenseInputs[i]; var cat = inp.dataset.category; expenses[cat] = parseFloat(inp.value) || 0; } var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || ''; var existing = allEntries.find(function(e) { return e.date === date; }); if (existing) { if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return; try { var { error } = await supabase.from('entries').update({ income: income, expenses: expenses, spare_desc: spareDesc, description: description }).eq('id', existing.id); if (error) { console.error('❌ Update error:', error); showToast('❌ Yangilashda xatolik: ' + error.message, 'error'); return; } showToast('✅ ' + date + ' yangilandi!', 'success'); } catch (e) { console.error('❌ updateEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); return; } } else { try { var { error } = await supabase.from('entries').insert([{ date: date, income: income, expenses: expenses, spare_desc: spareDesc, description: description, user_id: currentUser ? currentUser.id : 1 }]); if (error) { console.error('❌ Insert error:', error); showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error'); return; } showToast('✅ ' + date + ' uchun saqlandi!', 'success'); } catch (e) { console.error('❌ addEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); return; } } clearForm(); await loadEntries(); }
+        async function addEntry() { var date = document.getElementById('entryDate').value; var income = parseFloat(document.getElementById('incomeInput').value) || 0; var description = document.getElementById('entryDescription').value.trim() || ''; if (!date) { showToast('Iltimos, sanani tanlang!', 'error'); return; } var expenses = {}; var expenseInputs = document.querySelectorAll('.expense-input'); for (var i = 0; i < expenseInputs.length; i++) { var inp = expenseInputs[i]; var cat = inp.dataset.category; expenses[cat] = parseFloat(inp.value) || 0; } var spareDesc = document.querySelector('.expense-desc-input')?.value.trim() || ''; var existing = allEntries.find(function(e) { return e.date === date; }); if (existing) { if (!confirm('"' + date + '" sanasi uchun yozuv mavjud. Yangilashni xohlaysizmi?')) return; try { var { error } = await supabaseClient.from('entries').update({ income: income, expenses: expenses, spare_desc: spareDesc, description: description }).eq('id', existing.id); if (error) { console.error('❌ Update error:', error); showToast('❌ Yangilashda xatolik: ' + error.message, 'error'); return; } showToast('✅ ' + date + ' yangilandi!', 'success'); } catch (e) { console.error('❌ updateEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); return; } } else { try { var { error } = await supabaseClient.from('entries').insert([{ date: date, income: income, expenses: expenses, spare_desc: spareDesc, description: description, user_id: currentUser ? currentUser.id : 1 }]); if (error) { console.error('❌ Insert error:', error); showToast('❌ Qo‘shishda xatolik: ' + error.message, 'error'); return; } showToast('✅ ' + date + ' uchun saqlandi!', 'success'); } catch (e) { console.error('❌ addEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); return; } } clearForm(); await loadEntries(); }
 
-        async function deleteEntry(date) { var entry = allEntries.find(function(e) { return e.date === date; }); if (!entry) return; if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return; try { var { error } = await supabase.from('entries').delete().eq('id', entry.id); if (error) { console.error('❌ Delete error:', error); showToast('❌ O‘chirishda xatolik: ' + error.message, 'error'); return; } showToast('🗑️ ' + date + ' o‘chirildi', 'success'); await loadEntries(); } catch (e) { console.error('❌ deleteEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); } }
+        async function deleteEntry(date) { var entry = allEntries.find(function(e) { return e.date === date; }); if (!entry) return; if (!confirm('"' + date + '" sanadagi yozuvni o‘chirish?')) return; try { var { error } = await supabaseClient.from('entries').delete().eq('id', entry.id); if (error) { console.error('❌ Delete error:', error); showToast('❌ O‘chirishda xatolik: ' + error.message, 'error'); return; } showToast('🗑️ ' + date + ' o‘chirildi', 'success'); await loadEntries(); } catch (e) { console.error('❌ deleteEntry error:', e); showToast('❌ Xatolik yuz berdi.', 'error'); } }
 
-        async function clearAll() { if (allEntries.length === 0) { showToast('Hech qanday maʼlumot yo‘q', 'error'); return; } if (!confirm('🚨 Barcha maʼlumotlarni o‘chirish?')) return; try { var { error } = await supabase.from('entries').delete().neq('id', 0); if (error) { showToast('❌ Xatolik: ' + error.message, 'error'); return; } showToast('🗑️ Barchasi tozalandi', 'success'); await loadEntries(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } }
+        async function clearAll() { if (allEntries.length === 0) { showToast('Hech qanday maʼlumot yo‘q', 'error'); return; } if (!confirm('🚨 Barcha maʼlumotlarni o‘chirish?')) return; try { var { error } = await supabaseClient.from('entries').delete().neq('id', 0); if (error) { showToast('❌ Xatolik: ' + error.message, 'error'); return; } showToast('🗑️ Barchasi tozalandi', 'success'); await loadEntries(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } }
 
         function clearForm() { document.getElementById('entryDate').value = getToday(); document.getElementById('incomeInput').value = ''; document.getElementById('entryDescription').value = ''; var expenseInputs = document.querySelectorAll('.expense-input'); for (var i = 0; i < expenseInputs.length; i++) { expenseInputs[i].value = ''; } var descInput = document.querySelector('.expense-desc-input'); if (descInput) descInput.value = ''; }
 
@@ -269,13 +271,70 @@
 
         function switchTab(tabId) { var panes = document.querySelectorAll('.tab-pane'); for (var i = 0; i < panes.length; i++) { panes[i].classList.remove('active'); } var btns = document.querySelectorAll('.tab-btn'); for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); } document.getElementById('tab-' + tabId).classList.add('active'); var activeBtn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]'); if (activeBtn) activeBtn.classList.add('active'); if (tabId === 'users' && currentUser?.role === 'admin') { loadUsers(); } if (tabId === 'overview' || tabId === 'expenses') renderSummary(); }
 
-        async function loadUsers() { if (currentUser?.role !== 'admin') return; try { var { data, error } = await supabase.from('users').select('*').order('id'); if (error) { console.error(error); return; } var list = document.getElementById('userList'); list.innerHTML = data.map(function(u) { return '<div class="user-item"><span><strong>' + u.name + '</strong> (' + u.id + ') <span class="role-badge ' + (u.role === 'admin' ? 'admin' : '') + '">' + u.role + '</span></span><div>' + (u.role === 'admin' ? '<button class="btn btn-outline btn-sm" onclick="changeRole(' + u.id + ', \'worker\')">Ishchi qilish</button>' : '<button class="btn btn-outline btn-sm" onclick="changeRole(' + u.id + ', \'admin\')">Admin qilish</button>') + (u.id !== currentUser.id ? '<button class="btn btn-danger btn-sm" onclick="removeUser(' + u.id + ')">🗑️</button>' : '') + '</div></div>'; }).join(''); } catch (e) { console.error('loadUsers error:', e); } }
+        async function loadUsers() { if (currentUser?.role !== 'admin') return; try { var { data, error } = await supabaseClient.from('users').select('*').order('id'); if (error) { console.error(error); return; } var list = document.getElementById('userList'); list.innerHTML = data.map(function(u) { return '<div class="user-item"><span><strong>' + u.name + '</strong> (' + u.id + ') <span class="role-badge ' + (u.role === 'admin' ? 'admin' : '') + '">' + u.role + '</span></span><div>' + (u.role === 'admin' ? '<button class="btn btn-outline btn-sm" onclick="changeRole(' + u.id + ', \'worker\')">Ishchi qilish</button>' : '<button class="btn btn-outline btn-sm" onclick="changeRole(' + u.id + ', \'admin\')">Admin qilish</button>') + (u.id !== currentUser.id ? '<button class="btn btn-danger btn-sm" onclick="removeUser(' + u.id + ')">🗑️</button>' : '') + '</div></div>'; }).join(''); } catch (e) { console.error('loadUsers error:', e); } }
 
-        window.changeRole = async function(userId, newRole) { try { var { error } = await supabase.from('users').update({ role: newRole }).eq('id', userId); if (error) { showToast('❌ Rolni o‘zgartirishda xatolik', 'error'); return; } showToast('✅ Rol o‘zgartirildi!', 'success'); loadUsers(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } };
-        window.removeUser = async function(userId) { if (!confirm('Bu foydalanuvchini o‘chirishga ishonchingiz komilmi?')) return; try { var { error } = await supabase.from('users').delete().eq('id', userId); if (error) { showToast('❌ O‘chirishda xatolik', 'error'); return; } showToast('✅ Foydalanuvchi o‘chirildi', 'success'); loadUsers(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } };
-        document.getElementById('addUserBtn')?.addEventListener('click', function() { var userId = prompt('Yangi foydalanuvchining Telegram ID sini kiriting:'); if (!userId) return; var name = prompt('Foydalanuvchi ismi:'); if (!name) return; supabase.from('users').insert([{ id: parseInt(userId), name: name, role: 'worker' }]).then(function() { showToast('✅ Foydalanuvchi qo‘shildi', 'success'); loadUsers(); }).catch(function(err) { showToast('❌ Xatolik: ' + err.message, 'error'); }); });
+        window.changeRole = async function(userId, newRole) { try { var { error } = await supabaseClient.from('users').update({ role: newRole }).eq('id', userId); if (error) { showToast('❌ Rolni o‘zgartirishda xatolik', 'error'); return; } showToast('✅ Rol o‘zgartirildi!', 'success'); loadUsers(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } };
+        window.removeUser = async function(userId) { if (!confirm('Bu foydalanuvchini o‘chirishga ishonchingiz komilmi?')) return; try { var { error } = await supabaseClient.from('users').delete().eq('id', userId); if (error) { showToast('❌ O‘chirishda xatolik', 'error'); return; } showToast('✅ Foydalanuvchi o‘chirildi', 'success'); loadUsers(); } catch (e) { showToast('❌ Xatolik: ' + e.message, 'error'); } };
+        document.getElementById('addUserBtn')?.addEventListener('click', function() { var userId = prompt('Yangi foydalanuvchining Telegram ID sini kiriting:'); if (!userId) return; var name = prompt('Foydalanuvchi ismi:'); if (!name) return; supabaseClient.from('users').insert([{ id: parseInt(userId), name: name, role: 'worker' }]).then(function() { showToast('✅ Foydalanuvchi qo‘shildi', 'success'); loadUsers(); }).catch(function(err) { showToast('❌ Xatolik: ' + err.message, 'error'); }); });
 
-        function init() { console.log('🚀 ALFA MOY SAM starting...'); if (window.Telegram && window.Telegram.WebApp) { var user = window.Telegram.WebApp.initDataUnsafe?.user; if (user) { var name = user.first_name + (user.last_name ? ' ' + user.last_name : ''); var userId = user.id; currentUser = { id: userId, name: name, role: 'admin' }; document.getElementById('userName').textContent = name; document.getElementById('userRoleBadge').textContent = 'Admin'; document.getElementById('userRoleBadge').className = 'role-badge admin'; console.log('👤 User:', name); } } if (!currentUser) { currentUser = { id: 1, name: 'Test User', role: 'admin' }; document.getElementById('userName').textContent = 'Test User'; document.getElementById('userRoleBadge').textContent = 'Admin'; document.getElementById('userRoleBadge').className = 'role-badge admin'; } if (!checkPassword()) return; document.getElementById('entryDate').value = getToday(); updatePeriodUI(); loadEntries(); document.getElementById('addBtn').addEventListener('click', addEntry); document.getElementById('clearBtn').addEventListener('click', clearAll); document.getElementById('refreshBtn').addEventListener('click', loadEntries); document.getElementById('periodSelect').addEventListener('change', updatePeriodUI); document.getElementById('periodDate').addEventListener('change', renderSummary); document.getElementById('periodWeekStart').addEventListener('change', renderSummary); document.getElementById('periodMonth').addEventListener('change', renderSummary); document.getElementById('periodYear').addEventListener('change', renderSummary); var tabBtns = document.querySelectorAll('.tab-btn'); for (var i = 0; i < tabBtns.length; i++) { tabBtns[i].addEventListener('click', function() { switchTab(this.dataset.tab); }); } document.getElementById('incomeInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addEntry(); }); console.log('✅ ALFA MOY SAM loaded!'); console.log('📊 Entries:', allEntries.length); }
+        function init() { 
+            console.log('🚀 ALFA MOY SAM starting...'); 
+            
+            // Fixed Missing UI logic
+            var userNameEl = document.getElementById('userName');
+            var userRoleEl = document.getElementById('userRoleBadge');
+
+            if (window.Telegram && window.Telegram.WebApp) { 
+                var user = window.Telegram.WebApp.initDataUnsafe?.user; 
+                if (user) { 
+                    var name = user.first_name + (user.last_name ? ' ' + user.last_name : ''); 
+                    var userId = user.id; 
+                    currentUser = { id: userId, name: name, role: 'admin' }; 
+                    if (userNameEl) userNameEl.textContent = name; 
+                    if (userRoleEl) {
+                        userRoleEl.textContent = 'Admin'; 
+                        userRoleEl.className = 'role-badge admin'; 
+                    }
+                    console.log('👤 User:', name); 
+                } 
+            } 
+            
+            // Fallback for missing user context
+            if (!currentUser) { 
+                currentUser = { id: 1, name: 'Test User', role: 'admin' }; 
+                if (userNameEl) userNameEl.textContent = 'Test User'; 
+                if (userRoleEl) {
+                    userRoleEl.textContent = 'Admin'; 
+                    userRoleEl.className = 'role-badge admin'; 
+                }
+            } 
+
+            if (!checkPassword()) return; 
+
+            document.getElementById('entryDate').value = getToday(); 
+            updatePeriodUI(); 
+            loadEntries(); 
+            
+            document.getElementById('addBtn').addEventListener('click', addEntry); 
+            document.getElementById('clearBtn').addEventListener('click', clearAll); 
+            document.getElementById('refreshBtn').addEventListener('click', loadEntries); 
+            document.getElementById('periodSelect').addEventListener('change', updatePeriodUI); 
+            document.getElementById('periodDate').addEventListener('change', renderSummary); 
+            document.getElementById('periodWeekStart').addEventListener('change', renderSummary); 
+            document.getElementById('periodMonth').addEventListener('change', renderSummary); 
+            document.getElementById('periodYear').addEventListener('change', renderSummary); 
+            
+            var tabBtns = document.querySelectorAll('.tab-btn'); 
+            for (var i = 0; i < tabBtns.length; i++) { 
+                tabBtns[i].addEventListener('click', function() { switchTab(this.dataset.tab); }); 
+            } 
+            
+            document.getElementById('incomeInput').addEventListener('keydown', function(e) { 
+                if (e.key === 'Enter') addEntry(); 
+            }); 
+            
+            console.log('✅ ALFA MOY SAM loaded!'); 
+        }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
